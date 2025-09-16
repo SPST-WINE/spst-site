@@ -1,4 +1,3 @@
-// vercel.json
 {
   "rewrites": [
     { "source": "/assets/esm/base.css", "destination": "/back-office/base.css" },
