@@ -1,14 +1,11 @@
-'use client';
+export const dynamic = 'force-static';
 
 export default function BackOfficePage() {
   return (
-    <main style={{ minHeight: '100vh', background: '#000' }}>
-      <iframe
-        src="/back-office/back-office-standalone.html?v=7"
-        title="SPST — Back Office"
-        style={{ width: '100%', minHeight: '100vh', border: 0, display: 'block' }}
-        loading="eager"
-      />
+    <main id="view-spedizioni" suppressHydrationWarning>
+      <div id="list" />
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script type="module" src="/bo-assets/esm/main.js?v=1"></script>
     </main>
   );
 }
