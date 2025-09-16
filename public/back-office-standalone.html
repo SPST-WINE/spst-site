@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Back Office</title>
 
-    <!-- CSS locali (percorso GIUSTO) -->
-    <link rel="preload" href="/back-office/base.css?v=2" as="style">
-    <link rel="stylesheet" href="/back-office/base.css?v=2">
-    <link rel="stylesheet" href="/back-office/quotes-admin.css?v=2">
+    <!-- CSS dal progetto spst-logistics -->
+    <link rel="preconnect" href="https://spst-logistics.vercel.app">
+    <link rel="preload" href="https://spst-logistics.vercel.app/back-office/base.css?v=2" as="style">
+    <link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/base.css?v=2">
+    <link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/quotes-admin.css?v=2">
 
     <!-- Config -->
     <script>
@@ -50,15 +51,13 @@
     </script>
   </head>
   <body>
-
-    <!-- Contenitore app BO (gli script lo riempiono) -->
     <div id="back-office-root"></div>
 
-    <!-- Loader ESM -->
+    <!-- JS ESM dal progetto spst-logistics -->
     <script type="module">
-      const BASE = '/assets/esm';
-      const v = '4';
-      const ts = Date.now();
+      const BASE = 'https://spst-logistics.vercel.app/assets/esm';
+      const v = '4';              // stessa versione che usi in logistics
+      const ts = Date.now();      // cache-busting
       console.log('[BO] bootstrap loader v=' + v, 'ts=' + ts);
       await Promise.allSettled([
         import(`${BASE}/main.js?v=${v}&ts=${ts}`),
