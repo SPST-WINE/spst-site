@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Back Office</title>
+
+    <!-- CSS locali (percorso GIUSTO) -->
+    <link rel="preload" href="/back-office/base.css?v=2" as="style">
+    <link rel="stylesheet" href="/back-office/base.css?v=2">
+    <link rel="stylesheet" href="/back-office/quotes-admin.css?v=2">
+
+    <!-- Config -->
+    <script>
+      window.BACK_OFFICE_CONFIG = {
+        PROXY_BASE: 'https://spst-logistics.vercel.app/api/airtable',
+        DEBUG: true,
+        CARRIERS: ['DHL','FedEx','UPS','TNT','Privato'],
+        INCOTERMS: ['EXW','DAP','DDP']
+      };
+    </script>
+
+    <!-- Hotfix PATCH (come su Webflow) -->
+    <script>
+    (function(){
+      const origFetch = window.fetch;
+      window.fetch = async function(input, init = {}) {
+        try {
+          const url = (typeof input === 'string') ? input : (input && input.url) || '';
+          const method = (init && init.method || 'GET').toUpperCase();
+          if (method === 'PATCH' && /\/api\/airtable\/spedizioni\/[^/]+$/.test(url)) {
+            if (typeof init.body === 'string' && init.body.trim().startsWith('{')) {
+              const body = JSON.parse(init.body);
+              if (!body.fields || typeof body.fields !== 'object') body.fields = {};
+              const KNOWN = new Set(['carrier','tracking','statoEvasa','docs','fields']);
+              Object.keys(body).forEach(k => { if (!KNOWN.has(k)) { body.fields[k] = body[k]; delete body[k]; } });
+              const ALIAS = new Set(['e-DAS','e_DAS','eDAS','EDAS']);
+              for (const a of ALIAS) {
+                if (body.fields[a]) { body.fields['Allegato 3'] = body.fields[a]; delete body.fields[a]; }
+                if (body[a])       { body.fields['Allegato 3'] = body[a];       delete body[a]; }
+              }
+              init.body = JSON.stringify(body);
+              console.log('[PatchInterceptor] PATCH normalizzato →', body);
+            }
+          }
+        } catch(e){ console.warn('[PatchInterceptor] non applicato:', e); }
+        return origFetch(input, init);
+      };
+    })();
+    </script>
+  </head>
+  <body>
+
+    <!-- Contenitore app BO (gli script lo riempiono) -->
+    <div id="back-office-root"></div>
+
+    <!-- Loader ESM -->
+    <script type="module">
+      const BASE = '/assets/esm';
+      const v = '4';
+      const ts = Date.now();
+      console.log('[BO] bootstrap loader v=' + v, 'ts=' + ts);
+      await Promise.allSettled([
+        import(`${BASE}/main.js?v=${v}&ts=${ts}`),
+        import(`${BASE}/quotes-admin.js?v=${v}&ts=${ts}`),
+        import(`${BASE}/back-office-tabs.js?v=${v}&ts=${ts}`),
+        import(`${BASE}/brandbar-offset.js?v=${v}&ts=${ts}`)
+      ]);
+    </script>
+  </body>
+</html>
