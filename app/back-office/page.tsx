@@ -1,9 +1,11 @@
-// app/back-office/page.tsx
-export const metadata = { title: 'Back Office — SPST' };
-
-export default function BackOffice() {
+export default function BackOfficePage() {
   return (
-    // Contenitore che gli script del BO usano per montare l’interfaccia
-    <main id="back-office" className="min-h-screen" />
+    <main style={{ background: '#000' }}>
+      <iframe
+        src="/back-office-standalone.html"
+        style={{ width: '100%', height: '100vh', border: 0, display: 'block' }}
+        title="SPST Back Office"
+      />
+    </main>
   );
 }
