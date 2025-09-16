@@ -1,17 +1,14 @@
-// app/back-office/page.tsx
-export const metadata = {
-  title: 'SPST • Back Office',
-  description: 'Gestione spedizioni e preventivi',
-};
+'use client';
 
-export default function BackOffice() {
+export default function BackOfficePage() {
   return (
-    <div style={{height: '100dvh', width: '100vw', background: '#000'}}>
+    <main style={{ minHeight: '100vh', background: '#000' }}>
       <iframe
-        src="https://spst-logistics.vercel.app/back-office-standalone.html?v=4"
-        style={{border: '0', width: '100%', height: '100%', display: 'block'}}
-        allow="clipboard-write *; clipboard-read *"
+        src="/back-office/back-office-standalone.html?v=7"
+        title="SPST — Back Office"
+        style={{ width: '100%', minHeight: '100vh', border: 0, display: 'block' }}
+        loading="eager"
       />
-    </div>
+    </main>
   );
 }
