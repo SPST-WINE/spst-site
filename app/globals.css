@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* opzionale: smoothing & colore di base coerente */
+html, body { height: 100%; }
+body { @apply antialiased; }
