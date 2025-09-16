@@ -1,108 +1,15 @@
-<!doctype html>
-<html lang="it">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SPST • Back Office</title>
-
-  <!-- Performance + font -->
-  <link rel="preconnect" href="https://spst-logistics.vercel.app">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS dal progetto spst-logistics (usa il path /back-office/, non /assets/esm/) -->
-  <link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/base.css?v=5">
-  <link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/quotes-admin.css?v=5">
-
-  <style>
-    /* micro-fix locali (già usati) */
-    #qa-packages { margin-top:16px; }
-    :root{ --pkg-grid:110px 1fr 1fr 1fr 120px 90px; }
-    #qa-packages .pkg-head{ display:grid; grid-template-columns:var(--pkg-grid); gap:8px; padding:6px 0; align-items:center; }
-    #qa-packages .pkg-head>div{ text-align:left; }
-    #qa-packages .pkg-row{ display:grid!important; grid-template-columns:var(--pkg-grid)!important; gap:8px; margin:6px 0; align-items:center; }
-    #qa-packages .pkg-row>*{ min-width:0; }
-    #qa-packages .pkg-row input[type="text"], #qa-packages .pkg-row input[type="number"]{ width:100%; }
-    #qa-packages .pkg-row input::placeholder{ color:transparent!important; }
-    #qa-packages .pkg-row input[type="button"], #qa-packages .pkg-row button:not(.pkg-remove){ display:none!important; }
-    #qa-packages .pkg-row .pkg-remove{ width:100%; height:36px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.06); color:#e7ecf5; cursor:pointer; font-weight:600; display:flex; align-items:center; justify-content:center; transition:.15s; }
-    #qa-packages .pkg-row .pkg-remove:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.18); }
-    #qa-packages .pkg-row .pkg-remove:active{ transform:translateY(1px); }
-    .qa-inner .fullrow{ grid-column:1 / -1; }
-  </style>
-
-  <!-- Guard: evita doppi bootstrap (in caso di copia/incolla o estensioni browser) -->
-  <script>
-    if (window.__BO_BOOTED) { document.documentElement.innerHTML = '<body style="background:#000;color:#fff;font:14px/1.4 system-ui;padding:24px">Back Office già inizializzato.</body>'; throw new Error('BO already booted'); }
-    window.__BO_BOOTED = true;
-  </script>
-</head>
-<body>
-  <!-- ancore + brandbar + header (uguali alla tua versione) -->
-  <a id="tab-spedizioni" class="anchor" aria-hidden="true"></a>
-  <a id="tab-preventivi" class="anchor" aria-hidden="true"></a>
-
-  <div class="brandbar">
-    <div class="wrap" style="display:flex;align-items:center;gap:12px">
-      <div class="brand-left" style="display:flex;align-items:center;gap:12px">
-        <img class="logo" src="https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png" alt="SPST logo" />
-        <div class="divider" aria-hidden="true"></div>
-        <div class="title">Back Office</div>
-      </div>
-      <a href="https://spst-logistics.vercel.app/api/tools/docs" target="_blank" rel="noopener" class="link-orange" style="margin-left:auto">Utility Documenti</a>
-    </div>
-  </div>
-
-  <header>
-    <div class="wrap">
-      <div class="toolbar">
-        <div class="toolbar-left">
-          <input id="search" type="text" placeholder="Cerca per ID spedizione o cliente…" />
-        </div>
-        <div class="toolbar-right">
-          <label class="chip small"><input id="only-open" type="checkbox"> Solo non evase</label>
-        </div>
-      </div>
-      <div class="hairline"></div>
-      <div class="tabbar" style="margin-top:10px">
-        <a href="#tab-spedizioni" data-tab="spedizioni" class="is-active">Spedizioni</a>
-        <a href="#tab-preventivi" data-tab="preventivi">Preventivi</a>
-      </div>
-    </div>
-  </header>
-
-  <div id="api-banner" class="banner">Impossibile raggiungere il proxy API. Sto mostrando la lista vuota. <span class="small">(controlla ORIGIN_ALLOWLIST su Vercel e la connettività)</span></div>
-
-  <main class="wrap">
-    <section id="view-preventivi" class="view" style="display:none">…<!-- (contenuti preventivi come già hai) --></section>
-    <section id="view-spedizioni"><div id="list" class="grid"></div></section>
-  </main>
-
-  <div id="toast" class="toast"></div>
-
-  <!-- Config + hotfix PATCH -->
-  <script>
-    window.BACK_OFFICE_CONFIG = {
-      PROXY_BASE: 'https://spst-logistics.vercel.app/api/airtable',
-      DEBUG: false,
-      CARRIERS: ['DHL','FedEx','UPS','TNT','Privato'],
-      INCOTERMS: ['EXW','DAP','DDP']
-    };
-    // Interceptor PATCH (e-DAS -> Allegato 3)
-    (function(){const f=window.fetch;window.fetch=async(i,n={})=>{try{const u=typeof i==='string'?i:(i&&i.url)||'';const m=(n&&n.method||'GET').toUpperCase();if(m==='PATCH'&&/\/api\/airtable\/spedizioni\/[^/]+$/.test(u)){if(typeof n.body==='string'&&n.body.trim().startsWith('{')){const b=JSON.parse(n.body);if(!b.fields||typeof b.fields!=='object')b.fields={};const K=new Set(['carrier','tracking','statoEvasa','docs','fields']);Object.keys(b).forEach(k=>{if(!K.has(k)){b.fields[k]=b[k];delete b[k];}});const A=new Set(['e-DAS','e_DAS','eDAS','EDAS']);for(const a of A){if(b.fields[a]){b.fields['Allegato 3']=b.fields[a];delete b.fields[a];}if(b[a]){b.fields['Allegato 3']=b[a];delete b[a];}}n.body=JSON.stringify(b);}}}catch(e){}return f(i,n);};})();
-  </script>
-
-  <!-- Loader ESM unico (niente Webflow) -->
-  <script type="module">
-    const BASE = 'https://spst-logistics.vercel.app/assets/esm';
-    const v = '5'; const ts = Date.now();
-    await Promise.allSettled([
-      import(`${BASE}/main.js?v=${v}&ts=${ts}`),
-      import(`${BASE}/quotes-admin.js?v=${v}&ts=${ts}`),
-      import(`${BASE}/back-office-tabs.js?v=${v}&ts=${ts}`),
-      import(`${BASE}/brandbar-offset.js?v=${v}&ts=${ts}`)
-    ]);
-  </script>
-</body>
-</html>
+<link rel="preconnect" href="https://spst-logistics.vercel.app">
+<link rel="preload" href="https://spst-logistics.vercel.app/back-office/base.css?v=5" as="style">
+<link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/base.css?v=5">
+<link rel="stylesheet" href="https://spst-logistics.vercel.app/back-office/quotes-admin.css?v=5">
+<div id="view-spedizioni"></div>
+<script>if(window.__BO_BOOTED){throw new Error('BO already booted')}window.__BO_BOOTED=true;</script>
+<script type="module">
+  const BASE='https://spst-logistics.vercel.app/assets/esm', v='5', ts=Date.now();
+  await Promise.allSettled([
+    import(`${BASE}/main.js?v=${v}&ts=${ts}`),
+    import(`${BASE}/quotes-admin.js?v=${v}&ts=${ts}`),
+    import(`${BASE}/back-office-tabs.js?v=${v}&ts=${ts}`),
+    import(`${BASE}/brandbar-offset.js?v=${v}&ts=${ts}`)
+  ]);
+</script>
