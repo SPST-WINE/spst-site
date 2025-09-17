@@ -1,8 +1,8 @@
 // app/back-office/page.tsx
+// (lascia invariato il resto della pagina; qui aggiungo solo il bootstrap del BO se non l'hai già)
 export default function BackOfficePage() {
   return (
     <>
-      {/* UI minima + anchor/containers che il BO si aspetta */}
       <header className="bo-header">
         <div className="wrap">
           <nav className="tabbar" aria-label="Sezioni Back Office">
@@ -33,13 +33,9 @@ export default function BackOfficePage() {
         </section>
       </main>
 
-      {/* Config PRIMA del loader ESM, così il bundle la trova subito */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.BACK_OFFICE_CONFIG = { PROXY_BASE: '/api/airtable', DEBUG: true };`,
-        }}
-      />
-      {/* Carica il bundle ESM senza crossorigin per evitare mismatch con eventuale preload */}
+      {/* Config per le API locali */}
+      <script dangerouslySetInnerHTML={{ __html: `window.BACK_OFFICE_CONFIG = { PROXY_BASE: '/api', DEBUG: true };` }} />
+      {/* Loader ESM del Back Office */}
       <script type="module" src="/bo-assets/esm/main.js"></script>
     </>
   );
