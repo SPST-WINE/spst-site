@@ -1,5 +1,9 @@
 // app/api/spedizioni/route.ts
-// Ricerca estesa: filtra per ID, cliente, città, paese, CAP (con fallback su più schemi Airtable)
+// Ricerca FIX: filtra per ID Spedizione + campi Airtable forniti
+// - Creato da
+// - Mittente - Ragione Sociale / Città / CAP
+// - Destinatario - Ragione Sociale / Paese / Città / CAP
+// Mantiene il toggle "Solo non evase" (onlyOpen=1)
 
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -62,7 +66,7 @@ export async function GET(req: NextRequest) {
   const pageSize = Number(url.searchParams.get('pageSize') || '50') || 50;
   const offset   = url.searchParams.get('offset') || undefined;
 
-  // Stato aperte/non evase
+  // Stato aperte/non evase (tollerante a varianti)
   const openPart =
     `NOT(OR(` +
       `LOWER({Stato})='evasa',` +
@@ -71,56 +75,37 @@ export async function GET(req: NextRequest) {
       `LOWER({Stato})='completato'` +
     `))`;
 
-  const qs = esc(q.toLowerCase());
-
-  // Gruppi di campi alternativi (fall-through: se un gruppo non esiste -> 422 -> si prova il successivo)
-  const groups: string[][] = [
-    // ID e meta base
-    ['ID Spedizione','ID','Creato da','Email cliente'],
-    // Cliente
-    ['Cliente','Nome cliente','Ragione sociale','Email cliente'],
-    // Città (partenza/arrivo)
-    ['Città partenza','Città destinazione','Citta partenza','Citta destinazione','Partenza','Arrivo','City From','City To','Città','Citta'],
-    // Paese
-    ['Paese partenza','Paese destinazione','Country From','Country To','Paese','Country','Partenza','Arrivo'],
-    // CAP / ZIP
-    ['CAP partenza','CAP destinazione','CAP','Zip','ZIP From','ZIP To','Partenza','Arrivo'],
+  // Campi richiesti per la ricerca
+  const searchFields = [
+    'ID Spedizione',
+    'Creato da',
+    'Mittente - Ragione Sociale',
+    'Mittente - Città',
+    'Mittente - CAP',
+    'Destinatario - Ragione Sociale',
+    'Destinatario - Paese',
+    'Destinatario - Città',
+    'Destinatario - CAP',
   ];
 
-  // Costruisce OR(FIND(q, LOWER({campo}&''))>0, …) per un gruppo
-  const buildGroup = (fields: string[]) =>
-    `OR(${fields.map(f => `FIND('${qs}', LOWER({${f}}&''))>0`).join(',')})`;
+  // Costruisci formula OR su tutti i campi indicati
+  const buildSearch = (needle: string) => {
+    const lowered = esc(needle.toLowerCase());
+    const parts = searchFields.map(f => `FIND('${lowered}', LOWER({${f}}&''))>0`);
+    return parts.length ? `OR(${parts.join(',')})` : '';
+  };
 
-  // Candidati: prima prova su ID, poi sugli altri gruppi
-  const candidates: string[] = [];
-  const idFirst = buildGroup(['ID Spedizione','ID']);
-  candidates.push(idFirst);
-  groups.forEach(g => candidates.push(buildGroup(g)));
+  // Formula finale
+  const clauses: string[] = [];
+  if (q) clauses.push(buildSearch(q));
+  if (onlyOpen === '1' || onlyOpen === 'true') clauses.push(openPart);
+  const formula = clauses.length ? `AND(${clauses.join(',')})` : '';
 
-  // Applica stato aperte se richiesto
-  const formulas = candidates.map(f => {
-    const parts = [];
-    if (f) parts.push(f);
-    if (onlyOpen === '1' || onlyOpen === 'true') parts.push(openPart);
-    return parts.length ? `AND(${parts.join(',')})` : '';
-  });
-
-  // Esegui in sequenza ignorando 422 (campi mancanti)
-  for (const formula of formulas) {
-    try {
-      const { ok: okAt, status, json } = await listWithFormula(TB_SPED, formula, pageSize, offset);
-      if (okAt) {
-        return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
-      }
-      if (status === 422) continue; // prova formula successiva
-      return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
-    } catch {
-      continue;
-    }
+  // Query Airtable
+  const { ok: okAt, status, json } = await listWithFormula(TB_SPED, formula, pageSize, offset);
+  if (okAt) {
+    return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
   }
-
-  // Nessuna formula valida → lista senza filtro (fallback sicuro)
-  const { ok: okPlain, status, json } = await listWithFormula(TB_SPED, '', pageSize, offset);
-  if (okPlain) return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
+  // Se la formula fosse invalida (422) restituiamo errore chiaro
   return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
 }
