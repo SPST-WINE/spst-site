@@ -5,7 +5,6 @@ export default function BackOfficePage() {
       <header className="bo-header">
         <div className="wrap">
           {/* brand/top utilities */}
-          // app/back-office/page.tsx  (sostituisci SOLO il blocco brand)
 <div className="bo-brandbar">
   <div className="bo-brand">
     {/* Se metti il file nella root di /public con nome "spst-logo.png" usa questo src: "/spst-logo.png"
