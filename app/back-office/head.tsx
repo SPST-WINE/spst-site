@@ -5,16 +5,12 @@ export default function Head() {
       <title>Back Office • SPST</title>
       <meta name="robots" content="noindex,nofollow" />
 
-      {/* ✅ CSS locale per il Back Office */}
+      {/* CSS locali */}
       <link rel="stylesheet" href="/bo-assets/esm/base.css" />
       <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" />
 
-      {/* ❗️Disattiva l'iniezione CSS automatica (che punta a /assets/esm su un altro host) */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: 'window.__BO_CSS_INJECTED__ = true;',
-        }}
-      />
+      {/* Evita che il bundle provi a iniettare CSS da /assets/esm */}
+      <script dangerouslySetInnerHTML={{ __html: `window.__BO_CSS_INJECTED__ = true;` }} />
     </>
   );
 }
