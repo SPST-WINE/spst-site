@@ -70,3 +70,29 @@
   .bo-filters{ grid-template-columns: 1fr; }
   .switch{ justify-content:flex-start; }
 }
+
+/* ⬇️ Incolla in fondo a: app/back-office/bo.css */
+
+/* FIX riga azzurra sopra la topbar:
+   appare quando l’URL usa l’anchor (#tab-spedizioni / #tab-preventivi).
+   Disattiviamo outline/box-shadow del target invisibile e diamo una
+   scroll-margin per non coprire l’intestazione. */
+.anchor {
+  display: block;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+  scroll-margin-top: 88px; /* spazio sotto la topbar */
+}
+.anchor:focus,
+.anchor:target {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Evita eventuali highlight sui tab quando ci arrivi via hash */
+.tabbar a:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
