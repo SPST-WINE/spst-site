@@ -3,11 +3,13 @@
 const W = (typeof window !== 'undefined' && window.BACK_OFFICE_CONFIG) || {};
 
 // Debug attivabile da Webflow (DEBUG: true/false)
-export const DEBUG = (typeof W.DEBUG === 'boolean') ? W.DEBUG : true;
+export const DEBUG = false;
+
 
 // Config Airtable/proxy; PROXY_BASE può essere sovrascritto da Webflow
 export const AIRTABLE = {
   baseId: 'appwnx59j8NJ1x5ts',
+  proxyBase: 'https://spst-logistics.vercel.app/api',
   table: 'SPEDIZIONI',
   view: null,
   // Default sicuro: progetto proxy su Vercel
