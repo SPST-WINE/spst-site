@@ -1,20 +1,27 @@
 // app/layout.tsx
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "SPST — Export & Wine Logistics",
-  description: "Export vino all-in-one: documenti, spedizioni e crescita commerciale.",
+  // Titolo di default (home e tutte le pagine che NON lo sovrascrivono)
+  title: 'SPST - Export & Wine Logistics',
+  icons: {
+    // Usa il logo già presente in /public/bo-assets/img/spst-logo.png
+    icon: [
+      { url: '/bo-assets/img/spst-logo.png', type: 'image/png', sizes: '32x32' },
+      { url: '/bo-assets/img/spst-logo.png', type: 'image/png', sizes: '192x192' },
+      { url: '/bo-assets/img/spst-logo.png', type: 'image/png', sizes: 'any' },
+    ],
+    apple: [{ url: '/bo-assets/img/spst-logo.png' }],
+    shortcut: ['/bo-assets/img/spst-logo.png'],
+  },
+  themeColor: '#0b1220',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it">
-      {/* Se vuoi un fallback nero anche senza CSS, aggiungi: style={{ backgroundColor: '#000' }} */}
-      <body className={inter.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
