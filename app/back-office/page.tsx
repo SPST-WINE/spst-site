@@ -5,30 +5,26 @@ export default function BackOfficePage() {
       <header className="bo-header">
         <div className="wrap">
           {/* brand/top utilities */}
-<div className="bo-brandbar">
-  <div className="bo-brand">
-    {/* Se metti il file nella root di /public con nome "spst-logo.png" usa questo src: "/spst-logo.png"
-       * In alternativa, metti il file in /public/bo-assets/img/spst-logo.png e usa quel percorso.
-       */}
-    <img
-      className="bo-logo-img"
-      src="/bo-assets/img/spst-logo.png"
-      alt="SPST"
-    />
-    <span className="bo-title">Back Office</span>
-  </div>
-  <div className="bo-utils">
-    <a
-      className="util-link"
-      href="https://spst-logistics-spsts-projects.vercel.app/api/tools/docs"
-      target="_blank"
-      rel="noopener"
-    >
-      Utility Documenti
-    </a>
-  </div>
-</div>
-
+          <div className="bo-brandbar">
+            <div className="bo-brand">
+              <img
+                className="bo-logo-img"
+                src="/bo-assets/img/spst-logo.png"
+                alt="SPST"
+              />
+              <span className="bo-title">Back Office</span>
+            </div>
+            <div className="bo-utils">
+              <a
+                className="util-link"
+                href="https://spst-logistics-spsts-projects.vercel.app/api/tools/docs"
+                target="_blank"
+                rel="noopener"
+              >
+                Utility Documenti
+              </a>
+            </div>
+          </div>
 
           {/* tabs */}
           <nav className="tabbar" aria-label="Sezioni Back Office">
@@ -44,8 +40,6 @@ export default function BackOfficePage() {
               type="text"
               placeholder="Cerca per ID cliente, Paese, città…"
             />
-
-            {/* mantiene gli stessi id per la logica JS */}
             <label className="switch" title="Mostra solo spedizioni non evase">
               <input id="only-open" type="checkbox" />
               <span className="slider" aria-hidden="true"></span>
@@ -69,8 +63,12 @@ export default function BackOfficePage() {
         </section>
       </main>
 
+      {/* Config per le API locali */}
       <script dangerouslySetInnerHTML={{ __html: `window.BACK_OFFICE_CONFIG = { PROXY_BASE: '/api', DEBUG: true };` }} />
+      {/* Loader ESM del Back Office */}
       <script type="module" src="/bo-assets/esm/main.js"></script>
+      {/* Enhancer UI per doc: rimuove "template", trasforma "apri" in bottone */}
+      <script type="module" src="/bo-assets/bo-enhance.js"></script>
     </>
   );
 }
