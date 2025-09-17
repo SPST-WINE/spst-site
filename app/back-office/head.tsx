@@ -4,10 +4,17 @@ export default function Head() {
     <>
       <title>Back Office • SPST</title>
       <meta name="robots" content="noindex,nofollow" />
-      {/* NIENTE preload: evitiamo mismatch di crossorigin/credentials */}
-      {/* Se vuoi preloading, usa:
-      <link rel="preload" href="/bo-assets/esm/main.js" as="script" crossOrigin="anonymous" />
-      */}
+
+      {/* ✅ CSS locale per il Back Office */}
+      <link rel="stylesheet" href="/bo-assets/esm/base.css" />
+      <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" />
+
+      {/* ❗️Disattiva l'iniezione CSS automatica (che punta a /assets/esm su un altro host) */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: 'window.__BO_CSS_INJECTED__ = true;',
+        }}
+      />
     </>
   );
 }
