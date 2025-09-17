@@ -11,7 +11,7 @@ export const AIRTABLE = {
   table: 'SPEDIZIONI',
   view: null,
   // Default sicuro: progetto proxy su Vercel
-  proxyBase: W.PROXY_BASE || 'https://spst-airtable-proxy.vercel.app/api/airtable'
+  proxyBase: '/api'
 };
 
 export const USE_PROXY = true;
