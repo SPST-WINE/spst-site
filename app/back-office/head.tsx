@@ -1,19 +1,19 @@
 // app/back-office/head.tsx
-export default function Head() {
+export default function Head(){
   return (
     <>
-      <title>Back Office — SPST</title>
-      {/* CSS */}
+      <title>Back Office — Spedizioni</title>
+      <meta charSet="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      {/* CSS back-office */}
+      <link rel="preload" href="/bo-assets/esm/base.css" as="style" />
       <link rel="stylesheet" href="/bo-assets/esm/base.css" />
+      <link rel="preload" href="/bo-assets/esm/quotes-admin.css" as="style" />
       <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" />
 
-      {/* Preload modulo principale (opzionale). Se tieni il preload, aggiungi crossorigin */}
-      <link
-        rel="modulepreload"
-        href="/bo-assets/esm/main.js"
-        as="script"
-        crossOrigin="anonymous"
-      />
+      {/* JS back-office (niente preload per evitare il warning “credentials mode”) */}
+      <script type="module" src="/bo-assets/esm/main.js" />
     </>
   );
 }
