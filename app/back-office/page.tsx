@@ -1,20 +1,48 @@
 // app/back-office/page.tsx
-// (lascia invariato il resto della pagina; qui aggiungo solo il bootstrap del BO se non l'hai già)
 export default function BackOfficePage() {
   return (
     <>
       <header className="bo-header">
         <div className="wrap">
+          {/* brand/top utilities */}
+          <div className="bo-brandbar">
+            <div className="bo-brand">
+              <span className="bo-logo">S</span>
+              <span className="bo-title">Back Office</span>
+            </div>
+            <div className="bo-utils">
+              <a
+                className="util-link"
+                href="https://spst-logistics-spsts-projects.vercel.app/api/tools/docs"
+                target="_blank"
+                rel="noopener"
+              >
+                Utility Documenti
+              </a>
+            </div>
+          </div>
+
+          {/* tabs */}
           <nav className="tabbar" aria-label="Sezioni Back Office">
             <a href="#tab-spedizioni" data-tab="spedizioni" aria-current="page">Spedizioni</a>
             <a href="#tab-preventivi" data-tab="preventivi">Preventivi</a>
           </nav>
-          <div className="bo-tools">
-            <label className="chip">
+
+          {/* filters row */}
+          <div className="bo-filters">
+            <input
+              id="search"
+              className="nice-input"
+              type="text"
+              placeholder="Cerca per ID cliente, Paese, città…"
+            />
+
+            {/* keep the same input#only-open used dalla logica JS, ma con look & label nuovi */}
+            <label className="switch" title="Mostra solo spedizioni non evase">
               <input id="only-open" type="checkbox" />
-              <span>Mostra solo aperte</span>
+              <span className="slider" aria-hidden="true"></span>
+              <span className="lbl">Solo non evase</span>
             </label>
-            <input id="search" className="nice-input" type="text" placeholder="Cerca per ID cliente, Paese, città…" />
           </div>
         </div>
       </header>
