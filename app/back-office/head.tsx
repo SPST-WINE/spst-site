@@ -1,16 +1,12 @@
 // app/back-office/head.tsx
+// Titolo e favicon solo per il Back Office
 export default function Head() {
   return (
     <>
-      <title>Back Office • SPST</title>
-      <meta name="robots" content="noindex,nofollow" />
-
-      {/* CSS locali */}
-      <link rel="stylesheet" href="/bo-assets/esm/base.css" />
-      <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" />
-
-      {/* Evita che il bundle provi a iniettare CSS da /assets/esm */}
-      <script dangerouslySetInnerHTML={{ __html: `window.__BO_CSS_INJECTED__ = true;` }} />
+      <title>SPST Back Office</title>
+      <link rel="icon" href="/bo-assets/img/spst-logo.png" type="image/png" />
+      <link rel="apple-touch-icon" href="/bo-assets/img/spst-logo.png" />
+      <meta name="theme-color" content="#0b1220" />
     </>
   );
 }
