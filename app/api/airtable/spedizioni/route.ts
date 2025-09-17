@@ -1,8 +1,8 @@
-// app/api/airtable/spedizioni/route.ts
+// app/api/spedizioni/route.ts
+// Alias compatibilità: /api/spedizioni  → lista/ricerca (stessa logica di /api/airtable/spedizioni)
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-/* ───────── CORS helpers ───────── */
 function getAllowedOrigin(req: NextRequest) {
   const origin = req.headers.get('origin') || '';
   const raw =
@@ -29,19 +29,15 @@ export function OPTIONS(req: NextRequest) {
   return withCors(req, new NextResponse(null, { status: 204 }));
 }
 
-/* ───────── Config ───────── */
 const BASE = process.env.AIRTABLE_BASE_ID!;
 const KEY  = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_PAT!;
 const TBL  = process.env.TB_SPEDIZIONI || 'SPEDIZIONI';
 
-/* ───────── Filter formula ───────── */
 function esc(s: string){ return String(s).replace(/"/g,'\\"'); }
-
 function buildFilterFormula(params: URLSearchParams) {
   const search = (params.get('search') || '').trim();
   const status = (params.get('status') || '').trim();
   const onlyOpen = params.get('onlyOpen') === '1';
-
   const parts: string[] = [];
 
   if (search) {
@@ -58,7 +54,6 @@ function buildFilterFormula(params: URLSearchParams) {
       'Paese Mittente','Città Mittente','Indirizzo Mittente',
     ];
     const FIELDS = [...NEW_FIELDS, ...LEGACY_FIELDS];
-
     const ors: string[] = [];
     ors.push(`LOWER({ID Spedizione} & "") = "${s}"`);
     ors.push(`LOWER({Tracking Number} & "") = "${s}"`);
@@ -73,18 +68,13 @@ function buildFilterFormula(params: URLSearchParams) {
 
   if (status === 'evase') parts.push(IS_EVASA);
   else if (status === 'nuova') parts.push(IS_NUOVA);
-  else if (status === 'in_elab') {
-    parts.push(`AND(NOT(${IS_EVASA}), NOT(${IS_CONSEGNATA}), NOT(${IS_ANNULLATA}))`);
-  }
-
-  // “solo non evase” = SOLO Nuova
+  else if (status === 'in_elab') parts.push(`AND(NOT(${IS_EVASA}), NOT(${IS_CONSEGNATA}), NOT(${IS_ANNULLATA}))`);
   if (onlyOpen) parts.push(IS_NUOVA);
 
   if (!parts.length) return '';
   return `AND(${parts.join(',')})`;
 }
 
-/* ───────── GET /api/airtable/spedizioni ───────── */
 export async function GET(req: NextRequest) {
   try {
     const params = req.nextUrl.searchParams;
@@ -101,11 +91,9 @@ export async function GET(req: NextRequest) {
       headers: { Authorization: `Bearer ${KEY}` },
       cache: 'no-store',
     });
-
     const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      return okJson(req, { ok:false, error: json }, { status: res.status });
-    }
+    if (!res.ok) return okJson(req, { ok:false, error: json }, { status: res.status });
+
     return okJson(req, { ok:true, records: Array.isArray(json.records) ? json.records : [] });
   } catch (err: any) {
     return okJson(req, { ok:false, error: String(err?.message||err) }, { status: 500 });
