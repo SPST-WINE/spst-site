@@ -1,15 +1,17 @@
-// assets/esm/main.js
-import { DEBUG, AIRTABLE } from './config.js';
+// public/bo-assets/esm/main.js
+// NB: ora importiamo dai path assoluti sotto /bo-assets/* (niente più /esm per utils/airtable/rules)
+
+import { DEBUG, AIRTABLE } from '/bo-assets/config.js';
 import {
   fetchShipments,
   patchShipmentTracking,
   uploadAttachment,
   docFieldFor,
-} from './airtable/api.js';
-import { renderList } from './ui/render.js';
-import { toast } from './utils/dom.js';
-import { dateTs } from './utils/misc.js';
-import './back-office-tabs.js';
+} from '/bo-assets/airtable/api.js';
+import { renderList } from '/bo-assets/esm/render.js';
+import { toast } from '/bo-assets/utils/dom.js';
+import { dateTs } from '/bo-assets/utils/misc.js';
+import '/bo-assets/esm/back-office-tabs.js';
 
 const elSearch   = document.getElementById('search');
 const elOnlyOpen = document.getElementById('only-open');
