@@ -32,8 +32,6 @@
 }
 .bo-utils .util-link:hover{ text-decoration:underline; }
 
-/* —— Tabs (usa stile esistente da base.css) —— */
-
 /* —— Filters row: search (75%) + toggle (25%) —— */
 .bo-filters{
   display:grid; grid-template-columns: 3fr 1fr; gap:12px; align-items:center;
@@ -65,7 +63,9 @@
 /* —— Spaziatura tra card spedizioni —— */
 #list > * + *{ margin-top:16px; }
 
-/* responsive */
+/* (Extra sicurezza) nascondi eventuali separatori resi come elementi */
+.doc .sep, .docs .sep, .bo-docs .sep, .doc .dot, .docs .dot, .bo-docs .dot { display:none !important; }
+
 @media (max-width: 900px){
   .bo-filters{ grid-template-columns: 1fr; }
   .switch{ justify-content:flex-start; }
