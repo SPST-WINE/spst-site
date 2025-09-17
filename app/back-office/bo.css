@@ -2,29 +2,28 @@
 @import url('/bo-assets/esm/base.css');
 @import url('/bo-assets/esm/quotes-admin.css');
 
-/* —— Brand bar + tabs —— */
+/* —— Vars —— */
 :root{
   --bo-brand: #1c3e5e;
   --bo-accent: #f7911e;
   --bo-border: rgba(0,0,0,.12);
   --bo-surface-2: rgba(15, 23, 42, .06);
-  --spst-orange: #f7911d; /* richiesta */
+  --spst-orange: #f7911d;
 }
 
 .bo-header { padding-top: 8px; }
 
+/* —— Brandbar —— */
 .bo-brandbar{
   display:flex; align-items:center; justify-content:space-between;
   gap:12px; margin-bottom:10px;
 }
 .bo-brand{ display:flex; align-items:center; gap:10px; }
 .bo-logo-img{ height:28px; width:auto; display:block; }
-
 .bo-title{
   font-weight:700; font-size:15px; letter-spacing:.2px;
   color: var(--spst-orange);
 }
-
 .bo-utils .util-link{
   display:inline-block; font-size:13px; text-decoration:none;
   padding:8px 12px; border-radius:10px; border:1px solid currentColor;
@@ -33,6 +32,8 @@
 }
 .bo-utils .util-link:hover{ text-decoration:underline; }
 
+/* —— Tabs (usa stile esistente da base.css) —— */
+
 /* —— Filters row: search (75%) + toggle (25%) —— */
 .bo-filters{
   display:grid; grid-template-columns: 3fr 1fr; gap:12px; align-items:center;
@@ -40,7 +41,7 @@
 }
 .bo-filters .nice-input{ width:100%; }
 
-/* Pretty switch */
+/* Pretty switch arancione */
 .switch{ display:flex; align-items:center; justify-content:flex-end; gap:10px; }
 .switch input{ position:absolute; opacity:0; width:1px; height:1px; }
 .switch .slider{
@@ -60,6 +61,9 @@
 }
 .switch input:checked + .slider::after{ left:28px; }
 .switch .lbl{ font-size:13px; color: var(--spst-orange); }
+
+/* —— Spaziatura tra card spedizioni —— */
+#list > * + *{ margin-top:16px; }
 
 /* responsive */
 @media (max-width: 900px){
