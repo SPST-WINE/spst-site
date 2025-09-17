@@ -1,7 +1,7 @@
 // app/api/airtable/spedizioni/[id]/colli/route.ts
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { okJson, empty204, applyCors } from '../../../../../../lib/cors';
+import { okJson, empty204, applyCors } from '../../../../../../_lib/cors';
 
 const BASE = process.env.AIRTABLE_BASE_ID!;
 const KEY  = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_PAT!;
