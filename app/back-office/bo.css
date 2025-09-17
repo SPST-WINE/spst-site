@@ -1,0 +1,4 @@
+/* app/back-office/bo.css */
+/* Importa i CSS presenti in public/bo-assets/esm */
+@import url('/bo-assets/esm/base.css');
+@import url('/bo-assets/esm/quotes-admin.css');
