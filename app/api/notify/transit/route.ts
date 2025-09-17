@@ -118,7 +118,7 @@ Ritiro previsto: ${fmtDateIso(ritiroData)}
 Dettagli: ${AREA_RISERVATA}`;
 
     const resend = new Resend(RESEND_API_KEY);
-    const sent = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: EMAIL_FROM,
       to,
       subject,
@@ -126,7 +126,11 @@ Dettagli: ${AREA_RISERVATA}`;
       text,
     });
 
-    return okJson(req, { ok:true, id: sent?.id ?? null });
+    if (error) {
+      return okJson(req, { ok:false, error: String((error as any)?.message || error) }, { status: 502 });
+    }
+
+    return okJson(req, { ok:true, id: data?.id ?? null });
   } catch (err: any) {
     return okJson(req, { ok:false, error: String(err?.message || err) }, { status: 502 });
   }
