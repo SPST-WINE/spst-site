@@ -45,82 +45,110 @@ export async function POST(req: NextRequest) {
 
     const RESEND_API_KEY   = process.env.RESEND_API_KEY;
     const EMAIL_FROM       = process.env.EMAIL_FROM         || 'notification@spst.it';
-    const EMAIL_LOGO_URL   = process.env.EMAIL_LOGO_URL     || '';
-    const AREA_RISERVATA   = process.env.AREA_RISERVATA_URL || 'https://www.spst.it/';
+    const EMAIL_LOGO_URL   = process.env.EMAIL_LOGO_URL     || 'https://www.spst.it/logo-email.png';
+    const AREA_RISERVATA   = process.env.AREA_RISERVATA_URL || 'https://www.spst.it/area-riservata';
     const WHATSAPP_URL     = process.env.WHATSAPP_URL       || 'https://wa.me/393000000000';
 
     if (!RESEND_API_KEY) return okJson(req, { ok:false, error:'RESEND_API_KEY missing' }, { status: 500 });
     if (!to)             return okJson(req, { ok:false, error:'Missing "to"' }, { status: 400 });
     if (!id)             return okJson(req, { ok:false, error:'Missing "id"' }, { status: 400 });
 
-    const BRAND_PRIMARY = '#1c3e5e';
-    const BRAND_ACCENT  = '#f7911e';
+    // Palette (header blu come template “area riservata”)
+    const BRAND_PRIMARY = '#1c3e5e'; // blu header
+    const BRAND_ACCENT  = '#f7911e'; // arancio CTA
     const BRAND_BG      = '#f6f8fb';
 
-    const subject = `SPST • Spedizione in transito — ${id}`;
-    const logo = EMAIL_LOGO_URL
-      ? `<img src="${esc(EMAIL_LOGO_URL)}" alt="SPST" height="28" style="display:block" />`
-      : `<strong style="font-weight:700;color:#0f172a">SPST</strong>`;
+    const subject   = `SPST • Spedizione in transito — ${id}`;
+    const preheader = `Spedizione in transito. Ritiro previsto ${fmtDate(ritiroData)}.`;
 
     const html = `<!doctype html>
 <html lang="it">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="x-apple-disable-message-reformatting">
-    <title>SPST • Spedizione in transito — ${esc(id)}</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="x-apple-disable-message-reformatting"/>
+    <title>${esc(subject)}</title>
   </head>
   <body style="margin:0;background:${BRAND_BG};font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;">
-    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">
-      Spedizione in transito — ritiro previsto ${esc(fmtDate(ritiroData))}.
-    </div>
+    <!-- Preheader -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${esc(preheader)}</div>
 
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:${BRAND_BG};padding:24px 12px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND_BG};padding:24px 12px;">
       <tr>
-        <td>
-          <table role="presentation" align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width:680px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(16,24,40,.06);">
+        <td align="center">
+          <table role="presentation" width="680" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(16,24,40,.06);border:1px solid #e2e8f0;">
+            <!-- Header blu -->
             <tr>
-              <td style="padding:18px 24px;border-bottom:1px solid #eef2f7;">
-                <table role="presentation" width="100%">
-                  <tr>
-                    <td style="width:32px">${logo}</td>
-                    <td style="text-align:right;font-size:12px;color:#64748b;">ID: <strong style="color:#0f172a">${esc(id)}</strong></td>
-                  </tr>
-                </table>
+              <td style="background:${BRAND_PRIMARY};padding:18px 24px;">
+                <img src="${esc(EMAIL_LOGO_URL)}" alt="SPST" style="height:28px;display:block;border:0;filter:brightness(110%);" />
               </td>
             </tr>
 
+            <!-- Body -->
             <tr>
               <td style="padding:24px;">
-                <h1 style="margin:0 0 14px 0;font-size:18px;line-height:1.3;color:#0f172a;">Spedizione in transito</h1>
-                <p style="margin:0 0 8px 0;font-size:14px;color:#0f172a;">ID spedizione: <strong>${esc(id)}</strong></p>
-                <p style="margin:0 0 8px 0;font-size:14px;color:#0f172a;">Corriere: <strong>${esc(carrier)}</strong></p>
-                <p style="margin:0 0 8px 0;font-size:14px;color:#0f172a;">Tracking: <strong>${esc(tracking)}</strong></p>
-                <p style="margin:0 0 16px 0;font-size:14px;color:#0f172a;">Ritiro previsto: <strong>${esc(fmtDate(ritiroData))}</strong></p>
+                <h1 style="margin:0 0 8px 0;font-size:20px;color:#0f172a;">Spedizione in transito</h1>
 
-                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:16px 0 20px 0;">
+                <!-- ID box -->
+                <table role="presentation" style="width:100%;margin:6px 0 18px;">
+                  <tr>
+                    <td style="font-size:12px;color:#6b7280;padding-bottom:4px;">ID spedizione</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;font-size:14px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#111827;">
+                      ${esc(id)}
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="margin:0 0 10px 0;color:#374151;font-size:14px;line-height:1.55;">
+                  Gentile Cliente, la tua spedizione è stata evasa. Trovi i documenti da stampare all'interno della tua
+                  <a href="${esc(AREA_RISERVATA)}" style="color:#0a58ca;">Area Riservata SPST</a>.
+                </p>
+
+                <p style="margin:0 0 14px 0;color:#374151;font-size:14px;line-height:1.55;">
+                  <strong>Ritiro previsto:</strong> ${esc(fmtDate(ritiroData))}
+                </p>
+
+                <p style="margin:0 0 18px 0;color:#374151;font-size:14px;line-height:1.55;">
+                  Se ci dovessero essere problemi con il ritiro puoi riferirti al nostro
+                  <a href="${esc(WHATSAPP_URL)}" style="color:#0a58ca;">Supporto WhatsApp</a>.
+                </p>
+
+                <!-- Info box -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:12px;background:#fff;margin:0 0 16px;">
+                  <tr>
+                    <td style="padding:12px 14px;font-size:14px;color:#0f172a;">
+                      <div style="margin:0 0 6px 0;"><strong>Corriere:</strong> ${esc(carrier || '—')}</div>
+                      <div><strong>Tracking:</strong> ${esc(tracking || '—')}</div>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- CTAs -->
+                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 18px;">
                   <tr>
                     <td>
-                      <a href="${esc(AREA_RISERVATA)}"
-                        style="display:inline-block;background:${BRAND_PRIMARY};color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 16px;border-radius:10px;">
-                        Vai all'Area Riservata
+                      <a href="${esc(AREA_RISERVATA)}" target="_blank"
+                         style="display:inline-block;background:${BRAND_PRIMARY};color:#fff;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:600;font-size:14px;">
+                        Area Riservata
+                      </a>
+                    </td>
+                    <td style="width:10px"></td>
+                    <td>
+                      <a href="${esc(WHATSAPP_URL)}" target="_blank"
+                         style="display:inline-block;background:${BRAND_ACCENT};color:#111827;text-decoration:none;padding:12px 16px;border-radius:10px;font-weight:600;font-size:14px;">
+                        Supporto WhatsApp
                       </a>
                     </td>
                   </tr>
                 </table>
 
-                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #e5e7eb;border-radius:12px;">
-                  <tr>
-                    <td style="padding:14px 16px;font-size:14px;color:#0f172a;">
-                      <div style="margin:0 0 6px 0;"><strong style="color:#0f172a">Assistenza</strong></div>
-                      In caso di necessità puoi contattarci su
-                      <a href="${esc(WHATSAPP_URL)}" target="_blank" rel="noopener" style="color:${BRAND_ACCENT};font-weight:600;">WhatsApp</a>.
-                    </td>
-                  </tr>
-                </table>
+                <p style="margin:0 0 18px 0;color:#374151;font-size:14px;">Grazie,<br/>Team SPST</p>
               </td>
             </tr>
 
+            <!-- Footer grigio -->
             <tr>
               <td style="padding:16px 24px;background:#f3f4f6;color:#6b7280;font-size:12px;">
                 <p style="margin:0;">Ricevi questa mail perché hai effettuato una spedizione con SPST.</p>
@@ -136,13 +164,13 @@ export async function POST(req: NextRequest) {
     const text = `Spedizione in transito — ${id}
 
 Gentile Cliente, la tua spedizione è stata evasa.
-Trovi i documenti da stampare nella tua Area Riservata SPST: ${AREA_RISERVATA}
+Trovi i documenti da stampare nella tua Area Riservata: ${AREA_RISERVATA}
 Ritiro previsto: ${fmtDate(ritiroData)}
 
 Corriere: ${carrier || '—'}
 Tracking: ${tracking || '—'}
 
-Se ci fossero problemi con il ritiro, contatta il Supporto WhatsApp: ${WHATSAPP_URL}
+Supporto WhatsApp: ${WHATSAPP_URL}
 
 Grazie,
 Team SPST`;
@@ -157,7 +185,6 @@ Team SPST`;
     });
 
     if (error) return okJson(req, { ok:false, error: String((error as any)?.message || error) }, { status: 502 });
-
     return okJson(req, { ok:true, id: data?.id ?? null });
   } catch (err: any) {
     return okJson(req, { ok:false, error: String(err?.message || err) }, { status: 502 });
