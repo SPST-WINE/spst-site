@@ -7,7 +7,12 @@ export default function BackOfficePage() {
           {/* brand/top utilities */}
           <div className="bo-brandbar">
             <div className="bo-brand">
-              <span className="bo-logo">S</span>
+              {/* Sostituisci il percorso con quello in /public dove salvi il PNG */}
+              <img
+                className="bo-logo-img"
+                src="/bo-assets/img/spst-logo.png"
+                alt="SPST"
+              />
               <span className="bo-title">Back Office</span>
             </div>
             <div className="bo-utils">
@@ -37,7 +42,7 @@ export default function BackOfficePage() {
               placeholder="Cerca per ID cliente, Paese, città…"
             />
 
-            {/* keep the same input#only-open used dalla logica JS, ma con look & label nuovi */}
+            {/* mantiene gli stessi id per la logica JS */}
             <label className="switch" title="Mostra solo spedizioni non evase">
               <input id="only-open" type="checkbox" />
               <span className="slider" aria-hidden="true"></span>
@@ -61,9 +66,7 @@ export default function BackOfficePage() {
         </section>
       </main>
 
-      {/* Config per le API locali */}
       <script dangerouslySetInnerHTML={{ __html: `window.BACK_OFFICE_CONFIG = { PROXY_BASE: '/api', DEBUG: true };` }} />
-      {/* Loader ESM del Back Office */}
       <script type="module" src="/bo-assets/esm/main.js"></script>
     </>
   );
