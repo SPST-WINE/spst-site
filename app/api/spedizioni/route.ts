@@ -1,5 +1,5 @@
 // app/api/spedizioni/route.ts
-// FIX ricerca: fallback su più formule Airtable per evitare INVALID_FILTER_BY_FORMULA (422)
+// Ricerca estesa: filtra per ID, cliente, città, paese, CAP (con fallback su più schemi Airtable)
 
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -37,20 +37,15 @@ const BASE_ID = process.env.AIRTABLE_BASE_ID!;
 const TOKEN   = process.env.AIRTABLE_TOKEN || process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY!;
 const TB_SPED = process.env.TB_SPEDIZIONI_WEBAPP || 'SpedizioniWebApp';
 
-const atHeaders: HeadersInit = {
-  Authorization: `Bearer ${TOKEN}`,
-  'Content-Type': 'application/json',
-};
-
+const atHeaders: HeadersInit = { Authorization: `Bearer ${TOKEN}` };
 const api = (t: string) => `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(t)}`;
 
 async function listWithFormula(table: string, formula: string, pageSize = 50, offset?: string) {
   const qs = new URLSearchParams();
   if (formula) qs.set('filterByFormula', formula);
-  if (pageSize) qs.set('pageSize', String(pageSize));
+  qs.set('pageSize', String(pageSize));
   if (offset) qs.set('offset', offset);
-  const url = `${api(table)}?${qs.toString()}`;
-  const res = await fetch(url, { headers: atHeaders, cache: 'no-store' });
+  const res = await fetch(`${api(table)}?${qs.toString()}`, { headers: atHeaders, cache: 'no-store' });
   const text = await res.text();
   let json: any = {};
   try { json = text ? JSON.parse(text) : {}; } catch { json = { error: text }; }
@@ -67,56 +62,64 @@ export async function GET(req: NextRequest) {
   const pageSize = Number(url.searchParams.get('pageSize') || '50') || 50;
   const offset   = url.searchParams.get('offset') || undefined;
 
-  // Stato aperte/non evase (tollerante a nomi diversi)
+  // Stato aperte/non evase
   const openPart =
     `NOT(OR(` +
+      `LOWER({Stato})='evasa',` +
       `LOWER({Stato})='evaso',` +
       `LOWER({Stato})='completata',` +
-      `LOWER({Stato})='evasa'` +
+      `LOWER({Stato})='completato'` +
     `))`;
 
-  // Testo ricerca – proviamo più combinazioni di campi.
   const qs = esc(q.toLowerCase());
-  const textParts: string[] = q
-    ? [
-        // 1) ID Spedizione + Creato da
-        `OR(FIND('${qs}', LOWER({ID Spedizione}&''))>0, FIND('${qs}', LOWER({Creato da}&''))>0)`,
-        // 2) ID + Creato da
-        `OR(FIND('${qs}', LOWER({ID}&''))>0, FIND('${qs}', LOWER({Creato da}&''))>0)`,
-        // 3) ID Spedizione + Email cliente
-        `OR(FIND('${qs}', LOWER({ID Spedizione}&''))>0, FIND('${qs}', LOWER({Email cliente}&''))>0)`,
-        // 4) ID + Email cliente
-        `OR(FIND('${qs}', LOWER({ID}&''))>0, FIND('${qs}', LOWER({Email cliente}&''))>0)`,
-      ]
-    : [''];
 
-  // Costruiamo le formule candidate combinando stato aperto (se richiesto)
-  const candidates = textParts.map(tp => {
-    const clauses = [];
-    if (tp) clauses.push(tp);
-    if (onlyOpen === '1' || onlyOpen === 'true') clauses.push(openPart);
-    if (!clauses.length) return ''; // nessun filtro
-    return `AND(${clauses.join(',')})`;
+  // Gruppi di campi alternativi (fall-through: se un gruppo non esiste -> 422 -> si prova il successivo)
+  const groups: string[][] = [
+    // ID e meta base
+    ['ID Spedizione','ID','Creato da','Email cliente'],
+    // Cliente
+    ['Cliente','Nome cliente','Ragione sociale','Email cliente'],
+    // Città (partenza/arrivo)
+    ['Città partenza','Città destinazione','Citta partenza','Citta destinazione','Partenza','Arrivo','City From','City To','Città','Citta'],
+    // Paese
+    ['Paese partenza','Paese destinazione','Country From','Country To','Paese','Country','Partenza','Arrivo'],
+    // CAP / ZIP
+    ['CAP partenza','CAP destinazione','CAP','Zip','ZIP From','ZIP To','Partenza','Arrivo'],
+  ];
+
+  // Costruisce OR(FIND(q, LOWER({campo}&''))>0, …) per un gruppo
+  const buildGroup = (fields: string[]) =>
+    `OR(${fields.map(f => `FIND('${qs}', LOWER({${f}}&''))>0`).join(',')})`;
+
+  // Candidati: prima prova su ID, poi sugli altri gruppi
+  const candidates: string[] = [];
+  const idFirst = buildGroup(['ID Spedizione','ID']);
+  candidates.push(idFirst);
+  groups.forEach(g => candidates.push(buildGroup(g)));
+
+  // Applica stato aperte se richiesto
+  const formulas = candidates.map(f => {
+    const parts = [];
+    if (f) parts.push(f);
+    if (onlyOpen === '1' || onlyOpen === 'true') parts.push(openPart);
+    return parts.length ? `AND(${parts.join(',')})` : '';
   });
 
-  // Prova in sequenza, ignorando 422 su campi non esistenti
-  for (const formula of candidates) {
+  // Esegui in sequenza ignorando 422 (campi mancanti)
+  for (const formula of formulas) {
     try {
       const { ok: okAt, status, json } = await listWithFormula(TB_SPED, formula, pageSize, offset);
       if (okAt) {
         return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
       }
-      // 422 = formula invalida -> prova la prossima
-      if (status === 422) continue;
-      // altri errori: restituisci
+      if (status === 422) continue; // prova formula successiva
       return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
-    } catch (e: any) {
-      // fallthrough alla prossima formula
+    } catch {
       continue;
     }
   }
 
-  // Se siamo qui, nessuna formula è andata a buon fine: ritorna senza filtro
+  // Nessuna formula valida → lista senza filtro (fallback sicuro)
   const { ok: okPlain, status, json } = await listWithFormula(TB_SPED, '', pageSize, offset);
   if (okPlain) return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
   return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
