@@ -2,16 +2,18 @@
 export default function Head() {
   return (
     <>
-      <title>Back Office — Spedizioni</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      {/* CSS: ora sotto /bo-assets/esm */}
+      <title>Back Office — SPST</title>
+      {/* CSS */}
       <link rel="stylesheet" href="/bo-assets/esm/base.css" />
+      <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" />
 
-      {/* Se/quando servi la pagina “quotes admin”, aggiungi lì anche: */}
-      {/* <link rel="stylesheet" href="/bo-assets/esm/quotes-admin.css" /> */}
-
-      {/* Togliamo il modulepreload per evitare il warning “preload not used…” */}
-      {/* <link rel="modulepreload" href="/bo-assets/esm/main.js" /> */}
+      {/* Preload modulo principale (opzionale). Se tieni il preload, aggiungi crossorigin */}
+      <link
+        rel="modulepreload"
+        href="/bo-assets/esm/main.js"
+        as="script"
+        crossOrigin="anonymous"
+      />
     </>
   );
 }
