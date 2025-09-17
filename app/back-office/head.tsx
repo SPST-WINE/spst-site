@@ -1,5 +1,4 @@
 // app/back-office/head.tsx
-// Titolo e favicon solo per il Back Office
 export default function Head() {
   return (
     <>
