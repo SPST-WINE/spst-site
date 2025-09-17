@@ -5,27 +5,31 @@ export default function BackOfficePage() {
       <header className="bo-header">
         <div className="wrap">
           {/* brand/top utilities */}
-          <div className="bo-brandbar">
-            <div className="bo-brand">
-              {/* Sostituisci il percorso con quello in /public dove salvi il PNG */}
-              <img
-                className="bo-logo-img"
-                src="/bo-assets/img/spst-logo.png"
-                alt="SPST"
-              />
-              <span className="bo-title">Back Office</span>
-            </div>
-            <div className="bo-utils">
-              <a
-                className="util-link"
-                href="https://spst-logistics-spsts-projects.vercel.app/api/tools/docs"
-                target="_blank"
-                rel="noopener"
-              >
-                Utility Documenti
-              </a>
-            </div>
-          </div>
+          // app/back-office/page.tsx  (sostituisci SOLO il blocco brand)
+<div className="bo-brandbar">
+  <div className="bo-brand">
+    {/* Se metti il file nella root di /public con nome "spst-logo.png" usa questo src: "/spst-logo.png"
+       * In alternativa, metti il file in /public/bo-assets/img/spst-logo.png e usa quel percorso.
+       */}
+    <img
+      className="bo-logo-img"
+      src="/bo-assets/img/spst-logo.png"
+      alt="SPST"
+    />
+    <span className="bo-title">Back Office</span>
+  </div>
+  <div className="bo-utils">
+    <a
+      className="util-link"
+      href="https://spst-logistics-spsts-projects.vercel.app/api/tools/docs"
+      target="_blank"
+      rel="noopener"
+    >
+      Utility Documenti
+    </a>
+  </div>
+</div>
+
 
           {/* tabs */}
           <nav className="tabbar" aria-label="Sezioni Back Office">
