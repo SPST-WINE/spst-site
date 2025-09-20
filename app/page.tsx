@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { TriangleAlert, Mail, Phone, Building2, Ship, Globe2, ChevronDown, Route, FileCheck2, TrendingUp } from 'lucide-react';
+import React from 'react'; 
 
 const SPST_BLUE = '#0a1722'; // base blu scuro (sfondo)
 const SPST_BLUE_SOFT = '#1c3e5e'; // accenti
