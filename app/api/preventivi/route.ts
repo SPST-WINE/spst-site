@@ -19,7 +19,7 @@ export async function OPTIONS(req: NextRequest) {
 
 const esc = (s: string) => String(s ?? '').replace(/'/g, "\\'");
 
-// tieni i campi più “sicuri” per la tabella Preventivi
+// Campi “sicuri” per la ricerca nella tab Preventivi
 const SEARCH_FIELDS = [
   'ID',
   'Creato da',
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     const pageSize = Number(searchParams.get('pageSize') || '50') || 50;
 
     const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const API_KEY = process.env.AIRTABLE_PAT;
+    const API_KEY = process.env.AIRTABLE_PAT;        // <- token PAT
     const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
 
     if (!BASE_ID || !API_KEY) {
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // formula di ricerca (usa solo i campi sopra per minimizzare 422)
+    // Formula di ricerca
     let filterByFormula = '';
     if (search) {
       const parts = SEARCH_FIELDS.map(
@@ -57,25 +57,35 @@ export async function GET(req: NextRequest) {
       filterByFormula = `OR(${parts.join(',')})`;
     }
 
-    const params = new URLSearchParams();
-    params.set('pageSize', String(pageSize));
-    // ordina per ID desc; se il campo non esistesse Airtable ignora il sort
-    params.set('sort[0][field]', 'ID');
-    params.set('sort[0][direction]', 'desc');
-    if (filterByFormula) params.set('filterByFormula', filterByFormula);
+    const baseParams = new URLSearchParams();
+    baseParams.set('pageSize', String(pageSize));
+    if (filterByFormula) baseParams.set('filterByFormula', filterByFormula);
 
-    const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${params.toString()}`;
+    const buildUrl = (withSort: boolean) => {
+      const p = new URLSearchParams(baseParams);
+      if (withSort) {
+        // ⚠️ Se il campo non esiste Airtable risponde 422 -> gestito con fallback
+        p.set('sort[0][field]', 'ID');
+        p.set('sort[0][direction]', 'desc');
+      }
+      return `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${p.toString()}`;
+    };
 
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store',
-    });
+    const headers = {
+      Authorization: `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json',
+    };
 
-    const json = await res.json();
+    // 1) Prova con sort=ID
+    let res = await fetch(buildUrl(true), { method: 'GET', headers, cache: 'no-store' });
+    let json: any = await res.json().catch(() => ({}));
+
+    // 2) Se 422 (campo sort inesistente), riprova SENZA sort
+    if (res.status === 422) {
+      res = await fetch(buildUrl(false), { method: 'GET', headers, cache: 'no-store' });
+      json = await res.json().catch(() => ({}));
+    }
+
     if (!res.ok) {
       return NextResponse.json({ ok: false, error: json }, { status: res.status, headers: cors });
     }
