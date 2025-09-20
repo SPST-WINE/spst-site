@@ -10,38 +10,56 @@ import { fetchColliFor }         from '/bo-assets/airtable/api.js';
 function normKey(s){return String(s||'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toLowerCase();}
 function pickLoose(fields,...names){if(!fields)return;const m=new Map(Object.keys(fields).map(k=>[normKey(k),k]));for(const n of names){const real=m.get(normKey(n));if(real!=null){const v=fields[real];if(v!==''&&v!=null)return v;}}for(const n of names){if(n in fields&&fields[n]!==''&&fields[n]!=null)return fields[n];}return;}
 function toNum(v){if(v==null||v==='')return NaN;const n=Number(String(v).replace(',', '.').replace(/[^0-9.]+/g,''));return isFinite(n)?n:NaN;}
+
 function mapDocs(fields){
-  const getAttUrl=k=>{
-    const v=pickLoose(fields,k);
-    if(Array.isArray(v)&&v.length&&v[0]?.url)return v[0].url;
-    if(typeof v==='string'&&v)return v;
-    return'';
+  const getAttUrl = (k) => {
+    const v = pickLoose(fields, k);
+    if (Array.isArray(v) && v.length && v[0]?.url) return v[0].url;
+    if (typeof v === 'string' && v) return v;
+    return '';
   };
-  const fatturaCli=getAttUrl('Fattura - Allegato Cliente');
-  const packingCli=getAttUrl('Packing List - Allegato Cliente');
-  const ldv=getAttUrl('Allegato LDV')||getAttUrl('Lettera di Vettura');
-  const fatturaBO=getAttUrl('Allegato Fattura');
-  const dle=getAttUrl('Allegato DLE')||getAttUrl('Dichiarazione Esportazione');
-  const plBO=getAttUrl('Allegato PL')||getAttUrl('Packing List');
-  const att1=getAttUrl('Allegato 1');
-  const att2=getAttUrl('Allegato 2');
-  const att3=getAttUrl('Allegato 3');
-  const PROFORMA=att1||att2||att3;
-  const FDA_PN=att2||att1||att3;
-  const EDAS=att3||att2||att1;
-  return{
-    Lettera_di_Vettura:ldv,
-    Fattura_Commerciale:fatturaBO||fatturaCli,
-    Fattura_Proforma:PROFORMA,
-    Dichiarazione_Esportazione:dle,
-    Packing_List:plBO||packingCli,
-    FDA_Prior_Notice:FDA_PN,
-    'e-DAS':EDAS,
-    Fattura_Client:fatturaCli,
-    Packing_Client:packingCli,
-    Allegato_1:att1,Allegato_2:att2,Allegato_3:att3
+
+  // Allegati (BO e Cliente)
+  const fatturaCli = getAttUrl('Fattura - Allegato Cliente');
+  const packingCli = getAttUrl('Packing List - Allegato Cliente');
+
+  const ldv       = getAttUrl('Allegato LDV') || getAttUrl('Lettera di Vettura');
+  const fatturaBO = getAttUrl('Allegato Fattura'); // <-- unico campo usato per Commerciale/Proforma
+  const dle       = getAttUrl('Allegato DLE') || getAttUrl('Dichiarazione Esportazione');
+  const plBO      = getAttUrl('Allegato PL')  || getAttUrl('Packing List');
+
+  // Allegati generici 1/2/3 (eventuali usi legacy)
+  const att1 = getAttUrl('Allegato 1');
+  const att2 = getAttUrl('Allegato 2');
+  const att3 = getAttUrl('Allegato 3');
+
+  // Regole finali:
+  // - Fattura Proforma deve diventare VERDE se c'è "Allegato Fattura" (o allegato cliente),
+  //   con fallback ai legacy Allegato 1/2/3.
+  const PROFORMA = (fatturaBO || fatturaCli || att1 || att2 || att3);
+  const FDA_PN   = (att2 || att1 || att3);
+  const EDAS     = (att3 || att2 || att1);
+
+  return {
+    Lettera_di_Vettura: ldv,
+    Fattura_Commerciale: (fatturaBO || fatturaCli),
+    Fattura_Proforma: PROFORMA,                // <-- ora legge anche "Allegato Fattura"
+    Dichiarazione_Esportazione: dle,
+    Packing_List: (plBO || packingCli),
+    FDA_Prior_Notice: FDA_PN,
+    'e-DAS': EDAS,
+
+    // visibilità lato cliente
+    Fattura_Client:  fatturaCli,
+    Packing_Client:  packingCli,
+
+    // debug/legacy
+    Allegato_1: att1,
+    Allegato_2: att2,
+    Allegato_3: att3,
   };
 }
+
 function colliFromListString(str){
   if(!str)return[];
   return String(str).split(/[;|\n]+/).map(p=>{
