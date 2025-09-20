@@ -1,144 +1,155 @@
 // public/bo-assets/rules/docs.js
 // ⬇️ SOSTITUISCI INTERAMENTE QUESTO FILE
 
-// Paesi UE per derivare l'area (UE/ExtraUE)
+// ———————————————————————————————————————————————————————————
+// Utils: UE set + normalizzazione paese (sinonimi/casing)
+// ———————————————————————————————————————————————————————————
 const EU_COUNTRIES = new Set([
-  "Italia","Francia","Germania","Spagna","Portogallo","Belgio","Olanda","Paesi Bassi","Austria",
-  "Svezia","Finlandia","Danimarca","Repubblica Ceca","Slovacchia","Polonia","Ungheria","Irlanda",
-  "Lituania","Lettonia","Estonia","Grecia","Romania","Bulgaria","Slovenia","Croazia","Lussemburgo",
-  "Malta","Cipro"
+  "Italia","Francia","Germania","Spagna","Portogallo","Belgio",
+  "Olanda","Paesi Bassi","Austria","Svezia","Finlandia","Danimarca",
+  "Repubblica Ceca","Slovacchia","Polonia","Ungheria","Irlanda",
+  "Lituania","Lettonia","Estonia","Grecia","Romania","Bulgaria",
+  "Slovenia","Croazia","Lussemburgo","Malta","Cipro"
 ]);
-const isEU = c => EU_COUNTRIES.has(c);
-const areaOf = c => isEU(c) ? 'UE' : 'ExtraUE';
 
-/**
- * REGOLE DOCUMENTALI
- * Nomi documenti (stabili): Lettera_di_Vettura, Fattura_Commerciale, Fattura_Proforma,
- * Dichiarazione_Esportazione, Packing_List, FDA_Prior_Notice, e-DAS, CIQ, Certificato_di_Origine, Certificato_Sanitario
- *
- * NB: applichiamo precedenza alle regole con country rispetto a quelle per area (UE/ExtraUE).
- * Se esiste almeno una regola che matcha il country, NON applichiamo le regole per area.
- */
+const isEU = (c) => EU_COUNTRIES.has(c);
+const areaOf = (c) => (isEU(c) ? "UE" : "ExtraUE");
+
+// Canonicalizzatore paesi (gestisce upper/lower e sinonimi)
+function normalizeCountry(input) {
+  const s = String(input || "").trim();
+  const U = s.toUpperCase();
+
+  const map = new Map([
+    // Italia
+    ["ITALIA", "Italia"], ["ITALY", "Italia"],
+    // UK
+    ["REGNO UNITO", "UK"], ["UNITED KINGDOM", "UK"], ["UK", "UK"], ["U.K.", "UK"],
+    ["GRAN BRETAGNA", "UK"], ["GREAT BRITAIN", "UK"], ["INGHILTERRA", "UK"],
+    ["ENGLAND", "UK"], ["GB", "UK"],
+    // USA
+    ["USA", "USA"], ["U.S.A.", "USA"], ["STATI UNITI", "USA"],
+    ["UNITED STATES", "USA"], ["US", "USA"],
+    // Svizzera
+    ["SVIZZERA", "Svizzera"], ["SWITZERLAND", "Svizzera"], ["CH", "Svizzera"],
+    // Canada
+    ["CANADA", "Canada"],
+    // Asia (no Cina)
+    ["HONG KONG", "Hong Kong"],
+    ["SINGAPORE", "Singapore"],
+    ["TAIWAN", "Taiwan"],
+    ["COREA DEL SUD", "Corea del Sud"], ["SOUTH KOREA", "Corea del Sud"],
+    ["KOREA, REPUBLIC OF", "Corea del Sud"],
+    // Cina
+    ["CINA", "Cina"], ["CHINA", "Cina"], ["PRC", "Cina"], ["P.R.C.", "Cina"],
+    // Paesi Bassi (per UE)
+    ["NETHERLANDS", "Paesi Bassi"], ["PAESI BASSI", "Paesi Bassi"], ["OLANDA", "Paesi Bassi"]
+  ]);
+
+  return map.get(U) || s; // fallback: stringa originale (title-case non necessario qui)
+}
+
+// ———————————————————————————————————————————————————————————
+// Regole documentali
+// Nomi documenti: Lettera_di_Vettura, Fattura_Commerciale, Fattura_Proforma,
+// Dichiarazione_Esportazione, FDA_Prior_Notice, e-DAS, CIQ, Certificato_di_Origine, Certificato_Sanitario
+// ———————————————————————————————————————————————————————————
 const RULES = [
-  // —— ITALIA: solo LDV per tutti i tipi
-  { when: {country:'Italia', tipo:'B2B'},           require: ['Lettera_di_Vettura'] },
-  { when: {country:'Italia', tipo:'B2C'},           require: ['Lettera_di_Vettura'] },
-  { when: {country:'Italia', tipo:'Campionatura'},  require: ['Lettera_di_Vettura'] },
-  // alias inglese
-  { when: {country:'Italy', tipo:'B2B'},            require: ['Lettera_di_Vettura'] },
-  { when: {country:'Italy', tipo:'B2C'},            require: ['Lettera_di_Vettura'] },
-  { when: {country:'Italy', tipo:'Campionatura'},   require: ['Lettera_di_Vettura'] },
+  // ITALIA (sempre e solo LDV)
+  { when: { country: "Italia", tipo: "B2B" },          require: ["Lettera_di_Vettura"] },
+  { when: { country: "Italia", tipo: "B2C" },          require: ["Lettera_di_Vettura"] },
+  { when: { country: "Italia", tipo: "Campionatura" }, require: ["Lettera_di_Vettura"] },
 
-  // —— EUROPA (UE)
-  { when: {area:'UE', tipo:'B2C'},          require: ['Lettera_di_Vettura'] },
-  { when: {area:'UE', tipo:'B2B'},          require: ['Lettera_di_Vettura','Fattura_Commerciale'] },
-  { when: {area:'UE', tipo:'Campionatura'}, require: ['Lettera_di_Vettura','Fattura_Proforma'] },
+  // EUROPA (UE)
+  { when: { area: "UE", tipo: "B2C" },          require: ["Lettera_di_Vettura"] },
+  { when: { area: "UE", tipo: "B2B" },          require: ["Lettera_di_Vettura","Fattura_Commerciale"] },
+  { when: { area: "UE", tipo: "Campionatura" }, require: ["Lettera_di_Vettura","Fattura_Proforma"] },
 
-  // —— USA (con note comuni)
-  { when: {country:'USA', tipo:'B2C'},         require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice evitabile per B2C/Campionatura.' },
-  { when: {country:'USA', tipo:'B2B'},         require: ['Lettera_di_Vettura','Fattura_Commerciale','FDA_Prior_Notice','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice richiesto per B2B.' },
-  { when: {country:'USA', tipo:'Campionatura'},require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice evitabile per B2C/Campionatura.' },
-  // alias
-  { when: {country:'Stati Uniti', tipo:'B2C'},         require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice evitabile per B2C/Campionatura.' },
-  { when: {country:'Stati Uniti', tipo:'B2B'},         require: ['Lettera_di_Vettura','Fattura_Commerciale','FDA_Prior_Notice','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice richiesto per B2B.' },
-  { when: {country:'Stati Uniti', tipo:'Campionatura'},require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'USA: COLA + Importatore registrato. Prior Notice evitabile per B2C/Campionatura.' },
+  // UK
+  { when: { country: "UK", tipo: "B2C" },            require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+  { when: { country: "UK", tipo: "B2B" },            require: ["Lettera_di_Vettura","Fattura_Commerciale","Dichiarazione_Esportazione"] },
+  { when: { country: "UK", tipo: "Campionatura" },   require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
 
-  // —— CANADA (note comuni)
-  { when: {country:'Canada', tipo:'B2C'},         require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'Canada: CCI + Importatore registrato (monopolio). Documenti perfetti.' },
-  { when: {country:'Canada', tipo:'B2B'},         require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'], note: 'Canada: CCI + Importatore registrato (monopolio). Documenti perfetti.' },
-  { when: {country:'Canada', tipo:'Campionatura'},require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'], note: 'Canada: CCI + Importatore registrato (monopolio). Documenti perfetti.' },
+  // USA (+ note)
+  { when: { country: "USA", tipo: "B2C" },          require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"], note: "USA: COLA + importatore registrato. Prior Notice evitabile per B2C/Campionatura." },
+  { when: { country: "USA", tipo: "B2B" },          require: ["Lettera_di_Vettura","Fattura_Commerciale","FDA_Prior_Notice","Dichiarazione_Esportazione"], note: "USA: COLA + importatore registrato. Prior Notice richiesto per B2B." },
+  { when: { country: "USA", tipo: "Campionatura" }, require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"], note: "USA: COLA + importatore registrato. Prior Notice evitabile per B2C/Campionatura." },
 
-  // —— UK
-  { when: {country:'UK', tipo:'B2C'},            require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'UK', tipo:'B2B'},            require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'UK', tipo:'Campionatura'},   require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // alias
-  { when: {country:'Regno Unito', tipo:'B2C'},          require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Regno Unito', tipo:'B2B'},          require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Regno Unito', tipo:'Campionatura'}, require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
+  // CANADA (+ note)
+  { when: { country: "Canada", tipo: "B2C" },          require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"], note: "Canada: CCI + importatore registrato (monopolio). Documenti perfetti." },
+  { when: { country: "Canada", tipo: "B2B" },          require: ["Lettera_di_Vettura","Fattura_Commerciale","Dichiarazione_Esportazione"], note: "Canada: CCI + importatore registrato (monopolio). Documenti perfetti." },
+  { when: { country: "Canada", tipo: "Campionatura" }, require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"], note: "Canada: CCI + importatore registrato (monopolio). Documenti perfetti." },
 
-  // —— SVIZZERA
-  { when: {country:'Svizzera', tipo:'B2C'},            require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Svizzera', tipo:'B2B'},            require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Svizzera', tipo:'Campionatura'},   require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // alias
-  { when: {country:'Switzerland', tipo:'B2C'},         require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Switzerland', tipo:'B2B'},         require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Switzerland', tipo:'Campionatura'},require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
+  // SVIZZERA
+  { when: { country: "Svizzera", tipo: "B2C" },            require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+  { when: { country: "Svizzera", tipo: "B2B" },            require: ["Lettera_di_Vettura","Fattura_Commerciale","Dichiarazione_Esportazione"] },
+  { when: { country: "Svizzera", tipo: "Campionatura" },   require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
 
-  // —— ASIA (escl. Cina): Hong Kong, Singapore, Taiwan, Corea del Sud
-  //    Regole uguali per questi paesi
-  // Hong Kong
-  { when: {country:'Hong Kong', tipo:'B2C'},          require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Hong Kong', tipo:'B2B'},          require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Hong Kong', tipo:'Campionatura'}, require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // Singapore
-  { when: {country:'Singapore', tipo:'B2C'},          require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Singapore', tipo:'B2B'},          require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Singapore', tipo:'Campionatura'}, require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // Taiwan
-  { when: {country:'Taiwan', tipo:'B2C'},             require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Taiwan', tipo:'B2B'},             require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Taiwan', tipo:'Campionatura'},    require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // Corea del Sud
-  { when: {country:'Corea del Sud', tipo:'B2C'},          require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Corea del Sud', tipo:'B2B'},          require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'Corea del Sud', tipo:'Campionatura'}, require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'South Korea', tipo:'B2C'},            require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'South Korea', tipo:'B2B'},            require: ['Lettera_di_Vettura','Fattura_Commerciale','Dichiarazione_Esportazione'] },
-  { when: {country:'South Korea', tipo:'Campionatura'},   require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
+  // ASIA (esclusa Cina): Hong Kong, Singapore, Taiwan, Corea del Sud
+  ...["Hong Kong","Singapore","Taiwan","Corea del Sud"].flatMap(c => ([
+    { when: { country: c, tipo: "B2C" },          require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+    { when: { country: c, tipo: "B2B" },          require: ["Lettera_di_Vettura","Fattura_Commerciale","Dichiarazione_Esportazione"] },
+    { when: { country: c, tipo: "Campionatura" }, require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+  ])),
 
-  // —— CINA (note B2B)
-  { when: {country:'Cina', tipo:'B2C'},             require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'Cina', tipo:'B2B'},             require: ['Lettera_di_Vettura','Fattura_Commerciale','CIQ','Certificato_di_Origine','Certificato_Sanitario','Dichiarazione_Esportazione'], note: 'Cina B2B: CIQ + Certificato di origine + Analisi sanitarie obbligatori.' },
-  { when: {country:'Cina', tipo:'Campionatura'},    require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  // alias
-  { when: {country:'China', tipo:'B2C'},            require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
-  { when: {country:'China', tipo:'B2B'},            require: ['Lettera_di_Vettura','Fattura_Commerciale','CIQ','Certificato_di_Origine','Certificato_Sanitario','Dichiarazione_Esportazione'], note: 'Cina B2B: CIQ + Certificato di origine + Analisi sanitarie obbligatori.' },
-  { when: {country:'China', tipo:'Campionatura'},   require: ['Lettera_di_Vettura','Fattura_Proforma','Dichiarazione_Esportazione'] },
+  // CINA
+  { when: { country: "Cina", tipo: "B2C" },            require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+  { when: { country: "Cina", tipo: "B2B" },            require: ["Lettera_di_Vettura","Fattura_Commerciale","CIQ","Certificato_di_Origine","Certificato_Sanitario","Dichiarazione_Esportazione"], note: "Cina B2B: CIQ + Certificato di origine + Analisi sanitarie obbligatori." },
+  { when: { country: "Cina", tipo: "Campionatura" },   require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
 
-  // —— Default: sempre LDV
-  { when: {}, require: ['Lettera_di_Vettura'] }
+  // FALLBACK GENERICI ExtraUE (in caso di country non mappato)
+  { when: { area: "ExtraUE", tipo: "B2B" },          require: ["Lettera_di_Vettura","Fattura_Commerciale","Dichiarazione_Esportazione"] },
+  { when: { area: "ExtraUE", tipo: "Campionatura" }, require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+  { when: { area: "ExtraUE", tipo: "B2C" },          require: ["Lettera_di_Vettura","Fattura_Proforma","Dichiarazione_Esportazione"] },
+
+  // Default assoluto: LDV
+  { when: {}, require: ["Lettera_di_Vettura"] }
 ];
 
-/**
- * Matching con precedenza: se esiste almeno una regola country-match,
- * applichiamo SOLO quelle e ignoriamo regole per area.
- */
-export function matchRules(rec){
-  const country = rec.dest_paese || rec.paese || '';
-  const tipo = rec.tipo_spedizione || '';
+// ———————————————————————————————————————————————————————————
+// Matching con normalizzazione paese + precedenza country-specific
+// ———————————————————————————————————————————————————————————
+export function matchRules(rec) {
+  const rawCountry = rec.dest_paese || rec.paese || "";
+  const country = normalizeCountry(rawCountry);
+  const tipo = rec.tipo_spedizione || "";
   const area = areaOf(country);
 
-  const required = new Set(['Lettera_di_Vettura']);
+  const required = new Set(["Lettera_di_Vettura"]);
   const notes = [];
 
-  const countryRules = RULES.filter(r => r.when.country && r.when.country === country && (!r.when.tipo || r.when.tipo === tipo));
-  if (countryRules.length){
-    countryRules.forEach(r => {
-      (r.require||[]).forEach(d => required.add(d));
+  // 1) Regole specifiche per country (normalizzate)
+  const countryRules = RULES.filter(r => {
+    if (!r.when.country) return false;
+    return normalizeCountry(r.when.country) === country &&
+           (!r.when.tipo || r.when.tipo === tipo);
+  });
+
+  if (countryRules.length) {
+    for (const r of countryRules) {
+      (r.require || []).forEach(d => required.add(d));
       if (r.note) notes.push(r.note);
-    });
+    }
   } else {
-    // Nessuna regola country → applica regole per area + regole senza country
-    RULES.forEach(r => {
+    // 2) Nessuna regola country -> usa regole per area / generiche
+    for (const r of RULES) {
       const okCountry = !r.when.country;
       const okTipo    = !r.when.tipo || r.when.tipo === tipo;
       const okArea    = !r.when.area || r.when.area === area;
-      if (okCountry && okTipo && okArea){
-        (r.require||[]).forEach(d => required.add(d));
+      if (okCountry && okTipo && okArea) {
+        (r.require || []).forEach(d => required.add(d));
         if (r.note) notes.push(r.note);
       }
-    });
+    }
   }
 
   return { country, tipo, area, required: Array.from(required), notes };
 }
 
-export function computeRequiredDocs(rec){
-  const {required, notes, country, tipo} = matchRules(rec);
-  const have = Object.entries(rec.docs||{})
-    .filter(([_,v]) => Boolean(v))
+export function computeRequiredDocs(rec) {
+  const { required, notes, country, tipo } = matchRules(rec);
+  const have = Object.entries(rec.docs || {})
+    .filter(([_, v]) => Boolean(v))
     .map(([k]) => k);
   const missing = required.filter(d => !have.includes(d));
   return { required, missing, notes, country, tipo };
