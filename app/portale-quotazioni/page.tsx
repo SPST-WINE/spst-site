@@ -359,7 +359,7 @@ function QuoteDetailsForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <Check name="express" label="Spedizione express" icon={<Rocket className="h-4 w-4" />} />
           <Check name="accise" label="Pratica accise" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />} />
+                    <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />
           <Check name="cola" label="COLA / Prior Notice (USA)" icon={<FileCheck2 className="h-4 w-4" />} />
           <Check name="temp" label="Temperatura controllata" icon={<Thermometer className="h-4 w-4" />} />
           <Check name="assicurazione" label="Assicurazione" icon={<ShieldCheck className="h-4 w-4" />} />
