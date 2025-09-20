@@ -8,106 +8,98 @@ function cors(origin?: string | null) {
   const o = origin || '*';
   return {
     'Access-Control-Allow-Origin': o,
-    'Access-Control-Allow-Methods': 'GET,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   };
 }
+
 export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, { status: 204, headers: cors(req.headers.get('origin')) });
 }
 
-const esc = (s: string) => String(s ?? '').replace(/'/g, "\\'");
+// ───────── Env (Airtable) ─────────
+const BASE_ID = process.env.AIRTABLE_BASE_ID;
+const API_KEY = process.env.AIRTABLE_PAT;         // PAT
+const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
 
-const SEARCH_FIELDS = [
-  'ID',
-  'Creato da',
-  'Mittente - Ragione Sociale',
-  'Mittente - Città',
-  'Mittente - CAP',
-  'Destinatario - Ragione Sociale',
-  'Destinatario - Paese',
-  'Destinatario - Città',
-  'Destinatario - CAP',
-];
+function missingCreds() {
+  return !BASE_ID || !API_KEY;
+}
 
+// (GET opzionale: al momento non usato dalla UI; lo lasciamo semplice e robusto)
 export async function GET(req: NextRequest) {
+  if (missingCreds()) {
+    return NextResponse.json({ ok:false, error:'Missing Airtable credentials' }, { status:500, headers: cors(req.headers.get('origin')) });
+  }
+  const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID!)}/${encodeURIComponent(TABLE)}`;
+  const r = await fetch(url, {
+    method:'GET',
+    headers:{ Authorization:`Bearer ${API_KEY}`, 'Content-Type':'application/json' },
+    cache:'no-store',
+  });
+  const j = await r.json().catch(()=> ({}));
+  if (!r.ok) {
+    return NextResponse.json({ ok:false, status:r.status, error:j }, { status:422, headers:cors(req.headers.get('origin')) });
+  }
+  return NextResponse.json({ ok:true, records:j.records||[] }, { headers:cors(req.headers.get('origin')) });
+}
+
+// ───────── POST: CREA PREVENTIVO ─────────
+/**
+ * Body atteso:
+ * {
+ *   fields: {
+ *     "Creato da": string (email),
+ *     "Ritiro - Data": "YYYY-MM-DD",
+ *     "Sottotipo": "B2B" | "B2C" | "Campionatura",
+ *     "Corriere": string,
+ *     "Prezzo": number,
+ *     "Note": string
+ *   }
+ * }
+ */
+export async function POST(req: NextRequest) {
   const headers = cors(req.headers.get('origin'));
   try {
-    const { searchParams } = new URL(req.url);
-    const search   = (searchParams.get('search') || '').trim();
-    const onlyOpen = searchParams.get('onlyOpen') === '1'; // se non supportato, lo ignoreremo
-    const pageSize = Number(searchParams.get('pageSize') || '50') || 50;
-
-    const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const API_KEY = process.env.AIRTABLE_PAT;
-    const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
-
-    if (!BASE_ID || !API_KEY) {
+    if (missingCreds()) {
       return NextResponse.json({ ok:false, error:'Missing Airtable credentials' }, { status:500, headers });
     }
 
-    // Costruzione formula ricerca sicura (gestisce campi vuoti)
-    let searchFormula = '';
-    if (search) {
-      const parts = SEARCH_FIELDS.map(
-        f => `SEARCH(LOWER('${esc(search)}'), LOWER('' & {${esc(f)}}))`
-      );
-      searchFormula = `OR(${parts.join(',')})`;
-    }
+    const body = await req.json().catch(()=> ({}));
+    const input = (body && body.fields) || {};
 
-    // ⚠️ molti Preventivi non hanno un campo "Stato": se lo usiamo rischiamo 422.
-    // Quindi prepariamo una formula "open" ma la useremo solo se non genera 422.
-    const openFormulaUnsafe = `OR({Stato}='Aperto',{Stato}='Nuovo',NOT({Stato}='Chiuso'))`;
-
-    const buildParams = (useFilter: boolean, safeOpen: boolean) => {
-      let filterByFormula = '';
-      if (useFilter && searchFormula) filterByFormula = searchFormula;
-      if (useFilter && onlyOpen && safeOpen) {
-        filterByFormula = filterByFormula
-          ? `AND(${filterByFormula}, ${openFormulaUnsafe})`
-          : openFormulaUnsafe;
-      }
-
-      const params = new URLSearchParams();
-      params.set('pageSize', String(pageSize));
-      params.set('sort[0][field]', 'ID');         // più recenti in alto
-      params.set('sort[0][direction]', 'desc');
-      if (filterByFormula) params.set('filterByFormula', filterByFormula);
-      return params;
+    // Whitelist campi “sicuri” (evita 422 per nomi non esistenti)
+    const SAFE_FIELDS: Record<string, any> = {
+      'Creato da':           input['Creato da'],
+      'Ritiro - Data':       input['Ritiro - Data'],
+      'Sottotipo':           input['Sottotipo'],
+      'Corriere':            input['Corriere'],
+      'Prezzo':              input['Prezzo'],
+      'Note':                input['Note'],
     };
 
-    const baseUrl = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}`;
+    // Rimuovi undefined / null / '' per non sporcare il record
+    const fields: Record<string, any> = {};
+    for (const [k,v] of Object.entries(SAFE_FIELDS)) {
+      if (v !== undefined && v !== null && String(v) !== '') fields[k] = v;
+    }
 
-    // 1° tentativo: uso ricerca + (eventuale) openFormula
-    let url = `${baseUrl}?${buildParams(true, true).toString()}`;
-    let res = await fetch(url, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
-      cache: 'no-store',
+    // Minime validazioni
+    if (!fields['Creato da'])     return NextResponse.json({ ok:false, error:'Missing "Creato da"' }, { status:400, headers });
+    if (!fields['Ritiro - Data']) return NextResponse.json({ ok:false, error:'Missing "Ritiro - Data"' }, { status:400, headers });
+
+    const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID!)}/${encodeURIComponent(TABLE)}`;
+    const r = await fetch(url, {
+      method:'POST',
+      headers:{ Authorization:`Bearer ${API_KEY}`, 'Content-Type':'application/json' },
+      body: JSON.stringify({ fields }),
     });
-    let json: any = await res.json().catch(()=> ({}));
-
-    // Se Airtable risponde 422 INVALID_FILTER_BY_FORMULA, riprovo SENZA openFormula/filtri speciali
-    if (res.status === 422 && json?.error?.type === 'INVALID_FILTER_BY_FORMULA') {
-      const retryUrl = `${baseUrl}?${buildParams(Boolean(search), false).toString()}`;
-      res = await fetch(retryUrl, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
-        cache: 'no-store',
-      });
-      json = await res.json().catch(()=> ({}));
+    const j = await r.json().catch(()=> ({}));
+    if (!r.ok) {
+      return NextResponse.json({ ok:false, status:r.status, error:j }, { status:422, headers });
     }
-
-    if (!res.ok) {
-      // Ritorna all’esterno un errore “parlante”
-      return NextResponse.json(
-        { ok:false, status: res.status, error: json?.error || json || `HTTP ${res.status}` },
-        { status: res.status, headers }
-      );
-    }
-
-    return NextResponse.json({ ok:true, records: json.records || [] }, { headers });
-  } catch (err: any) {
-    return NextResponse.json({ ok:false, error: String(err?.message || err) }, { status:500, headers });
+    return NextResponse.json({ ok:true, record:j }, { status:201, headers });
+  } catch (err:any) {
+    return NextResponse.json({ ok:false, error:String(err?.message||err) }, { status:500, headers });
   }
 }
