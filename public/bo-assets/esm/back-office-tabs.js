@@ -1,9 +1,9 @@
-// public/bo-assets/esm/back-office-tabs.js
+// Router super-leggero per i tab "Spedizioni" / "Preventivi".
 const TAB_ACTIVE_CLASS = 'active';
-
 const $ = (sel) => document.querySelector(sel);
-const viewSped = $('#view-spedizioni') || document.getElementById('list');
-let viewPrev  = $('#view-preventivi');
+
+const viewSped = $('#view-spedizioni') || document.getElementById('list'); // fallback
+let viewPrev   = $('#view-preventivi');
 
 function ensurePrevContainer() {
   if (!viewPrev) {
@@ -23,33 +23,29 @@ function setActiveTab(name) {
 
 function showView(name) {
   ensurePrevContainer();
-  const onlyOpenWrap = $('#only-open')?.closest('.search-row') || $('#only-open')?.parentElement;
+  const prev = ensurePrevContainer();
 
-  if (name === 'spedizioni') {
-    if (viewSped) viewSped.style.display = '';
-    if (viewPrev) viewPrev.style.display = 'none';
-    if (onlyOpenWrap) onlyOpenWrap.style.display = '';
-  } else {
-    if (viewSped) viewSped.style.display = 'none';
-    if (viewPrev) viewPrev.style.display = '';
-    if (onlyOpenWrap) onlyOpenWrap.style.display = '';
-  }
+  const spedVisible = (name === 'spedizioni') ? '' : 'none';
+  const prevVisible = (name === 'preventivi') ? 'block' : 'none';
+
+  if (viewSped) viewSped.style.display = spedVisible;
+  if (prev)     prev.style.display     = prevVisible;
+
+  // toggle "solo non evase" lo lasciamo sempre visibile (se vuoi nasconderlo nei preventivi: metti 'none')
+  const toggleHolder = $('#only-open')?.closest('.search-row') || $('#only-open')?.parentElement;
+  if (toggleHolder) toggleHolder.style.display = '';
+
   setActiveTab(name);
 }
 
 async function enterPreventivi() {
   showView('preventivi');
-  try {
-    const mod = await import('/bo-assets/esm/quotes-main.js');
-    mod?.bootQuotes?.();
-  } catch (e) {
-    console.error('[tabs] errore import quotes-main.js', e);
-  }
+  const mod = await import('/bo-assets/esm/quotes-main.js');
+  if (mod?.bootQuotes) mod.bootQuotes();
 }
 
 function enterSpedizioni() {
   showView('spedizioni');
-  document.dispatchEvent(new CustomEvent('backoffice:enter-spedizioni'));
 }
 
 function wireTabs() {
@@ -57,7 +53,7 @@ function wireTabs() {
   const btnPrev = $('#tab-preventivi');
 
   btnSped?.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '#tab-spedizioni'; enterSpedizioni(); });
-  btnPrev?.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '#tab-preventivi';  enterPreventivi(); });
+  btnPrev?.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '#tab-preventivi';  enterPreventivi();  });
 
   window.addEventListener('hashchange', ()=>{
     if (location.hash === '#tab-preventivi') enterPreventivi();
