@@ -579,8 +579,8 @@ export function renderList(
       });
     });
 
-   // Lazy-load colli se assenti + aggiorna print-grid (peso, lista e TOTALE colli)
-(async ()=>{
+// Lazy-load colli se assenti + aggiorna print-grid (peso, lista e TOTALE colli)
+;(async ()=>{
   try{
     const holder = card.querySelector('.bo-colli-holder');
 
@@ -593,11 +593,11 @@ export function renderList(
       </table>`;
 
     const updatePrintSection = ()=>{
-      // aggiorna peso totale
+      // Peso totale
       const pesoEl = card.querySelector(`#peso-${rec.id}`);
       if (pesoEl) pesoEl.textContent = toKg(totalPesoKg(rec));
 
-      // aggiorna lista colli (riga testuale)
+      // Lista colli (testo)
       const printCell = card.querySelector(`#print-colli-${rec.id}`);
       if (printCell && Array.isArray(rec.colli)){
         printCell.textContent = rec.colli
@@ -605,16 +605,14 @@ export function renderList(
           .join(' ; ');
       }
 
-      // aggiorna "Colli (tot.)"
+      // Colli (tot.)
       const totCell = card.querySelector(`#tot-colli-${rec.id}`);
       if (totCell){
         let tot = 0;
         if (Array.isArray(rec.colli) && rec.colli.length){
-          // somma del campo "#" se presente, altrimenti 1
           tot = rec.colli.reduce((s,c)=> s + (Number(c['#']) || 1), 0);
         }
         if (!tot){
-          // fallback: numero colli dal record o lunghezza array
           const f = rec._rawFields || {};
           const fTot = toNum(pickLoose(f, '#','Colli (tot)','Colli tot','Numero colli','N. colli','Totale colli')) || 0;
           tot = fTot || (Array.isArray(rec.colli) ? rec.colli.length : 0);
@@ -632,7 +630,6 @@ export function renderList(
         rec.colli = rows;
         updatePrintSection();
       } else {
-        // fallback da campi "smart"
         const fb = buildColliSmart(rec._rawFields || {});
         if (fb.length){
           if (holder) holder.innerHTML = tableHtml(fb);
@@ -643,10 +640,9 @@ export function renderList(
         }
       }
     } else {
-      // già presenti: assicura comunque aggiornamento della sezione di stampa
       updatePrintSection();
     }
   }catch(err){
     console.warn('[BO] fetchColliFor error per', rec.id, err);
   }
-}
+})();
