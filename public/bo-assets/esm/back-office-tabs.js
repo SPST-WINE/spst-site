@@ -28,8 +28,33 @@ function setActiveTab(name) {
 }
 
 // mostra/nasconde i contenitori e opzionale: il toggle "solo non evase"
+// Aggiungi vicino a showView in back-office-tabs.js
 function showView(name) {
   ensurePrevContainer();
+
+  const onlyOpenWrap = document.getElementById('only-open')?.closest('.search-row') || document.getElementById('only-open')?.parentElement;
+
+  const viewSped = document.getElementById('view-spedizioni') || document.getElementById('list');
+  const viewPrev = document.getElementById('view-preventivi');
+
+  if (name === 'spedizioni') {
+    if (viewSped) viewSped.style.display = '';
+    if (viewPrev) viewPrev.style.display = 'none';
+    if (onlyOpenWrap) onlyOpenWrap.style.display = '';
+  } else {
+    if (viewSped) viewSped.style.display = 'none';
+    if (viewPrev) viewPrev.style.display = '';
+    if (onlyOpenWrap) onlyOpenWrap.style.display = '';
+  }
+
+  console.log('[tabs] showView:', name, {
+    spedVisible: viewSped ? viewSped.style.display : '(no node)',
+    prevVisible: viewPrev ? viewPrev.style.display : '(no node)'
+  });
+
+  setActiveTab(name);
+}
+
 
   const onlyOpen = $('#only-open')?.closest('.search-row') || $('#only-open')?.parentElement;
   // Spedizioni visibili?
