@@ -241,51 +241,37 @@ function renderTrackingBlock(rec){
 }
 
 /* print-grid */
+// public/bo-assets/esm/render.js
+// ⬇️ Sostituisci INTERAMENTE la funzione `renderPrintGrid` con questa versione
+
 function renderPrintGrid(rec){
   const pesoTot = toKg(rec._peso_tot_kg > 0 ? rec._peso_tot_kg : totalPesoKg(rec));
 
-  // Tot colli: somma del campo "#" della tabella SPED_COLLI
-  const totColli = Array.isArray(rec.colli)
-    ? rec.colli.reduce((s, c) => s + (Number(c['#']) || 1), 0)
-    : 0;
+  // —— Colli (tot): somma di "#" da SPED_COLLI; fallback a length o a campi del record
+  const rows = Array.isArray(rec.colli) ? rec.colli : [];
+  const totFromRows = rows.reduce((s,c)=> s + (Number(c['#']) || 1), 0);
+  const totFromFields =
+    toNum(pickLoose(rec._rawFields||{}, '#', 'Colli (tot)', 'Colli tot', 'Numero colli', 'N. colli', 'Totale colli')) || 0;
+  const totColli = totFromRows || (rows.length ? rows.length : 0) || totFromFields;
 
-  // Lista colli (dim + peso) – facoltativa
-  const colliListHtml = (rec.colli && rec.colli.length)
-    ? rec.colli.map(c => {
+  // Lista colli (dim + peso)
+  const colliListHtml = rows.length
+    ? rows.map(c=>{
         const dims = [c['Lunghezza (cm)'], c['Larghezza (cm)'], c['Altezza (cm)']]
           .map(v => (v!=null && v!=='' ? String(v).replace(',', '.') : ''))
-          .filter(Boolean)
-          .join('×');
+          .filter(Boolean).join('×');
         const kg = toKg(Number(String(c['Peso (kg)']||'').replace(',', '.')) || 0);
         const q  = Number(c['#']) || 1;
         return `${q}× ${dims ? `${dims}cm` : ''} ${kg}`.trim();
       }).join(' ; ')
     : '—';
 
-
-  const fields = [
-    ['ID spedizione', rec.id],
-    ['Cliente', rec.cliente],
-    ['Email cliente', rec.email],
-    ['Data ritiro', rec.ritiro_data],
-    ['Incoterm', rec.incoterm],
-    ['Tipo spedizione', rec.tipo_spedizione],
-    ['Peso reale (tot.)', toKg(rec._peso_tot_kg > 0 ? rec._peso_tot_kg : totalPesoKg(rec))],
-    ['Mittente – Paese/Città (CAP)', `${rec.mittente_paese||'-'} • ${rec.mittente_citta||'-'} ${rec.mittente_cap?('('+rec.mittente_cap+')'):''}`],
-    ['Mittente – Indirizzo', rec.mittente_indirizzo],
-    ['Mittente – Telefono', rec.mittente_telefono],
-    ['Mittente – P.IVA', rec.piva_mittente],
-    ['Destinatario – Paese/Città (CAP)', `${rec.dest_paese||'-'} • ${rec.dest_citta||'-'} ${rec.dest_cap?('('+rec.dest_cap+')'):''}`],
-    ['Destinatario – Indirizzo', rec.dest_indirizzo],
-    ['Destinatario – Telefono', rec.dest_telefono],
-    ['Destinatario – P.IVA/CF', rec.dest_piva || '—'],
-  ];
-
-return `
-    <div class="print-two" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;">
-      <div class="col">
+  // ——— Mittente / Destinatario (2 colonne con altezze uguali)
+  const twoCols = `
+    <div class="print-two" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="col" style="display:flex;flex-direction:column;">
         <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Mittente</strong></div>
-        <div class="print-grid" style="height:100%;">
+        <div class="print-grid" style="flex:1;">
           <div class="k">Ragione sociale</div><div>${rec.mittente_ragione || '—'}</div>
           <div class="k">Paese</div><div>${rec.mittente_paese || '—'}</div>
           <div class="k">Città</div><div>${rec.mittente_citta || '—'}</div>
@@ -296,9 +282,9 @@ return `
         </div>
       </div>
 
-      <div class="col">
+      <div class="col" style="display:flex;flex-direction:column;">
         <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Destinatario</strong></div>
-        <div class="print-grid" style="height:100%;">
+        <div class="print-grid" style="flex:1;">
           <div class="k">Ragione sociale</div><div>${rec.dest_ragione || '—'}</div>
           <div class="k">Paese</div><div>${rec.dest_paese || '—'}</div>
           <div class="k">Città</div><div>${rec.dest_citta || '—'}</div>
@@ -309,19 +295,39 @@ return `
         </div>
       </div>
     </div>
+  `;
 
+  // ——— Riepilogo spedizione (una colonna)
+  const summary = `
     <div class="hr"></div>
-
     <div class="print-grid">
       <div class="k">ID spedizione</div><div>${rec.id}</div>
       <div class="k">Data ritiro</div><div>${rec.ritiro_data || '—'}</div>
       <div class="k">Incoterm</div><div>${rec.incoterm || '—'}</div>
       <div class="k">Peso reale (tot.)</div><div>${pesoTot}</div>
-      <div class="k">Colli (tot.)</div><div>${totColli || '—'}</div>
+      <div class="k">Colli (tot.)</div><div id="tot-colli-${rec.id}">${totColli || '—'}</div>
       <div class="k">Colli (lista)</div><div id="print-colli-${rec.id}">${colliListHtml}</div>
     </div>
   `;
+
+  // ——— Dati per fattura (una colonna)
+  const fattura = `
+    <div class="hr"></div>
+    <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Dati per fattura</strong></div>
+    <div class="print-grid">
+      <div class="k">Cliente</div><div>${rec.dest_ragione || rec.mittente_ragione || '—'}</div>
+      <div class="k">Email</div><div>${rec.email || '—'}</div>
+      <div class="k">Indirizzo</div><div>${rec.dest_indirizzo || '—'}</div>
+      <div class="k">Città</div><div>${rec.dest_citta || '—'}</div>
+      <div class="k">CAP</div><div>${rec.dest_cap || '—'}</div>
+      <div class="k">Paese</div><div>${rec.dest_paese || '—'}</div>
+      <div class="k">P.IVA/CF</div><div>${rec.dest_piva || '—'}</div>
+    </div>
+  `;
+
+  return twoCols + summary + fattura;
 }
+
 
 /* Render list */
 function ensureListContainer() {
@@ -573,59 +579,74 @@ export function renderList(
       });
     });
 
-    // Lazy-load colli se assenti + aggiorna print-grid
-    (async ()=>{
-      try{
-        if (!rec.colli || !rec.colli.length) {
-          const holder = card.querySelector('.bo-colli-holder');
-          if (holder) holder.innerHTML = '<span class="small">Carico colli…</span>';
-          const rows = await fetchColliFor(rec._recId || rec.id);
-          if (Array.isArray(rows) && rows.length){
-            const html = `
-              <table class="colli">
-                <thead><tr><th>Dim. (L×W×H cm)</th><th>Peso reale</th></tr></thead>
-                <tbody>
-                  ${rows.map(c=>`<tr><td>${c.L}×${c.W}×${c.H}</td><td>${toKg(c.kg)}</td></tr>`).join('')}
-                </tbody>
-              </table>`;
-            if (holder) holder.innerHTML = html;
-            rec.colli = rows;
+   // Lazy-load colli se assenti + aggiorna print-grid (peso, lista e TOTALE colli)
+(async ()=>{
+  try{
+    const holder = card.querySelector('.bo-colli-holder');
 
-            const pesoEl = card.querySelector(`#peso-${rec.id}`);
-            if (pesoEl) pesoEl.textContent = toKg(totalPesoKg(rec));
+    const tableHtml = (arr)=>`
+      <table class="colli">
+        <thead><tr><th>Dim. (L×W×H cm)</th><th>Peso reale</th></tr></thead>
+        <tbody>
+          ${arr.map(c=>`<tr><td>${c.L}×${c.W}×${c.H}</td><td>${toKg(c.kg)}</td></tr>`).join('')}
+        </tbody>
+      </table>`;
 
-            const printCell = card.querySelector(`#print-colli-${rec.id}`);
-            if (printCell){
-              printCell.textContent = rows.map(c=>`${c.L}×${c.W}×${c.H}cm ${toKg(c.kg)}`).join(' ; ');
-            }
-          } else if (holder) {
-            const fb = buildColliSmart(rec._rawFields || {});
-            if (fb.length){
-              const html = `
-                <table class="colli">
-                  <thead><tr><th>Dim. (L×W×H cm)</th><th>Peso reale</th></tr></thead>
-                  <tbody>
-                    ${fb.map(c=>`<tr><td>${c.L}×${c.W}×${c.H}</td><td>${toKg(c.kg)}</td></tr>`).join('')}
-                  </tbody>
-                </table>`;
-              holder.innerHTML = html;
-              rec.colli = fb;
-              const pesoEl = card.querySelector(`#peso-${rec.id}`);
-              if (pesoEl) pesoEl.textContent = toKg(totalPesoKg(rec));
-              const printCell = card.querySelector(`#print-colli-${rec.id}`);
-              if (printCell){
-                printCell.textContent = fb.map(c=>`${c.L}×${c.W}×${c.H}cm ${toKg(c.kg)}`).join(' ; ');
-              }
-            } else {
-              holder.innerHTML = '<span class="small">—</span>';
-            }
-          }
-        }
-      }catch(err){
-        console.warn('[BO] fetchColliFor error per', rec.id, err);
+    const updatePrintSection = ()=>{
+      // aggiorna peso totale
+      const pesoEl = card.querySelector(`#peso-${rec.id}`);
+      if (pesoEl) pesoEl.textContent = toKg(totalPesoKg(rec));
+
+      // aggiorna lista colli (riga testuale)
+      const printCell = card.querySelector(`#print-colli-${rec.id}`);
+      if (printCell && Array.isArray(rec.colli)){
+        printCell.textContent = rec.colli
+          .map(c=>`${c.L}×${c.W}×${c.H}cm ${toKg(c.kg)}`)
+          .join(' ; ');
       }
-    })();
 
-    try { elList.appendChild(card); } catch (e) { console.error('[BO] append card fallito', e); }
-  });
-}
+      // aggiorna "Colli (tot.)"
+      const totCell = card.querySelector(`#tot-colli-${rec.id}`);
+      if (totCell){
+        let tot = 0;
+        if (Array.isArray(rec.colli) && rec.colli.length){
+          // somma del campo "#" se presente, altrimenti 1
+          tot = rec.colli.reduce((s,c)=> s + (Number(c['#']) || 1), 0);
+        }
+        if (!tot){
+          // fallback: numero colli dal record o lunghezza array
+          const f = rec._rawFields || {};
+          const fTot = toNum(pickLoose(f, '#','Colli (tot)','Colli tot','Numero colli','N. colli','Totale colli')) || 0;
+          tot = fTot || (Array.isArray(rec.colli) ? rec.colli.length : 0);
+        }
+        totCell.textContent = tot ? String(tot) : '—';
+      }
+    };
+
+    if (!rec.colli || !rec.colli.length) {
+      if (holder) holder.innerHTML = '<span class="small">Carico colli…</span>';
+      const rows = await fetchColliFor(rec._recId || rec.id);
+
+      if (Array.isArray(rows) && rows.length){
+        if (holder) holder.innerHTML = tableHtml(rows);
+        rec.colli = rows;
+        updatePrintSection();
+      } else {
+        // fallback da campi "smart"
+        const fb = buildColliSmart(rec._rawFields || {});
+        if (fb.length){
+          if (holder) holder.innerHTML = tableHtml(fb);
+          rec.colli = fb;
+          updatePrintSection();
+        } else if (holder) {
+          holder.innerHTML = '<span class="small">—</span>';
+        }
+      }
+    } else {
+      // già presenti: assicura comunque aggiornamento della sezione di stampa
+      updatePrintSection();
+    }
+  }catch(err){
+    console.warn('[BO] fetchColliFor error per', rec.id, err);
+  }
+})();
