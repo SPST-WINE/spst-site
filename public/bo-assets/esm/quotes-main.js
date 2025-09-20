@@ -6,7 +6,7 @@ import { toast } from '/bo-assets/utils/dom.js';
 
 // Se hai già un renderer fatto (già presente in repo):
 //  - assicurati che exporti "renderQuotesList" (o adegua la riga qui sotto)
-import { renderQuotesList } from '/bo-assets/esm/quotes-render.js';
+import { renderQuotes as renderQuotesList } from '/bo-assets/esm/quotes-render.js';
 
 const API_BASE =
   (AIRTABLE?.proxyBase || '').replace(/\/airtable\/?$/i, '') ||
