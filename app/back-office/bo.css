@@ -101,6 +101,11 @@
 .print-two{ align-items: stretch; }
 .print-two .col > .print-grid{ height:100%; }
 
-/* spacing per le card dei preventivi */
+/* visibilità contenitore preventivi */
+#view-preventivi { display:block; }
+#quotes-list { display:block; }
+
+/* margine tra card preventivi */
 #quotes-list > * + * { margin-top: 16px; }
+
 
