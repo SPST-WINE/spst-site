@@ -24,7 +24,7 @@ const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
 
 // Helper puro + "test" rapidi
-export function volumetricKg4000(l: number, w: number, h: number): number {
+function volumetricKg4000(l: number, w: number, h: number): number {
   if (!isFinite(l) || !isFinite(w) || !isFinite(h)) return 0;
   return Math.round(((l * w * h) / 4000) * 100) / 100;
 }
@@ -106,6 +106,7 @@ export default function PortaleQuotazioni() {
               Preventivi veloci
             </span>
            <h1 className="mt-2 text-[34px] sm:text-[40px] md:text-[54px] font-black leading-[1.15] pb-2">
+
               Portale quotazioni
               <span
                 className="block text-transparent bg-clip-text"
@@ -358,7 +359,7 @@ function QuoteDetailsForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <Check name="express" label="Spedizione express" icon={<Rocket className="h-4 w-4" />} />
           <Check name="accise" label="Pratica accise" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />
+          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />} />
           <Check name="cola" label="COLA / Prior Notice (USA)" icon={<FileCheck2 className="h-4 w-4" />} />
           <Check name="temp" label="Temperatura controllata" icon={<Thermometer className="h-4 w-4" />} />
           <Check name="assicurazione" label="Assicurazione" icon={<ShieldCheck className="h-4 w-4" />} />
