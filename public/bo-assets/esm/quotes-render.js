@@ -17,11 +17,10 @@ function pickLoose(fields,...names){
   return;
 }
 
-// RENDERER CORRETTO: esporta "renderQuotesList"
+// <<< EXPORT GIUSTO
 export function renderQuotesList(records = [], { host } = {}) {
   const container = host || document.getElementById('view-preventivi') || document.body;
 
-  // usa un container dedicato per i preventivi, per non interferire con le spedizioni
   let list = container.querySelector('#quotes-list');
   if (!list){
     list = document.createElement('div');
@@ -38,7 +37,6 @@ export function renderQuotesList(records = [], { host } = {}) {
 
   records.forEach(rec=>{
     const f = rec.fields || {};
-
     const id       = pickLoose(f, 'ID','Id','N°') || rec.id;
     const email    = pickLoose(f, 'Creato da','Email','Contatto','Richiedente') || '—';
     const tipo     = pickLoose(f, 'Sottotipo','Tipo Spedizione','Tipo') || '—';
