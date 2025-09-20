@@ -1,12 +1,6 @@
-// Loader logica "Preventivi" — idempotente
-
 import { AIRTABLE, DEBUG } from '/bo-assets/config.js';
 import { toast } from '/bo-assets/utils/dom.js';
 import { renderQuotesList } from '/bo-assets/esm/quotes-render.js';
-
-const API_BASE =
-  (AIRTABLE?.proxyBase || '').replace(/\/airtable\/?$/i, '') ||
-  (typeof location !== 'undefined' ? '' : ''); // usa lo stesso host ( /api/preventivi )
 
 const elSearch   = document.getElementById('search');
 const elOnlyOpen = document.getElementById('only-open');
@@ -26,17 +20,18 @@ function ensurePrevContainer(){
   return el;
 }
 
-async function fetchQuotes({ q='', onlyOpen=false } = {}){
+async function fetchQuotes({ q='' } = {}){
   const params = new URLSearchParams();
   if (q) params.set('search', q);
-  if (onlyOpen) params.set('onlyOpen', '1');
 
   const url = `/api/preventivi?${params.toString()}`;
   if (DEBUG) console.log('[quotes] GET', url);
   const r = await fetch(url, { method:'GET' });
   const j = await r.json().catch(()=> ({}));
   if (!r.ok || j?.ok === false) throw new Error(j?.error || `HTTP ${r.status}`);
-  return Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : []);
+  const out = Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : []);
+  if (DEBUG) console.log('[quotes] records:', out.length);
+  return out;
 }
 
 function applyQuotes(){
@@ -47,8 +42,7 @@ function applyQuotes(){
 async function loadQuotes(){
   try{
     const q = (elSearch?.value || '').trim();
-    const onlyOpen = !!elOnlyOpen?.checked; // se non serve filtrare, lascia pure true/false
-    DATA = await fetchQuotes({ q, onlyOpen });
+    DATA = await fetchQuotes({ q });
     applyQuotes();
   }catch(err){
     console.error('[quotes] load error', err);
@@ -61,7 +55,7 @@ export function bootQuotes(){
   BOOTED = true;
 
   if (elSearch)   elSearch.addEventListener('input', debounce(()=>loadQuotes(), 250));
-  if (elOnlyOpen) elOnlyOpen.addEventListener('change', ()=>loadQuotes());
+  // elOnlyOpen ignorato per i preventivi
 
   loadQuotes().catch(()=>{});
 }
