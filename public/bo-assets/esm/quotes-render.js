@@ -1,50 +1,63 @@
-// UI renderer per la tab "Preventivi"
+// Renderer per la tab "Preventivi". Scrive SEMPRE dentro #view-preventivi
+// usando un contenitore dedicato: #quotes-list (così non confligge con spedizioni).
 
-function normKey(s){return String(s||'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toLowerCase();}
+function normKey(s){ return String(s||'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toLowerCase(); }
 function pickLoose(fields,...names){
   if(!fields) return;
   const m = new Map(Object.keys(fields).map(k=>[normKey(k),k]));
-  for (const n of names){
+  for(const n of names){
     const real = m.get(normKey(n));
-    if (real!=null){
+    if(real!=null){
       const v = fields[real];
-      if (v!=='' && v!=null) return v;
+      if(v!=='' && v!=null) return v;
     }
   }
-  for (const n of names){
-    if (n in fields && fields[n]!=='' && fields[n]!=null) return fields[n];
+  for(const n of names){
+    if(n in fields && fields[n]!=='' && fields[n]!=null) return fields[n];
   }
   return;
 }
 
-// <<< EXPORT GIUSTO
-export function renderQuotesList(records = [], { host } = {}) {
-  const container = host || document.getElementById('view-preventivi') || document.body;
-
-  let list = container.querySelector('#quotes-list');
-  if (!list){
-    list = document.createElement('div');
-    list.id = 'quotes-list';
-    container.appendChild(list);
+function ensureQuotesHost(host){
+  let el = host || document.getElementById('view-preventivi');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'view-preventivi';
+    (document.getElementById('view-spedizioni')?.parentElement || document.body).appendChild(el);
   }
+  return el;
+}
 
-  list.innerHTML = '';
+function ensureQuotesList(host){
+  const h = ensureQuotesHost(host);
+  let el = h.querySelector('#quotes-list');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'quotes-list';
+    h.appendChild(el);
+  }
+  return el;
+}
 
-  if (!Array.isArray(records) || records.length === 0){
-    list.innerHTML = '<div class="small" style="opacity:.8">Nessun preventivo trovato</div>';
+export function renderQuotesList(records = [], { host } = {}){
+  const elList = ensureQuotesList(host);
+  try { elList.innerHTML = ''; } catch {}
+
+  if (!records.length){
+    elList.innerHTML = '<div class="small" style="opacity:.8">Nessun preventivo trovato</div>';
     return;
   }
 
   records.forEach(rec=>{
     const f = rec.fields || {};
-    const id       = pickLoose(f, 'ID','Id','N°') || rec.id;
-    const email    = pickLoose(f, 'Creato da','Email','Contatto','Richiedente') || '—';
-    const tipo     = pickLoose(f, 'Sottotipo','Tipo Spedizione','Tipo') || '—';
-    const paese    = pickLoose(f, 'Destinatario - Paese','Paese') || '—';
-    const citta    = pickLoose(f, 'Destinatario - Città','Città') || '—';
-    const rsMitt   = pickLoose(f, 'Mittente - Ragione Sociale','Mittente') || '';
-    const rsDest   = pickLoose(f, 'Destinatario - Ragione Sociale','Destinatario') || '';
-    const created  = pickLoose(f, 'Creato il','Created time','Created') || '';
+    const id     = pickLoose(f, 'ID', 'Id', 'N°') || rec.id;
+    const email  = pickLoose(f, 'Creato da', 'Email', 'Contatto', 'Richiedente') || '—';
+    const tipo   = pickLoose(f, 'Sottotipo', 'Tipo Spedizione', 'Tipo') || '—';
+    const paese  = pickLoose(f, 'Destinatario - Paese', 'Paese') || '—';
+    const citta  = pickLoose(f, 'Destinatario - Città', 'Città') || '—';
+    const rsMitt = pickLoose(f, 'Mittente - Ragione Sociale', 'Mittente');
+    const rsDest = pickLoose(f, 'Destinatario - Ragione Sociale', 'Destinatario');
+    const created = pickLoose(f, 'Creato il', 'Created time', 'Created') || '';
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -65,6 +78,6 @@ export function renderQuotesList(records = [], { host } = {}) {
         <div class="k">Tipo spedizione</div><div>${tipo}</div>
       </div>
     `;
-    list.appendChild(card);
+    elList.appendChild(card);
   });
 }
