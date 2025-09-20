@@ -96,3 +96,7 @@
   box-shadow: none !important;
 }
 
+/* app/back-office/bo.css */
+/* ⬇️ Aggiungi in fondo per allineare in altezza le due card dell'espanso */
+.print-two{ align-items: stretch; }
+.print-two .col > .print-grid{ height:100%; }
