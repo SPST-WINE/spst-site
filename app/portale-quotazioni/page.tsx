@@ -29,7 +29,42 @@ function volumetricKg4000(l: number, w: number, h: number): number {
   return Math.round(((l * w * h) / 4000) * 100) / 100;
 }
 
+/* ------------------------ TOAST ------------------------ */
+type ToastVariant = "success" | "error" | "info";
+function useToast() {
+  const [toast, setToast] = useState<{ message: string; variant: ToastVariant } | null>(null);
+  function show(message: string, variant: ToastVariant = "success") {
+    setToast({ message, variant });
+    window.clearTimeout((show as any)._t);
+    (show as any)._t = window.setTimeout(() => setToast(null), 3000);
+  }
+  function clear() {
+    setToast(null);
+  }
+  return { toast, show, clear };
+}
+function Toast({ toast }: { toast: { message: string; variant: ToastVariant } | null }) {
+  if (!toast) return null;
+  const ring =
+    toast.variant === "success"
+      ? "ring-1 ring-emerald-400/50"
+      : toast.variant === "error"
+      ? "ring-1 ring-red-400/50"
+      : "ring-1 ring-white/30";
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] px-4 py-3 rounded-xl border border-white/15 bg-white/10 backdrop-blur ${ring} shadow-[0_8px_30px_rgba(0,0,0,.25)]`}
+    >
+      <span className="text-sm">{toast.message}</span>
+    </div>
+  );
+}
+
 export default function PortaleQuotazioni() {
+  const { toast, show } = useToast();
+
   // Smoke test veloce per prevenire regressioni
   useEffect(() => {
     const ex = volumetricKg4000(40, 30, 35); // 40*30*35/4000 = 10.5
@@ -168,7 +203,7 @@ export default function PortaleQuotazioni() {
 
           {/* Colonna destra: dettagli spedizione */}
           <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
-            <QuoteDetailsForm />
+            <QuoteDetailsForm onToast={show} />
           </div>
         </div>
       </section>
@@ -211,6 +246,9 @@ export default function PortaleQuotazioni() {
           </small>
         </div>
       </footer>
+
+      {/* Toast */}
+      <Toast toast={toast} />
     </main>
   );
 }
@@ -284,9 +322,38 @@ function ContactFields() {
   );
 }
 
-function QuoteDetailsForm() {
+function QuoteDetailsForm({ onToast }: { onToast: (msg: string, v?: "success" | "error" | "info") => void }) {
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const form = e.currentTarget;
+      const fd = new FormData(form);
+      // Honeypot + timestamp
+      if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
+      if (!fd.get("_gotcha")) fd.append("_gotcha", "");
+
+      // NB: i campi della colonna sinistra sono legati via form="quoteForm"
+      const res = await fetch("/api/quote", { method: "POST", body: fd });
+      const json = await res.json();
+      if (json.ok) {
+        onToast("Richiesta inviata! Ti contatteremo a breve.", "success");
+        form.reset();
+      } else {
+        onToast(`Errore invio: ${json.error || "riprovare"}`, "error");
+      }
+    } catch (err: any) {
+      onToast(`Errore invio: ${err?.message || "riprovare"}`, "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <form id="quoteForm" action="/api/quote" method="POST" className="grid gap-4">
+    <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4">
       {/* Honeypot + ts */}
       <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="hidden" />
       <input type="hidden" name="_ts" value={String(Date.now())} />
@@ -411,10 +478,11 @@ function QuoteDetailsForm() {
 
       <motion.button
         whileTap={{ scale: 0.98 }}
-        className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+        disabled={submitting}
+        className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50 disabled:opacity-60 disabled:hover:translate-y-0"
         style={{ background: SPST_ORANGE }}
       >
-        Richiedi preventivo
+        {submitting ? "Invio in corso..." : "Richiedi preventivo"}
       </motion.button>
       <div className="text-[11px] text-white/50 text-center">Invio protetto. Nessuno spam.</div>
     </form>
