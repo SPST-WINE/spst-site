@@ -16,10 +16,16 @@ import { normalizeCarrier } from '../utils/misc.js';
    - Allegato 2
    - Allegato 3
 */
+// public/bo-assets/airtable/api.js
+// Sostituisci INTERAMENTE il blocco mappa + helper con questo:
+
 export const DOC_FIELD_MAP = {
   // principali (campo dedicato)
   Lettera_di_Vettura: 'Allegato LDV',
   Fattura_Commerciale: 'Allegato Fattura',
+  Fattura_Proforma: 'Allegato Fattura',          // ⬅️ NEW
+  'Fattura Commerciale': 'Allegato Fattura',      // ⬅️ alias safety
+  'Fattura Proforma': 'Allegato Fattura',         // ⬅️ alias safety
   Dichiarazione_Esportazione: 'Allegato DLE',
   Packing_List: 'Allegato PL',
 
