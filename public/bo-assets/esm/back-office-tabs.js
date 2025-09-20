@@ -1,42 +1,85 @@
-// assets/esm/back-office-tabs.js
-(function () {
-  const tabbar = document.querySelector('.tabbar');
-  if (!tabbar) return;
+// public/bo-assets/esm/back-office-tabs.js
+// Router super-leggero per i tab "Spedizioni" / "Preventivi".
+// NON tocca la logica di Spedizioni (che resta in /esm/main.js).
 
-  const tabs = [...tabbar.querySelectorAll('a[data-tab]')];
-  const views = {
-    spedizioni: document.getElementById('view-spedizioni'),
-    preventivi: document.getElementById('view-preventivi')
-  };
+const TAB_ACTIVE_CLASS = 'active';
 
-  function setActive(which) {
-    tabs.forEach(a => {
-      const is = a.dataset.tab === which;
-      a.classList.toggle('is-active', is);
-      a.setAttribute('aria-current', is ? 'page' : 'false');
-    });
-    Object.entries(views).forEach(([k, el]) => {
-      if (el) el.style.display = (k === which) ? 'block' : 'none';
-    });
+const $ = (sel) => document.querySelector(sel);
+const viewSped = $('#view-spedizioni') || document.getElementById('list'); // fallback
+let viewPrev  = $('#view-preventivi');
+
+// crea il container preventivi se manca
+function ensurePrevContainer() {
+  if (!viewPrev) {
+    viewPrev = document.createElement('div');
+    viewPrev.id = 'view-preventivi';
+    // lo mettiamo subito dopo il container spedizioni
+    (viewSped?.parentElement || document.body).appendChild(viewPrev);
   }
+  return viewPrev;
+}
 
-  function whichFromHash(h) {
-    return (h && h.includes('preventivi')) ? 'preventivi' : 'spedizioni';
+// evidenzia il tab selezionato
+function setActiveTab(name) {
+  const btnSped = $('#tab-spedizioni');
+  const btnPrev = $('#tab-preventivi');
+  btnSped?.classList.toggle(TAB_ACTIVE_CLASS, name === 'spedizioni');
+  btnPrev?.classList.toggle(TAB_ACTIVE_CLASS, name === 'preventivi');
+}
+
+// mostra/nasconde i contenitori e opzionale: il toggle "solo non evase"
+function showView(name) {
+  ensurePrevContainer();
+
+  const onlyOpen = $('#only-open')?.closest('.search-row') || $('#only-open')?.parentElement;
+  // Spedizioni visibili?
+  if (name === 'spedizioni') {
+    viewSped && (viewSped.style.display = '');
+    viewPrev && (viewPrev.style.display = 'none');
+    if (onlyOpen) onlyOpen.style.display = ''; // visibile per spedizioni
+  } else {
+    viewSped && (viewSped.style.display = 'none');
+    viewPrev && (viewPrev.style.display = '');
+    if (onlyOpen) onlyOpen.style.display = ''; // se vuoi nasconderlo nei preventivi -> 'none'
   }
+  setActiveTab(name);
+}
 
-  // click: niente scroll, aggiorna URL e UI
-  tabs.forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      const dest = a.dataset.tab;
-      history.replaceState(null, '', a.getAttribute('href')); // #tab-...
-      setActive(dest);
-    });
+// attiva la vista preventivi (dynamic import per non appesantire)
+async function enterPreventivi() {
+  showView('preventivi');
+  // Notifica personalizzata (utile se servisse in futuro)
+  document.dispatchEvent(new CustomEvent('backoffice:enter-preventivi'));
+  // carica la logica dei preventivi
+  const mod = await import('/bo-assets/esm/quotes-main.js');
+  if (mod && typeof mod.bootQuotes === 'function') {
+    mod.bootQuotes(); // idempotente
+  }
+}
+
+// attiva la vista spedizioni
+function enterSpedizioni() {
+  showView('spedizioni');
+  document.dispatchEvent(new CustomEvent('backoffice:enter-spedizioni'));
+}
+
+// gestione dei click sui bottoni/tab
+function wireTabs() {
+  const btnSped = $('#tab-spedizioni');
+  const btnPrev = $('#tab-preventivi');
+
+  btnSped?.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '#tab-spedizioni'; enterSpedizioni(); });
+  btnPrev?.addEventListener('click', (e)=>{ e.preventDefault(); location.hash = '#tab-preventivi';  enterPreventivi(); });
+
+  // routing via hash (per link diretti)
+  window.addEventListener('hashchange', ()=>{
+    if (location.hash === '#tab-preventivi') enterPreventivi();
+    else enterSpedizioni();
   });
 
-  // gestisci link diretto #tab-preventivi e cambi di hash esterni
-  window.addEventListener('hashchange', () => setActive(whichFromHash(location.hash)));
+  // boot iniziale
+  if (location.hash === '#tab-preventivi') enterPreventivi();
+  else enterSpedizioni();
+}
 
-  // init
-  setActive(whichFromHash(location.hash));
-})();
+document.addEventListener('DOMContentLoaded', wireTabs);
