@@ -108,4 +108,13 @@
 /* margine tra card preventivi */
 #quotes-list > * + * { margin-top: 16px; }
 
+/* ---- Single tab full width ---- */
+.tabbar { display: flex; gap: 12px; }           /* assicura il layout a flex */
+.tabbar a { flex: 1 1 0; text-align: center; }
+
+.tabbar a:only-child {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
 
