@@ -20,15 +20,25 @@ function ensurePrevContainer(){
   return el;
 }
 
+
 async function fetchQuotes({ q='', onlyOpen=false } = {}){
   const params = new URLSearchParams();
   if (q) params.set('search', q);
   if (onlyOpen) params.set('onlyOpen', '1');
-  const r = await fetch(`/api/preventivi?${params.toString()}`, { method:'GET' });
+
+  const url = `/api/preventivi?${params.toString()}`;
+  console.debug('[quotes] GET', url);
+  const r = await fetch(url, { method:'GET' });
   const j = await r.json().catch(()=> ({}));
-  if (!r.ok || j?.ok === false) throw new Error(j?.error || `HTTP ${r.status}`);
+
+  if (!r.ok || j?.ok === false) {
+    console.error('[quotes] GET error', { status: r.status, body: j });
+    throw new Error(j?.error || `HTTP ${r.status}`);
+  }
+  console.debug('[quotes] records:', Array.isArray(j?.records) ? j.records.length : 0);
   return Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : []);
 }
+
 
 async function createQuote(formData){
   const payload = Object.fromEntries(new FormData(formData).entries());
