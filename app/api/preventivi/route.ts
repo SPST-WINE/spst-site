@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-function buildCorsHeaders(origin?: string | null) {
+// CORS minimale
+function cors(origin?: string | null) {
   const o = origin || '*';
   return {
     'Access-Control-Allow-Origin': o,
@@ -11,90 +12,86 @@ function buildCorsHeaders(origin?: string | null) {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   };
 }
-
 export async function OPTIONS(req: NextRequest) {
-  const origin = req.headers.get('origin');
-  return new NextResponse(null, { status: 204, headers: buildCorsHeaders(origin) });
+  return new NextResponse(null, { status: 204, headers: cors(req.headers.get('origin')) });
 }
 
+// escape semplice per formula Airtable
 const esc = (s: string) => String(s ?? '').replace(/'/g, "\\'");
 
-// Campi “sicuri” per la ricerca nella tab Preventivi
+// Campi su cui fare la ricerca
 const SEARCH_FIELDS = [
-  'ID',
+  'ID', // autonumber o simile
   'Creato da',
+  'Mittente - Ragione Sociale',
+  'Mittente - Città',
+  'Mittente - CAP',
   'Destinatario - Ragione Sociale',
   'Destinatario - Paese',
   'Destinatario - Città',
+  'Destinatario - CAP',
 ];
 
 export async function GET(req: NextRequest) {
-  const origin = req.headers.get('origin');
-  const cors = buildCorsHeaders(origin);
-
+  const headers = cors(req.headers.get('origin'));
   try {
     const { searchParams } = new URL(req.url);
+
     const search   = (searchParams.get('search') || '').trim();
+    const onlyOpen = searchParams.get('onlyOpen') === '1';
     const pageSize = Number(searchParams.get('pageSize') || '50') || 50;
 
-    const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const API_KEY = process.env.AIRTABLE_PAT;        // <- token PAT
-    const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
+    // 🔑 ENV GIUSTE (come da tua nota)
+    const BASE_ID  = process.env.AIRTABLE_BASE_ID;
+    const API_KEY  = process.env.AIRTABLE_PAT;           // Personal Access Token
+    const TABLE    = process.env.TB_PREVENTIVI || 'Preventivi';
 
     if (!BASE_ID || !API_KEY) {
-      return NextResponse.json(
-        { ok: false, error: 'Missing Airtable credentials' },
-        { status: 500, headers: cors }
-      );
+      return NextResponse.json({ ok:false, error: 'Missing Airtable credentials' }, { status: 500, headers });
     }
 
-    // Formula di ricerca
-    let filterByFormula = '';
+    // Formula di ricerca: usiamo SEARCH(LOWER('q'), LOWER('' & {Campo}))
+    let searchFormula = '';
     if (search) {
-      const parts = SEARCH_FIELDS.map(
-        f => `FIND(LOWER('${esc(search)}'), LOWER({${esc(f)}}))`
+      const parts = SEARCH_FIELDS.map(f =>
+        `SEARCH(LOWER('${esc(search)}'), LOWER('' & {${esc(f)}}))`
       );
-      filterByFormula = `OR(${parts.join(',')})`;
+      searchFormula = `OR(${parts.join(',')})`;
     }
 
-    const baseParams = new URLSearchParams();
-    baseParams.set('pageSize', String(pageSize));
-    if (filterByFormula) baseParams.set('filterByFormula', filterByFormula);
+    // "Solo non evase" (adatta alle tue etichette di stato se servisse)
+    const openFormula = `OR({Stato}='Aperto',{Stato}='Nuovo', NOT({Stato}='Chiuso'))`;
 
-    const buildUrl = (withSort: boolean) => {
-      const p = new URLSearchParams(baseParams);
-      if (withSort) {
-        // ⚠️ Se il campo non esiste Airtable risponde 422 -> gestito con fallback
-        p.set('sort[0][field]', 'ID');
-        p.set('sort[0][direction]', 'desc');
-      }
-      return `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${p.toString()}`;
-    };
+    let filterByFormula = '';
+    if (searchFormula && onlyOpen) filterByFormula = `AND(${searchFormula}, ${openFormula})`;
+    else if (searchFormula)         filterByFormula = searchFormula;
+    else if (onlyOpen)              filterByFormula = openFormula;
 
-    const headers = {
-      Authorization: `Bearer ${API_KEY}`,
-      'Content-Type': 'application/json',
-    };
+    const params = new URLSearchParams();
+    params.set('pageSize', String(pageSize));
+    // Ordine: ID discendente (più recenti in alto)
+    params.set('sort[0][field]', 'ID');
+    params.set('sort[0][direction]', 'desc');
+    if (filterByFormula) params.set('filterByFormula', filterByFormula);
 
-    // 1) Prova con sort=ID
-    let res = await fetch(buildUrl(true), { method: 'GET', headers, cache: 'no-store' });
-    let json: any = await res.json().catch(() => ({}));
+    const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${params.toString()}`;
 
-    // 2) Se 422 (campo sort inesistente), riprova SENZA sort
-    if (res.status === 422) {
-      res = await fetch(buildUrl(false), { method: 'GET', headers, cache: 'no-store' });
-      json = await res.json().catch(() => ({}));
+    const r = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    const j = await r.json();
+    if (!r.ok) {
+      return NextResponse.json({ ok:false, error: j }, { status: r.status, headers });
     }
 
-    if (!res.ok) {
-      return NextResponse.json({ ok: false, error: json }, { status: res.status, headers: cors });
-    }
-
-    return NextResponse.json({ ok: true, records: json.records || [] }, { headers: cors });
+    return NextResponse.json({ ok:true, records: j.records || [] }, { headers });
   } catch (err: any) {
-    return NextResponse.json(
-      { ok: false, error: String(err?.message || err) },
-      { status: 500, headers: cors }
-    );
+    return NextResponse.json({ ok:false, error: String(err?.message || err) }, { status: 500, headers });
   }
 }
