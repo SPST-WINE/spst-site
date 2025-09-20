@@ -226,3 +226,14 @@
 #qa-packages .pkg-row button[aria-label="Remove"]{
   display:none !important;
 }
+
+/* Card quote + form */
+#view-preventivi #quotes-list { display:flex; flex-direction:column; gap:16px; }
+
+.quotes-form input, .quotes-form select {
+  width:100%; min-width:220px;
+}
+
+#quotes-list .card { border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:12px 14px; background:rgba(15,23,42,.35); }
+#quotes-list .card .card-head { margin-bottom:8px; }
+
