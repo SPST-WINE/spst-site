@@ -649,4 +649,4 @@ export function renderList(
   }catch(err){
     console.warn('[BO] fetchColliFor error per', rec.id, err);
   }
-})();
+}
