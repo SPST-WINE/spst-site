@@ -1,9 +1,9 @@
+// app/api/preventivi/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// CORS minimale
 function cors(origin?: string | null) {
   const o = origin || '*';
   return {
@@ -16,12 +16,10 @@ export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, { status: 204, headers: cors(req.headers.get('origin')) });
 }
 
-// escape semplice per formula Airtable
 const esc = (s: string) => String(s ?? '').replace(/'/g, "\\'");
 
-// Campi su cui fare la ricerca
 const SEARCH_FIELDS = [
-  'ID', // autonumber o simile
+  'ID',
   'Creato da',
   'Mittente - Ragione Sociale',
   'Mittente - Città',
@@ -36,62 +34,80 @@ export async function GET(req: NextRequest) {
   const headers = cors(req.headers.get('origin'));
   try {
     const { searchParams } = new URL(req.url);
-
     const search   = (searchParams.get('search') || '').trim();
-    const onlyOpen = searchParams.get('onlyOpen') === '1';
+    const onlyOpen = searchParams.get('onlyOpen') === '1'; // se non supportato, lo ignoreremo
     const pageSize = Number(searchParams.get('pageSize') || '50') || 50;
 
-    // 🔑 ENV GIUSTE (come da tua nota)
-    const BASE_ID  = process.env.AIRTABLE_BASE_ID;
-    const API_KEY  = process.env.AIRTABLE_PAT;           // Personal Access Token
-    const TABLE    = process.env.TB_PREVENTIVI || 'Preventivi';
+    const BASE_ID = process.env.AIRTABLE_BASE_ID;
+    const API_KEY = process.env.AIRTABLE_PAT;
+    const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
 
     if (!BASE_ID || !API_KEY) {
-      return NextResponse.json({ ok:false, error: 'Missing Airtable credentials' }, { status: 500, headers });
+      return NextResponse.json({ ok:false, error:'Missing Airtable credentials' }, { status:500, headers });
     }
 
-    // Formula di ricerca: usiamo SEARCH(LOWER('q'), LOWER('' & {Campo}))
+    // Costruzione formula ricerca sicura (gestisce campi vuoti)
     let searchFormula = '';
     if (search) {
-      const parts = SEARCH_FIELDS.map(f =>
-        `SEARCH(LOWER('${esc(search)}'), LOWER('' & {${esc(f)}}))`
+      const parts = SEARCH_FIELDS.map(
+        f => `SEARCH(LOWER('${esc(search)}'), LOWER('' & {${esc(f)}}))`
       );
       searchFormula = `OR(${parts.join(',')})`;
     }
 
-    // "Solo non evase" (adatta alle tue etichette di stato se servisse)
-    const openFormula = `OR({Stato}='Aperto',{Stato}='Nuovo', NOT({Stato}='Chiuso'))`;
+    // ⚠️ molti Preventivi non hanno un campo "Stato": se lo usiamo rischiamo 422.
+    // Quindi prepariamo una formula "open" ma la useremo solo se non genera 422.
+    const openFormulaUnsafe = `OR({Stato}='Aperto',{Stato}='Nuovo',NOT({Stato}='Chiuso'))`;
 
-    let filterByFormula = '';
-    if (searchFormula && onlyOpen) filterByFormula = `AND(${searchFormula}, ${openFormula})`;
-    else if (searchFormula)         filterByFormula = searchFormula;
-    else if (onlyOpen)              filterByFormula = openFormula;
+    const buildParams = (useFilter: boolean, safeOpen: boolean) => {
+      let filterByFormula = '';
+      if (useFilter && searchFormula) filterByFormula = searchFormula;
+      if (useFilter && onlyOpen && safeOpen) {
+        filterByFormula = filterByFormula
+          ? `AND(${filterByFormula}, ${openFormulaUnsafe})`
+          : openFormulaUnsafe;
+      }
 
-    const params = new URLSearchParams();
-    params.set('pageSize', String(pageSize));
-    // Ordine: ID discendente (più recenti in alto)
-    params.set('sort[0][field]', 'ID');
-    params.set('sort[0][direction]', 'desc');
-    if (filterByFormula) params.set('filterByFormula', filterByFormula);
+      const params = new URLSearchParams();
+      params.set('pageSize', String(pageSize));
+      params.set('sort[0][field]', 'ID');         // più recenti in alto
+      params.set('sort[0][direction]', 'desc');
+      if (filterByFormula) params.set('filterByFormula', filterByFormula);
+      return params;
+    };
 
-    const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${params.toString()}`;
+    const baseUrl = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}`;
 
-    const r = await fetch(url, {
+    // 1° tentativo: uso ricerca + (eventuale) openFormula
+    let url = `${baseUrl}?${buildParams(true, true).toString()}`;
+    let res = await fetch(url, {
       method: 'GET',
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
       cache: 'no-store',
     });
+    let json: any = await res.json().catch(()=> ({}));
 
-    const j = await r.json();
-    if (!r.ok) {
-      return NextResponse.json({ ok:false, error: j }, { status: r.status, headers });
+    // Se Airtable risponde 422 INVALID_FILTER_BY_FORMULA, riprovo SENZA openFormula/filtri speciali
+    if (res.status === 422 && json?.error?.type === 'INVALID_FILTER_BY_FORMULA') {
+      const retryUrl = `${baseUrl}?${buildParams(Boolean(search), false).toString()}`;
+      res = await fetch(retryUrl, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
+        cache: 'no-store',
+      });
+      json = await res.json().catch(()=> ({}));
     }
 
-    return NextResponse.json({ ok:true, records: j.records || [] }, { headers });
+    if (!res.ok) {
+      // Ritorna all’esterno un errore “parlante”
+      return NextResponse.json(
+        { ok:false, status: res.status, error: json?.error || json || `HTTP ${res.status}` },
+        { status: res.status, headers }
+      );
+    }
+
+    return NextResponse.json({ ok:true, records: json.records || [] }, { headers });
   } catch (err: any) {
-    return NextResponse.json({ ok:false, error: String(err?.message || err) }, { status: 500, headers });
+    return NextResponse.json({ ok:false, error: String(err?.message || err) }, { status:500, headers });
   }
 }
