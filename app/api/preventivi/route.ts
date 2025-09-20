@@ -16,13 +16,10 @@ function buildCorsHeaders(origin?: string | null) {
 
 export async function OPTIONS(req: NextRequest) {
   const origin = req.headers.get('origin');
-  return new NextResponse(null, {
-    status: 204,
-    headers: buildCorsHeaders(origin),
-  });
+  return new NextResponse(null, { status: 204, headers: buildCorsHeaders(origin) });
 }
 
-// Util per escape nella formula Airtable
+// Escape per formula Airtable
 const esc = (s: string) => String(s ?? '').replace(/'/g, "\\'");
 
 // Campi su cui cercare
@@ -44,24 +41,14 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url);
-
     const search   = (searchParams.get('search') || '').trim();
     const onlyOpen = searchParams.get('onlyOpen') === '1';
     const pageSize = Number(searchParams.get('pageSize') || '50') || 50;
 
-    // ---- ENV (aggiunto TB_PREVENTIVI)
-    const BASE_ID =
-      process.env.AIRTABLE_BASE_ID ||
-      process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID;
-
-    const API_KEY =
-      process.env.AIRTABLE_API_KEY ||
-      process.env.NEXT_PUBLIC_AIRTABLE_API_KEY;
-
-    const TABLE =
-      process.env.TB_PREVENTIVI ||              // <-- qui il tuo nome env
-      process.env.AIRTABLE_QUOTES_TABLE ||      // fallback generico
-      'Preventivi';
+    // === ENV NOMI ESATTI CHE MI HAI DATO ===
+    const BASE_ID = process.env.AIRTABLE_BASE_ID || '';
+    const API_KEY = process.env.AIRTABLE_PAT || '';        // <-- token
+    const TABLE   = process.env.TB_PREVENTIVI || 'Preventivi';
 
     if (!BASE_ID || !API_KEY) {
       return NextResponse.json(
@@ -70,40 +57,35 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Formula di ricerca robusta (coercizzo a stringa con CONCATENATE)
+    // Formula di ricerca robusta (coercizzo a stringa)
     let searchFormula = '';
     if (search) {
       const term = `LOWER('${esc(search)}')`;
       const parts = SEARCH_FIELDS.map(
-        (f) =>
-          `FIND(${term}, LOWER(CONCATENATE({${esc(f)}},'')))`
+        f => `FIND(${term}, LOWER(CONCATENATE({${esc(f)}},'')))`
       );
+      // match numerico esatto su {ID} se il termine è numero
+      if (/^\d+$/.test(search)) {
+        parts.push(`{ID} = ${parseInt(search, 10)}`);
+      }
       searchFormula = `OR(${parts.join(',')})`;
     }
 
-    // "Aperti": adatta ai tuoi stati reali se necessario
+    // “Aperti”: adatta se i tuoi stati sono diversi
     const openFormula = `OR({Stato}='Aperto',{Stato}='Nuovo',NOT({Stato}='Chiuso'))`;
 
-    // Composizione finale
     let filterByFormula = '';
-    if (searchFormula && onlyOpen) {
-      filterByFormula = `AND(${searchFormula}, ${openFormula})`;
-    } else if (searchFormula) {
-      filterByFormula = searchFormula;
-    } else if (onlyOpen) {
-      filterByFormula = openFormula;
-    }
+    if (searchFormula && onlyOpen) filterByFormula = `AND(${searchFormula}, ${openFormula})`;
+    else if (searchFormula)        filterByFormula = searchFormula;
+    else if (onlyOpen)             filterByFormula = openFormula;
 
     const params = new URLSearchParams();
     params.set('pageSize', String(pageSize));
-    // Ordina per ID (Autonumber) discendente
-    params.set('sort[0][field]', 'ID');
-    params.set('sort[0][direction]', 'desc');
+    params.set('sort[0][field]', 'ID');       // autonumber
+    params.set('sort[0][direction]', 'desc'); // più recenti in alto
     if (filterByFormula) params.set('filterByFormula', filterByFormula);
 
-    const url = `https://api.airtable.com/v0/${encodeURIComponent(
-      BASE_ID
-    )}/${encodeURIComponent(TABLE)}?${params.toString()}`;
+    const url = `https://api.airtable.com/v0/${encodeURIComponent(BASE_ID)}/${encodeURIComponent(TABLE)}?${params.toString()}`;
 
     const res = await fetch(url, {
       method: 'GET',
