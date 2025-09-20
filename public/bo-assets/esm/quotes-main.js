@@ -1,6 +1,12 @@
+// Loader della vista "Preventivi". Idempotente.
+
 import { AIRTABLE, DEBUG } from '/bo-assets/config.js';
 import { toast } from '/bo-assets/utils/dom.js';
 import { renderQuotesList } from '/bo-assets/esm/quotes-render.js';
+
+const API_BASE =
+  (AIRTABLE?.proxyBase || '').replace(/\/airtable\/?$/i, '') ||
+  'https://spst-logistics.vercel.app/api';
 
 const elSearch   = document.getElementById('search');
 const elOnlyOpen = document.getElementById('only-open');
@@ -20,29 +26,34 @@ function ensurePrevContainer(){
   return el;
 }
 
-async function fetchQuotes({ q='' } = {}){
+async function fetchQuotes({ q='', onlyOpen=false } = {}){
   const params = new URLSearchParams();
   if (q) params.set('search', q);
+  if (onlyOpen) params.set('onlyOpen', '1');
 
-  const url = `/api/preventivi?${params.toString()}`;
+  const url = `${API_BASE}/preventivi?${params.toString()}`;
   if (DEBUG) console.log('[quotes] GET', url);
   const r = await fetch(url, { method:'GET' });
   const j = await r.json().catch(()=> ({}));
-  if (!r.ok || j?.ok === false) throw new Error(j?.error || `HTTP ${r.status}`);
-  const out = Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : []);
-  if (DEBUG) console.log('[quotes] records:', out.length);
-  return out;
+  if (!r.ok || j?.ok === false) {
+    throw new Error(j?.error || `HTTP ${r.status}`);
+  }
+  return Array.isArray(j?.records) ? j.records : (Array.isArray(j) ? j : []);
 }
 
 function applyQuotes(){
   const host = ensurePrevContainer();
+  host.style.display = '';  // visibile
   renderQuotesList(DATA, { host });
 }
 
 async function loadQuotes(){
   try{
     const q = (elSearch?.value || '').trim();
-    DATA = await fetchQuotes({ q });
+    const onlyOpen = !!elOnlyOpen?.checked; // se non serve nei preventivi, puoi forzare false
+    const items = await fetchQuotes({ q, onlyOpen });
+    if (DEBUG) console.log('[quotes] records:', items?.length ?? 0);
+    DATA = items;
     applyQuotes();
   }catch(err){
     console.error('[quotes] load error', err);
@@ -51,11 +62,9 @@ async function loadQuotes(){
 }
 
 export function bootQuotes(){
-  if (BOOTED){ loadQuotes().catch(()=>{}); return; }
+  if (BOOTED) { loadQuotes().catch(()=>{}); return; }
   BOOTED = true;
-
   if (elSearch)   elSearch.addEventListener('input', debounce(()=>loadQuotes(), 250));
-  // elOnlyOpen ignorato per i preventivi
-
+  if (elOnlyOpen) elOnlyOpen.addEventListener('change', ()=>loadQuotes());
   loadQuotes().catch(()=>{});
 }
