@@ -16,7 +16,6 @@ function pickLoose(fields,...names){
   }
 }
 
-// ⬇️ NUOVO: contenitore dedicato ai preventivi
 function ensureQuotesContainer(){
   let el = document.getElementById('quotes-list');
   if (el) return el;
@@ -27,7 +26,6 @@ function ensureQuotesContainer(){
   return el;
 }
 
-// Manteniamo questo nome per coerenza con quotes-main.js
 export function renderQuotesList(records = []){
   const elList = ensureQuotesContainer();
   try { elList.innerHTML = ''; } catch {}
@@ -39,15 +37,15 @@ export function renderQuotesList(records = []){
 
   records.forEach(rec=>{
     const f = rec.fields || {};
-    const id     = pickLoose(f, 'ID','Id','N°') || rec.id;
-    const email  = pickLoose(f, 'Creato da','Email','Contatto','Richiedente') || '-';
-    const tipo   = pickLoose(f, 'Sottotipo','Tipo Spedizione','Tipo') || '-';
-    const paese  = pickLoose(f, 'Destinatario - Paese','Paese') || '-';
-    const citta  = pickLoose(f, 'Destinatario - Città','Città') || '-';
-    const rsMitt = pickLoose(f, 'Mittente - Ragione Sociale','Mittente');
-    const rsDest = pickLoose(f, 'Destinatario - Ragione Sociale','Destinatario');
-    const created= pickLoose(f, 'Creato il','Created time','Created') || '';
-    const stato  = pickLoose(f, 'Stato','Stato Preventivo') || 'Bozza';
+    const id      = pickLoose(f, 'ID','Id','N°') || rec.id;
+    const email   = pickLoose(f, 'Creato da','Email','Contatto','Richiedente') || '-';
+    const tipo    = pickLoose(f, 'Sottotipo','Tipo Spedizione','Tipo') || '-';
+    const paese   = pickLoose(f, 'Destinatario - Paese','Paese') || '-';
+    const citta   = pickLoose(f, 'Destinatario - Città','Città') || '-';
+    const rsMitt  = pickLoose(f, 'Mittente - Ragione Sociale','Mittente');
+    const rsDest  = pickLoose(f, 'Destinatario - Ragione Sociale','Destinatario');
+    const created = pickLoose(f, 'Creato il','Created time','Created') || '';
+    const stato   = pickLoose(f, 'Stato','Stato Preventivo') || 'Bozza';
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -73,5 +71,5 @@ export function renderQuotesList(records = []){
   });
 }
 
-// (facoltativo) compat: se altrove importavi renderQuotes
+// compat opzionale
 export const renderQuotes = renderQuotesList;
