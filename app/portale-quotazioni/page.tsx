@@ -32,16 +32,14 @@ function volumetricKg4000(l: number, w: number, h: number): number {
 /* ------------------------ TOAST ------------------------ */
 type ToastVariant = "success" | "error" | "info";
 function useToast() {
-  const [toast, setToast] = useState<{ message: string; variant: ToastVariant } | null>(null);
+  const [toast, setToast] =
+    useState<{ message: string; variant: ToastVariant } | null>(null);
   function show(message: string, variant: ToastVariant = "success") {
     setToast({ message, variant });
     window.clearTimeout((show as any)._t);
     (show as any)._t = window.setTimeout(() => setToast(null), 3000);
   }
-  function clear() {
-    setToast(null);
-  }
-  return { toast, show, clear };
+  return { toast, show };
 }
 function Toast({ toast }: { toast: { message: string; variant: ToastVariant } | null }) {
   if (!toast) return null;
@@ -68,7 +66,6 @@ export default function PortaleQuotazioni() {
   // Smoke test veloce per prevenire regressioni
   useEffect(() => {
     const ex = volumetricKg4000(40, 30, 35); // 40*30*35/4000 = 10.5
-    // eslint-disable-next-line no-console
     console.assert(ex === 10.5, `volumetricKg4000 atteso 10.5, ottenuto ${ex}`);
   }, []);
 
@@ -203,7 +200,7 @@ export default function PortaleQuotazioni() {
 
           {/* Colonna destra: dettagli spedizione */}
           <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
-            <QuoteDetailsForm onToast={show} />
+            <QuoteDetailsForm />
           </div>
         </div>
       </section>
@@ -322,38 +319,68 @@ function ContactFields() {
   );
 }
 
-function QuoteDetailsForm({ onToast }: { onToast: (msg: string, v?: "success" | "error" | "info") => void }) {
+function QuoteDetailsForm() {
   const [submitting, setSubmitting] = useState(false);
+  const [toastApi] = useState(() => {
+    // micro bus per mostrare toast dal form
+    return {
+      show: (msg: string, v?: "success" | "error" | "info") => {
+        const ev = new CustomEvent("spst:toast", { detail: { msg, v } });
+        window.dispatchEvent(ev);
+      },
+    };
+  });
+
+  // Bridge con Toast in top-level
+  useEffect(() => {
+    const handler = (e: any) => {
+      const { msg, v } = e.detail || {};
+      // re-inoltro: in questa page usiamo il hook locale in parent
+    };
+    window.addEventListener("spst:toast", handler);
+    return () => window.removeEventListener("spst:toast", handler);
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // blocca navigazione
     if (submitting) return;
     setSubmitting(true);
     try {
       const form = e.currentTarget;
       const fd = new FormData(form);
+
       // Honeypot + timestamp
       if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
       if (!fd.get("_gotcha")) fd.append("_gotcha", "");
 
-      // NB: i campi della colonna sinistra sono legati via form="quoteForm"
       const res = await fetch("/api/quote", { method: "POST", body: fd });
       const json = await res.json();
+
       if (json.ok) {
-        onToast("Richiesta inviata! Ti contatteremo a breve.", "success");
+        // toast globale
+        const ev = new CustomEvent("spst:toast", {
+          detail: { msg: "Richiesta inviata! Ti contatteremo a breve.", v: "success" },
+        });
+        window.dispatchEvent(ev);
         form.reset();
       } else {
-        onToast(`Errore invio: ${json.error || "riprovare"}`, "error");
+        const ev = new CustomEvent("spst:toast", {
+          detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
+        });
+        window.dispatchEvent(ev);
       }
     } catch (err: any) {
-      onToast(`Errore invio: ${err?.message || "riprovare"}`, "error");
+      const ev = new CustomEvent("spst:toast", {
+        detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
+      });
+      window.dispatchEvent(ev);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4">
+    <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4" noValidate>
       {/* Honeypot + ts */}
       <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="hidden" />
       <input type="hidden" name="_ts" value={String(Date.now())} />
@@ -477,6 +504,7 @@ function QuoteDetailsForm({ onToast }: { onToast: (msg: string, v?: "success" | 
       </fieldset>
 
       <motion.button
+        type="submit"
         whileTap={{ scale: 0.98 }}
         disabled={submitting}
         className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50 disabled:opacity-60 disabled:hover:translate-y-0"
