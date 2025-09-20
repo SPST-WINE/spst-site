@@ -44,7 +44,7 @@ async function fetchQuotes({ q='', onlyOpen=false } = {}){
 function applyQuotes(){
   const host = ensurePrevContainer();
   host.style.display = '';  // visibile
-  renderQuotesList(DATA, { host });
+  renderQuotesList(DATA);
 }
 
 async function loadQuotes(){
