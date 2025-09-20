@@ -1,9 +1,7 @@
 // app/api/spedizioni/route.ts
-// Ricerca FIX: filtra per ID Spedizione + campi Airtable forniti
-// - Creato da
-// - Mittente - Ragione Sociale / Città / CAP
-// - Destinatario - Ragione Sociale / Paese / Città / CAP
-// Mantiene il toggle "Solo non evase" (onlyOpen=1)
+// Toggle "solo non evase" => mostra SOLO le spedizioni con Stato = "nuova"
+// Ordinamento: per campo Airtable "ID" (Autonumber) DESC
+// Ricerca: ID/ID Spedizione + campi indicati (cliente, città, paese, CAP)
 
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
@@ -48,7 +46,11 @@ async function listWithFormula(table: string, formula: string, pageSize = 50, of
   const qs = new URLSearchParams();
   if (formula) qs.set('filterByFormula', formula);
   qs.set('pageSize', String(pageSize));
+  // Ordinamento per ID (Autonumber) discendente
+  qs.set('sort[0][field]', 'ID');
+  qs.set('sort[0][direction]', 'desc');
   if (offset) qs.set('offset', offset);
+
   const res = await fetch(`${api(table)}?${qs.toString()}`, { headers: atHeaders, cache: 'no-store' });
   const text = await res.text();
   let json: any = {};
@@ -66,18 +68,14 @@ export async function GET(req: NextRequest) {
   const pageSize = Number(url.searchParams.get('pageSize') || '50') || 50;
   const offset   = url.searchParams.get('offset') || undefined;
 
-  // Stato aperte/non evase (tollerante a varianti)
-  const openPart =
-    `NOT(OR(` +
-      `LOWER({Stato})='evasa',` +
-      `LOWER({Stato})='evaso',` +
-      `LOWER({Stato})='completata',` +
-      `LOWER({Stato})='completato'` +
-    `))`;
+  // ⬅️ Toggle "solo non evase" => solo STATO = "nuova"
+  const onlyNuova = (onlyOpen === '1' || onlyOpen === 'true');
+  const filterNuova = `LOWER({Stato})='nuova'`;
 
-  // Campi richiesti per la ricerca
+  // Campi per la ricerca full-text
   const searchFields = [
     'ID Spedizione',
+    'ID',
     'Creato da',
     'Mittente - Ragione Sociale',
     'Mittente - Città',
@@ -88,24 +86,23 @@ export async function GET(req: NextRequest) {
     'Destinatario - CAP',
   ];
 
-  // Costruisci formula OR su tutti i campi indicati
-  const buildSearch = (needle: string) => {
-    const lowered = esc(needle.toLowerCase());
-    const parts = searchFields.map(f => `FIND('${lowered}', LOWER({${f}}&''))>0`);
-    return parts.length ? `OR(${parts.join(',')})` : '';
-  };
-
-  // Formula finale
   const clauses: string[] = [];
-  if (q) clauses.push(buildSearch(q));
-  if (onlyOpen === '1' || onlyOpen === 'true') clauses.push(openPart);
+
+  if (q) {
+    const lowered = esc(q.toLowerCase());
+    const textOr = `OR(${searchFields
+      .map(f => `FIND('${lowered}', LOWER({${f}}&''))>0`)
+      .join(',')})`;
+    clauses.push(textOr);
+  }
+
+  if (onlyNuova) clauses.push(filterNuova);
+
   const formula = clauses.length ? `AND(${clauses.join(',')})` : '';
 
-  // Query Airtable
   const { ok: okAt, status, json } = await listWithFormula(TB_SPED, formula, pageSize, offset);
   if (okAt) {
     return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
   }
-  // Se la formula fosse invalida (422) restituiamo errore chiaro
   return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
 }
