@@ -416,11 +416,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Check({ name, label, icon }: { name: string; label: string; icon?: React.ReactNode }) {
   return (
-    <label className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10">
-      <input type="checkbox" name={name} className="sr-only peer" />
-      <span className="relative grid place-items-center w-5 h-5 rounded-full border border-white/30 bg-white/5">
-        <span className="w-2.5 h-2.5 rounded-full bg-orange-400 opacity-0 peer-checked:opacity-100 transition-opacity" />
-      </span>
+    <label className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10 cursor-pointer select-none">
+      <input type="checkbox" name={name} className="peer sr-only" />
+      <span className="relative grid place-items-center w-5 h-5 rounded-full border border-white/30 bg-white/5 after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-orange-400 after:opacity-0 peer-checked:after:opacity-100 after:transition-opacity" />
       {icon && <span className="opacity-80">{icon}</span>}
       <span className="text-sm">{label}</span>
     </label>
