@@ -579,6 +579,8 @@ export function renderList(
       });
     });
 
+// ⬇️ Sostituisci dal commento qui sotto FINO ALLA FINE della funzione `renderList`.
+
 // Lazy-load colli se assenti + aggiorna print-grid (peso, lista e TOTALE colli)
 ;(async ()=>{
   try{
@@ -647,3 +649,11 @@ export function renderList(
   }
 })();
 
+try {
+  elList.appendChild(card);
+} catch (e) {
+  console.error('[BO] append card fallito', e);
+}
+}); // ← chiude normalized.forEach
+
+} // ← chiude export function renderList
