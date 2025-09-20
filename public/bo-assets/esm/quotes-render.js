@@ -1,7 +1,6 @@
-// Renderer per la tab "Preventivi". Scrive SEMPRE dentro #view-preventivi
-// usando un contenitore dedicato: #quotes-list (così non confligge con spedizioni).
+// public/bo-assets/esm/quotes-render.js
 
-function normKey(s){ return String(s||'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toLowerCase(); }
+function normKey(s){return String(s||'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toLowerCase();}
 function pickLoose(fields,...names){
   if(!fields) return;
   const m = new Map(Object.keys(fields).map(k=>[normKey(k),k]));
@@ -15,32 +14,22 @@ function pickLoose(fields,...names){
   for(const n of names){
     if(n in fields && fields[n]!=='' && fields[n]!=null) return fields[n];
   }
-  return;
 }
 
-function ensureQuotesHost(host){
-  let el = host || document.getElementById('view-preventivi');
-  if (!el){
-    el = document.createElement('div');
-    el.id = 'view-preventivi';
-    (document.getElementById('view-spedizioni')?.parentElement || document.body).appendChild(el);
-  }
+// ⬇️ NUOVO: contenitore dedicato ai preventivi
+function ensureQuotesContainer(){
+  let el = document.getElementById('quotes-list');
+  if (el) return el;
+  const host = document.getElementById('view-preventivi') || document.body;
+  el = document.createElement('div');
+  el.id = 'quotes-list';
+  host.appendChild(el);
   return el;
 }
 
-function ensureQuotesList(host){
-  const h = ensureQuotesHost(host);
-  let el = h.querySelector('#quotes-list');
-  if (!el){
-    el = document.createElement('div');
-    el.id = 'quotes-list';
-    h.appendChild(el);
-  }
-  return el;
-}
-
-export function renderQuotesList(records = [], { host } = {}){
-  const elList = ensureQuotesList(host);
+// Manteniamo questo nome per coerenza con quotes-main.js
+export function renderQuotesList(records = []){
+  const elList = ensureQuotesContainer();
   try { elList.innerHTML = ''; } catch {}
 
   if (!records.length){
@@ -50,14 +39,15 @@ export function renderQuotesList(records = [], { host } = {}){
 
   records.forEach(rec=>{
     const f = rec.fields || {};
-    const id     = pickLoose(f, 'ID', 'Id', 'N°') || rec.id;
-    const email  = pickLoose(f, 'Creato da', 'Email', 'Contatto', 'Richiedente') || '—';
-    const tipo   = pickLoose(f, 'Sottotipo', 'Tipo Spedizione', 'Tipo') || '—';
-    const paese  = pickLoose(f, 'Destinatario - Paese', 'Paese') || '—';
-    const citta  = pickLoose(f, 'Destinatario - Città', 'Città') || '—';
-    const rsMitt = pickLoose(f, 'Mittente - Ragione Sociale', 'Mittente');
-    const rsDest = pickLoose(f, 'Destinatario - Ragione Sociale', 'Destinatario');
-    const created = pickLoose(f, 'Creato il', 'Created time', 'Created') || '';
+    const id     = pickLoose(f, 'ID','Id','N°') || rec.id;
+    const email  = pickLoose(f, 'Creato da','Email','Contatto','Richiedente') || '-';
+    const tipo   = pickLoose(f, 'Sottotipo','Tipo Spedizione','Tipo') || '-';
+    const paese  = pickLoose(f, 'Destinatario - Paese','Paese') || '-';
+    const citta  = pickLoose(f, 'Destinatario - Città','Città') || '-';
+    const rsMitt = pickLoose(f, 'Mittente - Ragione Sociale','Mittente');
+    const rsDest = pickLoose(f, 'Destinatario - Ragione Sociale','Destinatario');
+    const created= pickLoose(f, 'Creato il','Created time','Created') || '';
+    const stato  = pickLoose(f, 'Stato','Stato Preventivo') || 'Bozza';
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -68,16 +58,20 @@ export function renderQuotesList(records = [], { host } = {}){
           <span class="dest">${rsDest || rsMitt || '—'}</span>
         </div>
         <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+          <span class="badge ghost">${stato}</span>
           <span class="small" style="opacity:.8">${created ? String(created) : ''}</span>
         </div>
       </div>
 
       <div class="kv">
         <div class="k">Richiedente</div><div>${email}</div>
-        <div class="k">Destinazione</div><div>${paese} • ${citta}</div>
+        <div class="k">Destinazione</div><div>${paese} • ${citta || '—'}</div>
         <div class="k">Tipo spedizione</div><div>${tipo}</div>
       </div>
     `;
     elList.appendChild(card);
   });
 }
+
+// (facoltativo) compat: se altrove importavi renderQuotes
+export const renderQuotes = renderQuotesList;
