@@ -242,9 +242,12 @@ function renderTrackingBlock(rec){
 
 /* print-grid */
 function renderPrintGrid(rec){
+  const pesoTot = toKg(rec._peso_tot_kg > 0 ? rec._peso_tot_kg : totalPesoKg(rec));
+  const numColli = Array.isArray(rec.colli) ? rec.colli.length : 0;
   const colliListHtml = (rec.colli && rec.colli.length)
     ? rec.colli.map(c=>`${c.L}×${c.W}×${c.H}cm ${toKg(c.kg)}`).join(' ; ')
     : '—';
+
 
   const fields = [
     ['ID spedizione', rec.id],
@@ -264,10 +267,42 @@ function renderPrintGrid(rec){
     ['Destinatario – P.IVA/CF', rec.dest_piva || '—'],
   ];
 
-  let html = `<div class="print-grid">`;
-  for (const [k,v] of fields){ html += `<div class='k'>${k}</div><div>${v?String(v):'—'}</div>`; }
-  html += `<div class='k'>Colli (lista)</div><div id="print-colli-${rec.id}">${colliListHtml}</div>`;
-  html += `</div>`;
+let html = `
+    <div class="print-two" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="col">
+        <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Mittente</strong></div>
+        <div class="print-grid">
+          <div class="k">Ragione sociale</div><div>${rec.mittente_ragione || '—'}</div>
+          <div class="k">Paese/Città (CAP)</div><div>${(rec.mittente_paese||'—')} • ${(rec.mittente_citta||'—')} ${rec.mittente_cap?('('+rec.mittente_cap+')'):''}</div>
+          <div class="k">Indirizzo</div><div>${rec.mittente_indirizzo || '—'}</div>
+          <div class="k">Telefono</div><div>${rec.mittente_telefono || '—'}</div>
+          <div class="k">P.IVA/CF</div><div>${rec.piva_mittente || '—'}</div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Destinatario</strong></div>
+        <div class="print-grid">
+          <div class="k">Ragione sociale</div><div>${rec.dest_ragione || '—'}</div>
+          <div class="k">Paese/Città (CAP)</div><div>${(rec.dest_paese||'—')} • ${(rec.dest_citta||'—')} ${rec.dest_cap?('('+rec.dest_cap+')'):''}</div>
+          <div class="k">Indirizzo</div><div>${rec.dest_indirizzo || '—'}</div>
+          <div class="k">Telefono</div><div>${rec.dest_telefono || '—'}</div>
+          <div class="k">P.IVA/CF</div><div>${rec.dest_piva || '—'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="print-grid">
+      <div class="k">ID spedizione</div><div>${rec.id}</div>
+      <div class="k">Data ritiro</div><div>${rec.ritiro_data || '—'}</div>
+      <div class="k">Incoterm</div><div>${rec.incoterm || '—'}</div>
+      <div class="k">Peso reale (tot.)</div><div>${pesoTot}</div>
+      <div class="k">Colli (tot.)</div><div>${numColli || '—'}</div>
+      <div class="k">Colli (lista)</div><div id="print-colli-${rec.id}">${colliListHtml}</div>
+    </div>
+  `;
   return html;
 }
 
