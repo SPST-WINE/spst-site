@@ -100,3 +100,7 @@
 /* ⬇️ Aggiungi in fondo per allineare in altezza le due card dell'espanso */
 .print-two{ align-items: stretch; }
 .print-two .col > .print-grid{ height:100%; }
+
+/* spacing per le card dei preventivi */
+#quotes-list > * + * { margin-top: 16px; }
+
