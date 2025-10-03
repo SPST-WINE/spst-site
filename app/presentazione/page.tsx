@@ -16,10 +16,11 @@ import {
   FileCheck2,
   TrendingUp,
   Building2,
-  ChartLine,
+  LineChart,
   CheckCircle2,
   MessageSquareMore,
 } from 'lucide-react';
+
 
 const SPST_BLUE = '#0a1722';
 const SPST_BLUE_SOFT = '#1c3e5e';
@@ -131,7 +132,7 @@ const slides: Slide[] = [
       { icon: <Building2 className="h-5 w-5" />, title: 'Cantine', desc: 'Da chi inizia a esportare a realtà strutturate' },
       { icon: <Ship className="h-5 w-5" />, title: 'Distributori', desc: 'Flussi ricorrenti in EU/USA' },
       { icon: <Globe2 className="h-5 w-5" />, title: 'Importatori', desc: 'Documenti, consolidamenti, tempi rapidi' },
-      { icon: <ChartLine className="h-5 w-5" />, title: 'E-commerce', desc: 'Campionature e B2C, automazioni' },
+      { icon: <LineChart className="h-5 w-5" />, title: 'E-commerce', desc: 'Campionature e B2C, automazioni' },
     ],
   },
   {
