@@ -126,7 +126,7 @@ export default function RegisterPage() {
             </h1>
             <p className="mt-3 text-white/85 text-[15px] sm:text-base max-w-[60ch] mx-auto md:mx-0">
               Compila il form con gli stessi campi della sezione “Impostazioni”.
-              Riceverai conferma via email: al termine della call abiliteremo il tuo profilo.
+              Riceverai conferma via email: al termine della registrazione abiliteremo il tuo profilo.
             </p>
           </div>
 
