@@ -9,9 +9,9 @@ export default function ThankYou() {
     >
       <section className="mx-auto max-w-[800px] px-5 w-full">
         <div className="rounded-2xl p-6 md:p-7 border border-white/15 bg-white/5 backdrop-blur-xl text-center">
-          <h1 className="text-2xl md:text-3xl font-black">Grazie! Richiesta inviata ✅</h1>
+          <h1 className="text-2xl md:text-3xl font-black">Grazie! Richiesta inviata!</h1>
           <p className="text-white/80 mt-2">
-            Ti contatteremo per una breve call di presentazione. Dopo la verifica, imposteremo il tuo profilo e abiliteremo l’accesso.
+            Imposteremo il tuo profilo e abiliteremo l’accesso. Benvenuto in SPST!
           </p>
           <div className="mt-5 flex items-center justify-center">
             <a
