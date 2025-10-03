@@ -21,14 +21,15 @@ import {
   MessageSquareMore,
 } from 'lucide-react';
 
-
 const SPST_BLUE = '#0a1722';
 const SPST_BLUE_SOFT = '#1c3e5e';
 const SPST_ORANGE = '#f7931e';
 const LOGO_URL =
   'https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png';
 
-/* ---------------------------- SLIDES DATA ---------------------------- */
+// 👉 cambia questo con il tuo video (Loom/YouTube ecc.)
+const TUTORIAL_URL = 'https://example.com/tutorial-spst';
+
 type Slide =
   | {
       kind: 'title';
@@ -37,22 +38,11 @@ type Slide =
       subtitle?: string;
     }
   | {
-      kind: 'bullets';
-      title: string;
+      kind: 'column';
       kicker?: string;
-      items: Array<{ icon?: React.ReactNode; title: string; desc?: string }>;
-      cols?: 2 | 3 | 4;
-    }
-  | {
-      kind: 'kpi';
       title: string;
-      items: Array<{ num: string; label: string }>;
-    }
-  | {
-      kind: 'image';
-      title?: string;
-      src: string;
-      caption?: string;
+      description?: string;
+      items?: Array<{ icon?: React.ReactNode; title: string; desc?: string }>;
     }
   | {
       kind: 'cta';
@@ -63,12 +53,13 @@ type Slide =
     };
 
 const slides: Slide[] = [
+  /* 1) INTRO */
   {
     kind: 'title',
     kicker: 'Export vino all-in-one',
     title: (
       <>
-        Il tuo vino nel mondo, <br />
+        Il tuo vino nel mondo,{' '}
         <span
           className="text-transparent bg-clip-text"
           style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})` }}
@@ -78,84 +69,111 @@ const slides: Slide[] = [
       </>
     ),
     subtitle:
-      'Documenti doganali e fiscali, spedizioni express o pallet e supporto commerciale con Wine Connect: un unico partner, dall’Italia ai tuoi buyer.',
+      'SPST semplifica l’export per le cantine italiane: documenti doganali, spedizioni e accesso ai buyer — in un’unica piattaforma con assistenza reale.',
   },
+
+  /* 2) PROBLEMI REALI – colonna singola */
   {
-    kind: 'bullets',
+    kind: 'column',
     kicker: 'I problemi reali',
     title: 'Perché è complicato spedire vino',
-    cols: 3,
+    description:
+      'Ogni Paese richiede regole e prassi diverse. Senza processi e strumenti adeguati si perdono tempo e margini, e il rischio di blocchi aumenta.',
     items: [
-      { icon: <TriangleAlert className="h-5 w-5" />, title: 'Documenti complessi', desc: 'e-DAS, accise, HS code, COLA, Prior Notice' },
-      { icon: <Ship className="h-5 w-5" />, title: 'Costi e rotte variabili', desc: 'Scelta corrieri e tratte ottimali' },
-      { icon: <Globe2 className="h-5 w-5" />, title: 'Accesso ai buyer', desc: 'Qualifica lead e rete internazionale' },
+      {
+        icon: <TriangleAlert className="h-5 w-5" />,
+        title: 'Documenti complessi',
+        desc: 'e-DAS, accise, HS code, COLA, Prior Notice. Un errore può fermare l’intera spedizione.',
+      },
+      {
+        icon: <Ship className="h-5 w-5" />,
+        title: 'Costi e rotte variabili',
+        desc: 'Scegliere corrieri e tratte senza dati porta a costi più alti e tempi non affidabili.',
+      },
+      {
+        icon: <Globe2 className="h-5 w-5" />,
+        title: 'Accesso ai buyer',
+        desc: 'Trovare e qualificare clienti esteri richiede rete, metodo e continuità.',
+      },
     ],
   },
+
+  /* 3) SOLUZIONE – 3 step, sempre colonna singola */
   {
-    kind: 'bullets',
+    kind: 'column',
     kicker: 'Come funziona',
     title: 'Dalla carta al tracking, in 3 step',
-    cols: 3,
+    description:
+      'Ti seguiamo dall’impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
     items: [
-      { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Accise, COLA, Prior Notice, e-DAS' },
-      { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature e pallet' },
-      { icon: <TrendingUp className="h-5 w-5" />, title: '3) Crescita commerciale', desc: 'Wine Connect per ordini e campioni' },
+      {
+        icon: <FileCheck2 className="h-5 w-5" />,
+        title: '1) Documenti a norma',
+        desc: 'Generiamo e archiviamo automaticamente modulistica fiscale e doganale.',
+      },
+      {
+        icon: <Route className="h-5 w-5" />,
+        title: '2) Spedizione ottimizzata',
+        desc: 'Express, campionature o pallet: selezioniamo tratta e vettore più efficienti.',
+      },
+      {
+        icon: <TrendingUp className="h-5 w-5" />,
+        title: '3) Crescita commerciale',
+        desc: 'Wine Connect ti mette in contatto con buyer internazionali qualificati.',
+      },
     ],
   },
+
+  /* 4) WEB APP – descrizione + link tutorial */
   {
-    kind: 'bullets',
-    kicker: 'Cosa facciamo',
-    title: 'Operatività, non promesse',
-    cols: 4,
+    kind: 'column',
+    kicker: 'La Web App',
+    title: 'Un’unica piattaforma per tutto',
+    description:
+      'Gestisci spedizioni, documenti e tracking in autonomia. Salva i tuoi profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
     items: [
-      { title: 'Logistica & Spedizioni', desc: 'EU/USA, consolidamenti, temperature-safe' },
-      { title: 'Dogana & Fisco', desc: 'Accisa assolta/sospesa, e-DAS, proforma' },
-      { title: 'Deposito & Rappresentanza', desc: 'Snelliamo la vendita nei Paesi target' },
-      { title: 'Wine Connect', desc: 'Matchmaking cantine-buyer e KPI' },
+      {
+        icon: <Building2 className="h-5 w-5" />,
+        title: 'Dashboard operativa',
+        desc: 'Tutto in un posto: anagrafiche, documenti, ritiro, tracking.',
+      },
+      {
+        icon: <LineChart className="h-5 w-5" />,
+        title: 'Dati e KPI',
+        desc: 'Storico spedizioni, tempi medi, costi: prendi decisioni informate.',
+      },
+      {
+        icon: <MessageSquareMore className="h-5 w-5" />,
+        title: 'Assistenza integrata',
+        desc: 'Supporto WhatsApp/telefono direttamente dalla piattaforma.',
+      },
     ],
   },
+
+  /* 5) SUPPORTO */
   {
-    kind: 'kpi',
-    title: 'La nostra rete',
+    kind: 'column',
+    kicker: 'Perché SPST',
+    title: 'Tecnologia + persone',
+    description:
+      'La piattaforma riduce tempi ed errori; il team garantisce continuità e risoluzione. Dalla prima spedizione, non sei mai solo.',
     items: [
-      { num: '50+', label: 'Cantine' },
-      { num: '20+', label: 'Buyer' },
-      { num: 'USA • ASIA • UE', label: 'Mercati' },
+      { title: 'Unico partner', desc: 'Documenti, logistica e supporto commerciale coordinati.' },
+      { title: 'Tariffe ottimizzate', desc: 'Multi-corriere e rotte selezionate su dati reali.' },
+      { title: 'SLA chiari', desc: 'Tempi certi e comunicazione proattiva sugli stati.' },
     ],
   },
-  {
-    kind: 'bullets',
-    kicker: 'Per chi',
-    title: 'Partner per…',
-    cols: 4,
-    items: [
-      { icon: <Building2 className="h-5 w-5" />, title: 'Cantine', desc: 'Da chi inizia a esportare a realtà strutturate' },
-      { icon: <Ship className="h-5 w-5" />, title: 'Distributori', desc: 'Flussi ricorrenti in EU/USA' },
-      { icon: <Globe2 className="h-5 w-5" />, title: 'Importatori', desc: 'Documenti, consolidamenti, tempi rapidi' },
-      { icon: <LineChart className="h-5 w-5" />, title: 'E-commerce', desc: 'Campionature e B2C, automazioni' },
-    ],
-  },
-  {
-    kind: 'bullets',
-    kicker: 'Onboarding',
-    title: 'Come si parte',
-    cols: 3,
-    items: [
-      { icon: <CheckCircle2 className="h-5 w-5" />, title: '1) Registrazione', desc: 'Dati mittente + call di presentazione' },
-      { icon: <CheckCircle2 className="h-5 w-5" />, title: '2) Setup documenti', desc: 'Template fiscali e doganali' },
-      { icon: <CheckCircle2 className="h-5 w-5" />, title: '3) Primo invio', desc: 'Campionature o primo ordine' },
-    ],
-  },
+
+  /* 6) CTA FINALE */
   {
     kind: 'cta',
-    title: 'Pronti a spedire il tuo vino nel mondo?',
-    bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale, WhatsApp dedicato'],
-    primary: { label: 'Richiedi una quotazione', href: 'https://www.spst.it/portale-quotazioni' },
-    secondary: { label: 'Supporto WhatsApp', href: 'https://wa.me/393201441789' },
+    title: 'Pronto a spedire senza pensieri?',
+    bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
+    primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
+    secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
   },
 ];
 
-/* ---------------------------- PAGE ---------------------------- */
 export default function PresentationPage() {
   const [i, setI] = React.useState(0);
   const [grid, setGrid] = React.useState(false);
@@ -175,8 +193,8 @@ export default function PresentationPage() {
       }
       if (e.key === 'ArrowRight' || e.key === 'PageDown') go(1);
       if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(-1);
-      if (e.key === 'g') setGrid((v) => !v);
-      if (e.key === 'f') toggleFs();
+      if (e.key.toLowerCase() === 'g') setGrid((v) => !v);
+      if (e.key.toLowerCase() === 'f') toggleFs();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -222,7 +240,7 @@ export default function PresentationPage() {
             <span className="hidden sm:inline">SPST</span>
           </a>
 
-          <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
             <button
               onClick={() => setGrid((v) => !v)}
               title="Indice (G)"
@@ -276,7 +294,7 @@ export default function PresentationPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.25 }}
-              className="absolute inset-0 grid place-items-center p-6 md:p-10"
+              className="absolute inset-0"
               onClick={() => go(1)}
             >
               <SlideRenderer slide={slides[i]} />
@@ -310,10 +328,10 @@ export default function PresentationPage() {
           )}
         </AnimatePresence>
 
-        {/* helper */}
         <div className="mt-4 text-center text-white/60 text-xs">
-          Suggerimenti: usa <kbd className="px-1 py-[2px] bg-white/10 rounded">←</kbd> /{' '}
-          <kbd className="px-1 py-[2px] bg-white/10 rounded">→</kbd>, <kbd className="px-1 py-[2px] bg-white/10 rounded">G</kbd> per indice,{' '}
+          Usa <kbd className="px-1 py-[2px] bg-white/10 rounded">←</kbd> /{' '}
+          <kbd className="px-1 py-[2px] bg-white/10 rounded">→</kbd>,{' '}
+          <kbd className="px-1 py-[2px] bg-white/10 rounded">G</kbd> per indice,{' '}
           <kbd className="px-1 py-[2px] bg-white/10 rounded">F</kbd> per fullscreen.
         </div>
       </section>
@@ -321,187 +339,142 @@ export default function PresentationPage() {
   );
 }
 
-/* ---------------------------- RENDERERS ---------------------------- */
+/* ---------------- RENDERERS ---------------- */
 function SlideRenderer({ slide }: { slide: Slide }) {
   if (slide.kind === 'title') {
     return (
-      <div className="w-full h-full grid place-items-center text-center p-4">
-        <div>
-          {slide.kicker && <div className="text-[12px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
-          <h1 className="mt-1 text-[28px] sm:text-[36px] md:text-[48px] font-black leading-tight">
+      <div className="w-full h-full grid place-items-center p-6 text-center">
+        <div className="max-w-[80ch]">
+          {slide.kicker && <div className="text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
+          <h1 className="mt-1 text-[28px] sm:text-[36px] md:text-[44px] font-black leading-tight">
             {slide.title}
           </h1>
-          {slide.subtitle && <p className="mt-3 text-white/80 max-w-[70ch] mx-auto">{slide.subtitle}</p>}
+          {slide.subtitle && <p className="mt-3 text-white/80 text-base">{slide.subtitle}</p>}
         </div>
       </div>
     );
   }
 
-  if (slide.kind === 'bullets') {
-    const cols =
-      slide.cols === 4 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' :
-      slide.cols === 3 ? 'grid-cols-1 md:grid-cols-3' :
-      'grid-cols-1 md:grid-cols-2';
-
+  if (slide.kind === 'column') {
     return (
-      <div className="w-full h-full flex flex-col">
-        <HeaderSmall kicker={slide.kicker} title={slide.title} />
-        <div className={`grid ${cols} gap-4 mt-2`}>
-          {slide.items.map((it, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 14, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.04 }}
-              className="rounded-2xl p-4 border border-white/10 bg-white/[0.04]"
-            >
-              {it.icon && (
-                <div className="w-10 h-10 mb-2 grid place-items-center rounded-xl bg-white/5 border border-white/10">
-                  {it.icon}
-                </div>
-              )}
-              <div className="font-extrabold">{it.title}</div>
-              {it.desc && <div className="text-white/75 text-sm">{it.desc}</div>}
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (slide.kind === 'kpi') {
-    return (
-      <div className="w-full h-full grid place-items-center text-center p-4">
-        <div className="w-full">
-          <HeaderSmall title={slide.title} />
-          <div className="grid grid-cols-3 gap-4 mt-2">
-            {slide.items.map((k, i) => (
-              <motion.div
-                key={i}
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: i * 0.05 }}
-                className="rounded-2xl p-6 border border-white/10 bg-white/[0.04]"
+      <div className="w-full h-full p-6 md:p-10 overflow-auto">
+        <div className="mx-auto max-w-[980px] h-full flex flex-col justify-center">
+          {/* header */}
+          <div className="mb-4">
+            {slide.kicker && <div className="text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
+            <h2 className="text-[24px] sm:text-[30px] md:text-[36px] font-black">
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}
               >
-                <div className="text-2xl md:text-3xl font-extrabold">{k.num}</div>
-                <div className="text-xs text-white/70">{k.label}</div>
-              </motion.div>
-            ))}
+                {slide.title}
+              </span>
+            </h2>
+            {slide.description && <p className="text-white/80 mt-2">{slide.description}</p>}
+            <div className="mt-2 h-[3px] w-24 rounded-full" style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, transparent)` }} />
+          </div>
+
+          {/* items: UNA COLONNA, TRE RIGHE */}
+          {slide.items && (
+            <div className="grid grid-cols-1 gap-3">
+              {slide.items.map((it, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ y: 12, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="rounded-2xl p-4 border border-white/10 bg-white/[0.04]"
+                >
+                  <div className="flex items-start gap-3">
+                    {it.icon && (
+                      <div className="w-10 h-10 grid place-items-center rounded-xl bg-white/5 border border-white/10 shrink-0">
+                        {it.icon}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-extrabold">{it.title}</div>
+                      {it.desc && <div className="text-white/75 text-sm">{it.desc}</div>}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* link tutorial per la slide Web App */}
+          {slide.title.includes('Un’unica piattaforma') && (
+            <div className="mt-4">
+              <a
+                href={TUTORIAL_URL}
+                target="_blank"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition"
+              >
+                <MessageSquareMore className="h-4 w-4" />
+                Guarda il video tutorial
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (slide.kind === 'cta') {
+    return (
+      <div className="w-full h-full grid place-items-center p-6 text-center">
+        <div className="max-w-[70ch]">
+          <h2 className="text-[26px] md:text-[34px] font-black">{slide.title}</h2>
+          {slide.bullets && (
+            <ul className="mt-3 text-white/80">
+              {slide.bullets.map((b, i) => (
+                <li key={i}>• {b}</li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={slide.primary.href}
+              className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+              style={{ background: SPST_ORANGE }}
+            >
+              {slide.primary.label}
+            </a>
+            {slide.secondary && (
+              <a
+                href={slide.secondary.href}
+                target="_blank"
+                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+              >
+                {slide.secondary.label}
+              </a>
+            )}
+          </div>
+          <div className="mt-6 text-white/60 text-xs flex items-center justify-center gap-2">
+            <MessageSquareMore className="h-4 w-4" />
+            Hai domande? Parliamone ora.
           </div>
         </div>
       </div>
     );
   }
 
-  if (slide.kind === 'image') {
-    return (
-      <div className="w-full h-full grid place-items-center text-center p-4">
-        {slide.title && <HeaderSmall title={slide.title} />}
-        <div className="relative w-full h-full rounded-xl overflow-hidden border border-white/10 bg-black/20">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={slide.src} alt={slide.caption || ''} className="w-full h-full object-contain" />
-        </div>
-        {slide.caption && <div className="text-white/70 text-sm mt-2">{slide.caption}</div>}
-      </div>
-    );
-  }
-
-  if (slide.kind === 'cta') {
-    return (
-      <div className="w-full h-full grid place-items-center text-center p-4">
-        <h2 className="text-[26px] md:text-[36px] font-black">{slide.title}</h2>
-        {slide.bullets && (
-          <ul className="mt-3 text-white/80">
-            {slide.bullets.map((b, i) => (
-              <li key={i}>• {b}</li>
-            ))}
-          </ul>
-        )}
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a
-            href={slide.primary.href}
-            className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
-            style={{ background: SPST_ORANGE }}
-          >
-            {slide.primary.label}
-          </a>
-          {slide.secondary && (
-            <a
-              href={slide.secondary.href}
-              className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
-            >
-              {slide.secondary.label}
-            </a>
-          )}
-        </div>
-        <div className="mt-6 text-white/60 text-xs flex items-center justify-center gap-2">
-          <MessageSquareMore className="h-4 w-4" />
-          Domande? Apri WhatsApp e parliamo subito.
-        </div>
-      </div>
-    );
-  }
-
   return null;
-}
-
-function HeaderSmall({ kicker, title }: { kicker?: string; title: string }) {
-  return (
-    <div className="text-center md:text-left">
-      {kicker && <div className="text-[11px] tracking-wider uppercase text-white/60">{kicker}</div>}
-      <div className="relative inline-block">
-        <div
-          aria-hidden
-          className="absolute -inset-x-6 -inset-y-2 blur-xl md:blur-2xl opacity-25 pointer-events-none"
-          style={{
-            background: `radial-gradient(50% 60% at 50% 55%, rgba(255,255,255,.45) 0%, rgba(247,147,30,.28) 40%, transparent 65%), radial-gradient(90% 120% at 50% 50%, rgba(28,62,94,.18) 0%, transparent 60%)`,
-          }}
-        />
-        <h2 className="relative text-[22px] sm:text-[28px] md:text-[34px] font-black mt-1">
-          <span
-            className="bg-clip-text text-transparent"
-            style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}
-          >
-            {title}
-          </span>
-        </h2>
-      </div>
-      <div className="mt-2 h-[3px] w-24 mx-auto md:mx-0 rounded-full" style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, transparent)` }} />
-    </div>
-  );
 }
 
 function Preview({ slide }: { slide: Slide }) {
   if (slide.kind === 'title') {
-    return <div className="font-semibold">{stripReact(slide.title)}</div>;
+    return <div className="font-semibold">Intro</div>;
   }
-  if (slide.kind === 'bullets') {
+  if (slide.kind === 'column') {
     return (
       <div>
         <div className="font-semibold">{slide.title}</div>
-        <div className="text-white/70 text-xs">{slide.items.map((i) => i.title).join(' • ')}</div>
-      </div>
-    );
-  }
-  if (slide.kind === 'kpi') {
-    return (
-      <div>
-        <div className="font-semibold">{slide.title}</div>
-        <div className="text-white/70 text-xs">{slide.items.map((i) => i.num).join(' / ')}</div>
+        {slide.items && <div className="text-white/70 text-xs">{slide.items.map((i) => i.title).join(' • ')}</div>}
       </div>
     );
   }
   if (slide.kind === 'cta') {
     return <div className="font-semibold">{slide.title}</div>;
   }
-  if (slide.kind === 'image') {
-    return <div className="font-semibold">{slide.title || 'Image'}</div>;
-  }
   return null;
-}
-
-function stripReact(node: React.ReactNode): string {
-  if (typeof node === 'string') return node;
-  if (Array.isArray(node)) return node.map(stripReact).join(' ');
-  return '';
 }
