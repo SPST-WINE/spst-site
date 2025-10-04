@@ -26,8 +26,8 @@ const SPST_ORANGE = '#f7931e';
 const LOGO_URL =
   'https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png';
 
-// 👉 sostituisci con il tuo link
-const TUTORIAL_URL = 'https://example.com/tutorial-spst';
+// 👉 link al video YouTube
+const TUTORIAL_URL = 'https://youtu.be/R2Kj2EWMk_U';
 
 type Slide =
   | { kind: 'title'; kicker?: string; title: React.ReactNode; subtitle?: string }
@@ -38,7 +38,13 @@ type Slide =
       description?: string;
       items?: Array<{ icon?: React.ReactNode; title: string; desc?: string }>;
     }
-  | { kind: 'cta'; title: string; bullets?: string[]; primary: { label: string; href: string }; secondary?: { label: string; href: string } };
+  | {
+      kind: 'cta';
+      title: string;
+      bullets?: string[];
+      primary: { label: string; href: string };
+      secondary?: { label: string; href: string };
+    };
 
 const slides: Slide[] = [
   {
@@ -49,7 +55,9 @@ const slides: Slide[] = [
         Il tuo vino nel mondo,{' '}
         <span
           className="text-transparent bg-clip-text"
-          style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})` }}
+          style={{
+            backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
+          }}
         >
           senza pensieri.
         </span>
@@ -65,9 +73,21 @@ const slides: Slide[] = [
     description:
       'Ogni Paese ha prassi diverse. Senza processi chiari si perdono tempo e margini, con maggior rischio di blocchi.',
     items: [
-      { icon: <TriangleAlert className="h-5 w-5" />, title: 'Documenti complessi', desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.' },
-      { icon: <Ship className="h-5 w-5" />, title: 'Costi e rotte variabili', desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.' },
-      { icon: <Globe2 className="h-5 w-5" />, title: 'Accesso ai buyer', desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.' },
+      {
+        icon: <TriangleAlert className="h-5 w-5" />,
+        title: 'Documenti complessi',
+        desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.',
+      },
+      {
+        icon: <Ship className="h-5 w-5" />,
+        title: 'Costi e rotte variabili',
+        desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.',
+      },
+      {
+        icon: <Globe2 className="h-5 w-5" />,
+        title: 'Accesso ai buyer',
+        desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.',
+      },
     ],
   },
   {
@@ -77,9 +97,21 @@ const slides: Slide[] = [
     description:
       'Ti seguiamo dall’impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
     items: [
-      { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Generiamo e archiviamo modulistica fiscale e doganale.' },
-      { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.' },
-      { icon: <TrendingUp className="h-5 w-5" />, title: '3) Crescita commerciale', desc: 'Wine Connect ti collega a buyer internazionali qualificati.' },
+      {
+        icon: <FileCheck2 className="h-5 w-5" />,
+        title: '1) Documenti a norma',
+        desc: 'Generiamo e archiviamo modulistica fiscale e doganale.',
+      },
+      {
+        icon: <Route className="h-5 w-5" />,
+        title: '2) Spedizione ottimizzata',
+        desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.',
+      },
+      {
+        icon: <TrendingUp className="h-5 w-5" />,
+        title: '3) Crescita commerciale',
+        desc: 'Wine Connect ti collega a buyer internazionali qualificati.',
+      },
     ],
   },
   {
@@ -89,9 +121,21 @@ const slides: Slide[] = [
     description:
       'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
     items: [
-      { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.' },
-      { icon: <LineChart className="h-5 w-5" />, title: 'Dati e KPI', desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.' },
-      { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Assistenza integrata', desc: 'WhatsApp/telefono direttamente dalla piattaforma.' },
+      {
+        icon: <Building2 className="h-5 w-5" />,
+        title: 'Dashboard operativa',
+        desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.',
+      },
+      {
+        icon: <LineChart className="h-5 w-5" />,
+        title: 'Dati e KPI',
+        desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.',
+      },
+      {
+        icon: <MessageSquareMore className="h-5 w-5" />,
+        title: 'Assistenza integrata',
+        desc: 'WhatsApp/telefono direttamente dalla piattaforma.',
+      },
     ],
   },
   {
@@ -111,7 +155,7 @@ const slides: Slide[] = [
     title: 'Pronto a spedire senza pensieri?',
     bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
     primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
-    secondary: { label: 'Guarda il video tutorial', href: 'https://youtu.be/R2Kj2EWMk_U' },
+    secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
   },
 ];
 
@@ -141,7 +185,6 @@ export default function PresentationPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [grid]);
 
-  // swipe
   const startX = React.useRef<number | null>(null);
   const onTouchStart = (e: React.TouchEvent) => (startX.current = e.touches[0].clientX);
   const onTouchEnd = (e: React.TouchEvent) => {
@@ -151,7 +194,6 @@ export default function PresentationPage() {
     startX.current = null;
   };
 
-  // fullscreen
   const toggleFs = async () => {
     const el: any = document.documentElement;
     if (!document.fullscreenElement) {
@@ -173,14 +215,12 @@ export default function PresentationPage() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur">
         <div className="mx-auto max-w-[1200px] px-4 h-14 flex items-center justify-between gap-3">
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">
             <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
             <span className="hidden sm:inline">SPST</span>
           </a>
-
           <div className="flex items-center gap-1 sm:gap-2">
             <button onClick={() => setGrid((v) => !v)} title="Indice (G)" className="rounded-lg hover:bg-white/10 p-2">
               {grid ? <X className="h-5 w-5" /> : <LayoutGrid className="h-5 w-5" />}
@@ -190,61 +230,31 @@ export default function PresentationPage() {
             </button>
           </div>
         </div>
-
-        {/* progress */}
         <div className="h-1 bg-white/10">
           <div className="h-1 bg-[var(--spst-orange,#f7931e)]" style={{ width: `${((i + 1) / total) * 100}%` }} />
         </div>
       </header>
 
-      {/* Viewport
-          - mobile: altezza fluida (100svh - header - progress), contenuto scrollabile
-          - md+: canvas 16:9 come prima
-      */}
       <section className="mx-auto max-w-[1400px] px-4 py-4 md:py-6">
         <div
-          className="
-            relative mx-auto w-full rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,.25)]
-            h-[calc(100svh-56px-4px-2rem)] md:h-auto md:max-w-[1200px] md:aspect-[16/9]
-          "
+          className="relative mx-auto w-full rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,.25)]
+                     h-[calc(100svh-56px-4px-2rem)] md:h-auto md:max-w-[1200px] md:aspect-[16/9]"
         >
-          {/* Nav buttons:
-              - mobile: bottom floating
-              - md+: laterali a metà altezza
-          */}
           <div className="md:hidden absolute inset-x-0 bottom-3 flex items-center justify-between px-3 pointer-events-none">
             <button
               className="pointer-events-auto p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur hover:bg-white/10"
               onClick={() => go(-1)}
-              title="Indietro"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <button
               className="pointer-events-auto p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur hover:bg-white/10"
               onClick={() => go(1)}
-              title="Avanti"
             >
               <ArrowRight className="h-5 w-5" />
             </button>
           </div>
 
-          <button
-            className="hidden md:inline-flex absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-black/30 border border-white/10 hover:bg-white/10"
-            onClick={() => go(-1)}
-            title="Indietro"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
-          <button
-            className="hidden md:inline-flex absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-black/30 border border-white/10 hover:bg-white/10"
-            onClick={() => go(1)}
-            title="Avanti"
-          >
-            <ArrowRight className="h-5 w-5" />
-          </button>
-
-          {/* Slide */}
           <AnimatePresence mode="wait">
             <motion.div
               key={i}
@@ -260,37 +270,34 @@ export default function PresentationPage() {
           </AnimatePresence>
         </div>
 
-        {/* Index grid */}
-        <AnimatePresence>
-          {grid && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 grid gap-3 grid-cols-2 md:grid-cols-3">
-              {slides.map((s, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    goto(idx);
-                    setGrid(false);
-                  }}
-                  className="text-left rounded-xl border border-white/10 bg-white/[0.04] p-3 sm:p-4 hover:bg-white/[0.07] transition"
-                >
-                  <div className="text-[11px] text-white/60 mb-1">Slide {idx + 1}</div>
-                  <Preview slide={s} />
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="mt-4 text-center text-white/60 text-[11px] sm:text-xs">
-          Usa <kbd className="px-1 py-[2px] bg-white/10 rounded">←</kbd> / <kbd className="px-1 py-[2px] bg-white/10 rounded">→</kbd>,{' '}
-          <kbd className="px-1 py-[2px] bg-white/10 rounded">G</kbd> per indice, <kbd className="px-1 py-[2px] bg-white/10 rounded">F</kbd> per fullscreen.
-        </div>
+        {grid && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="mt-4 grid gap-3 grid-cols-2 md:grid-cols-3"
+          >
+            {slides.map((s, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  goto(idx);
+                  setGrid(false);
+                }}
+                className="text-left rounded-xl border border-white/10 bg-white/[0.04] p-3 sm:p-4 hover:bg-white/[0.07] transition"
+              >
+                <div className="text-[11px] text-white/60 mb-1">Slide {idx + 1}</div>
+                <Preview slide={s} />
+              </button>
+            ))}
+          </motion.div>
+        )}
       </section>
     </main>
   );
 }
 
-/* ---------------- RENDERERS ---------------- */
+/* ------------- SLIDE RENDERER ------------- */
 function SlideRenderer({ slide }: { slide: Slide }) {
   if (slide.kind === 'title') {
     return (
@@ -306,18 +313,17 @@ function SlideRenderer({ slide }: { slide: Slide }) {
 
   if (slide.kind === 'column') {
     return (
-      <div className="w-full h-full p-4 sm:p-6 md:p-10">
-        {/* contenuto centrato su desktop; su mobile è scrollabile */}
+      <div className="w-full h-full p-4 sm:p-6 md:p-10 overflow-y-auto">
         <div className="mx-auto max-w-[980px] md:h-full md:flex md:flex-col md:justify-center">
           <div className="mb-3 sm:mb-4">
             {slide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
-            <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-black">
-              <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}>
-                {slide.title}
-              </span>
+            <h2
+              className="text-[22px] sm:text-[28px] md:text-[34px] font-black"
+              style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}
+            >
+              <span className="bg-clip-text text-transparent">{slide.title}</span>
             </h2>
             {slide.description && <p className="text-white/80 mt-2 text-[14px] sm:text-[15px]">{slide.description}</p>}
-            <div className="mt-2 h-[3px] w-24 rounded-full" style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, transparent)` }} />
           </div>
 
           {slide.items && (
@@ -346,13 +352,14 @@ function SlideRenderer({ slide }: { slide: Slide }) {
             </div>
           )}
 
-          {/* link tutorial per la slide Web App */}
+          {/* 🎥 Link tutorial nella slide "Web App" */}
           {slide.title.includes('Un’unica piattaforma') && (
-            <div className="mt-4">
+            <div className="mt-6 flex justify-center">
               <a
                 href={TUTORIAL_URL}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
               >
                 <MessageSquareMore className="h-4 w-4" />
                 Guarda il video tutorial
@@ -379,7 +386,7 @@ function SlideRenderer({ slide }: { slide: Slide }) {
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href={slide.primary.href}
-              className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+              className="px-4 py-2 rounded-full font-bold text-[#0f1720]"
               style={{ background: SPST_ORANGE }}
             >
               {slide.primary.label}
@@ -388,15 +395,11 @@ function SlideRenderer({ slide }: { slide: Slide }) {
               <a
                 href={slide.secondary.href}
                 target="_blank"
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+                className="px-4 py-2 rounded-full font-bold border border-white/70 hover:bg-white/10"
               >
                 {slide.secondary.label}
               </a>
             )}
-          </div>
-          <div className="mt-6 text-white/60 text-[11px] sm:text-xs flex items-center justify-center gap-2">
-            <MessageSquareMore className="h-4 w-4" />
-            Hai domande? Parliamone ora.
           </div>
         </div>
       </div>
@@ -412,7 +415,11 @@ function Preview({ slide }: { slide: Slide }) {
     return (
       <div>
         <div className="font-semibold">{slide.title}</div>
-        {slide.items && <div className="text-white/70 text-[11px]">{slide.items.map((i) => i.title).join(' • ')}</div>}
+        {slide.items && (
+          <div className="text-white/70 text-[11px]">
+            {slide.items.map((i) => i.title).join(' • ')}
+          </div>
+        )}
       </div>
     );
   if (slide.kind === 'cta') return <div className="font-semibold">{slide.title}</div>;
