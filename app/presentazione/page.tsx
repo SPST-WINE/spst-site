@@ -1,427 +1,239 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  Maximize2,
-  Minimize2,
-  LayoutGrid,
-  X,
-  TriangleAlert,
-  Ship,
-  Globe2,
-  Route,
-  FileCheck2,
-  TrendingUp,
   Building2,
-  LineChart,
   CheckCircle2,
+  FileCheck2,
+  Globe2,
+  LayoutGrid,
   MessageSquareMore,
-} from 'lucide-react';
+  Route,
+  Ship,
+  TrendingUp,
+  TriangleAlert,
+} from "lucide-react";
 
-const SPST_BLUE_SOFT = '#1c3e5e';
-const SPST_ORANGE = '#f7931e';
-const LOGO_URL =
-  'https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png';
+// ─────────────────────────────────────────────
+// DATI SLIDES
+// ─────────────────────────────────────────────
 
-// 👉 link al video YouTube
-const TUTORIAL_URL = 'https://youtu.be/R2Kj2EWMk_U';
-
-type Slide =
-  | { kind: 'title'; kicker?: string; title: React.ReactNode; subtitle?: string }
-  | {
-      kind: 'column';
-      kicker?: string;
-      title: string;
-      description?: string;
-      items?: Array<{ icon?: React.ReactNode; title: string; desc?: string }>;
-    }
-  | {
-      kind: 'cta';
-      title: string;
-      bullets?: string[];
-      primary: { label: string; href: string };
-      secondary?: { label: string; href: string };
-    };
-
-const slides: Slide[] = [
+const slides = [
   {
-    kind: 'title',
-    kicker: 'Export vino all-in-one',
-    title: (
-      <>
-        Il tuo vino nel mondo,{' '}
-        <span
-          className="text-transparent bg-clip-text"
-          style={{
-            backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
-          }}
-        >
-          senza pensieri.
-        </span>
-      </>
-    ),
-    subtitle:
-      'SPST semplifica l’export per le cantine: documenti doganali, spedizioni e accesso ai buyer — in un’unica piattaforma con assistenza reale.',
-  },
-  {
-    kind: 'column',
-    kicker: 'I problemi reali',
-    title: 'Perché è complicato spedire vino',
+    title: "I problemi reali",
     description:
-      'Ogni Paese ha prassi diverse. Senza processi chiari si perdono tempo e margini, con maggior rischio di blocchi.',
-    items: [
+      "Spedire vino non è solo una questione di logistica. Ogni spedizione comporta complessità normative, costi variabili e difficoltà di accesso ai buyer internazionali.",
+    kind: "column",
+    points: [
       {
-        icon: <TriangleAlert className="h-5 w-5" />,
-        title: 'Documenti complessi',
-        desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.',
+        title: "Documenti complessi",
+        text: "e-DAS, accise, HS code, COLA, Prior Notice. Ogni Paese ha regole diverse.",
       },
       {
-        icon: <Ship className="h-5 w-5" />,
-        title: 'Costi e rotte variabili',
-        desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.',
+        title: "Costi e rotte variabili",
+        text: "Trovare il miglior corriere e la tratta più efficiente è un lavoro da broker.",
       },
       {
-        icon: <Globe2 className="h-5 w-5" />,
-        title: 'Accesso ai buyer',
-        desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.',
+        title: "Accesso ai buyer",
+        text: "Il vero ostacolo per crescere all’estero è trovare importatori affidabili.",
       },
     ],
   },
   {
-    kind: 'column',
-    kicker: 'Come funziona',
-    title: 'Dalla carta al tracking, in 3 step',
+    title: "Dalla carta al tracking, in 3 step",
     description:
-      'Ti seguiamo dall’impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
-    items: [
+      "Con SPST ogni spedizione diventa semplice, tracciata e conforme. Dalla burocrazia alla consegna, tutto passa da un’unica piattaforma.",
+    kind: "column",
+    points: [
       {
-        icon: <FileCheck2 className="h-5 w-5" />,
-        title: '1) Documenti a norma',
-        desc: 'Generiamo e archiviamo modulistica fiscale e doganale.',
+        title: "1. Documenti a norma",
+        text: "Gestione automatica e controllo dei requisiti doganali e accise.",
       },
       {
-        icon: <Route className="h-5 w-5" />,
-        title: '2) Spedizione ottimizzata',
-        desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.',
+        title: "2. Spedizione ottimizzata",
+        text: "Selezione automatica di corriere, tariffa e rotta migliore.",
       },
       {
-        icon: <TrendingUp className="h-5 w-5" />,
-        title: '3) Crescita commerciale',
-        desc: 'Wine Connect ti collega a buyer internazionali qualificati.',
+        title: "3. Crescita commerciale",
+        text: "Connessione diretta con buyer esteri e tracciamento KPI reali.",
       },
     ],
   },
   {
-    kind: 'column',
-    kicker: 'La Web App',
-    title: 'Un’unica piattaforma per tutto',
+    title: "La Web App",
     description:
-      'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
-    items: [
+      "Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.",
+    kind: "column",
+    points: [
       {
-        icon: <Building2 className="h-5 w-5" />,
-        title: 'Dashboard operativa',
-        desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.',
+        title: "Dashboard operativa",
+        text: "Anagrafiche, documenti, ritiro e tracking in un unico posto.",
       },
       {
-        icon: <LineChart className="h-5 w-5" />,
-        title: 'Dati e KPI',
-        desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.',
+        title: "Dati e KPI",
+        text: "Storico spedizioni, tempi medi, costi e decisioni informate.",
       },
       {
-        icon: <MessageSquareMore className="h-5 w-5" />,
-        title: 'Assistenza integrata',
-        desc: 'WhatsApp/telefono direttamente dalla piattaforma.',
+        title: "Assistenza integrata",
+        text: "WhatsApp e telefono direttamente dalla piattaforma.",
       },
     ],
+    videoUrl: "https://www.youtube.com/embed/R2Kj2EWMk_U",
   },
   {
-    kind: 'column',
-    kicker: 'Perché SPST',
-    title: 'Tecnologia + persone',
+    title: "Un’unica piattaforma per tutto",
     description:
-      'La piattaforma riduce tempi ed errori; il team garantisce continuità e risoluzione. Dalla prima spedizione, non sei mai solo.',
-    items: [
-      { title: 'Unico partner', desc: 'Documenti, logistica e supporto commerciale coordinati.' },
-      { title: 'Tariffe ottimizzate', desc: 'Multi-corriere e rotte selezionate su dati reali.' },
-      { title: 'SLA chiari', desc: 'Tempi certi e comunicazione proattiva sugli stati.' },
-    ],
-  },
-  {
-    kind: 'cta',
-    title: 'Pronto a spedire senza pensieri?',
-    bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
-    primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
-    secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
+      "SPST semplifica il lavoro di export per cantine e produttori. Una sola piattaforma per spedire, gestire documenti e connettersi ai buyer.",
+    kind: "cta",
   },
 ];
 
-export default function PresentationPage() {
-  const [i, setI] = React.useState(0);
-  const [grid, setGrid] = React.useState(false);
-  const [fs, setFs] = React.useState(false);
+// ─────────────────────────────────────────────
+// SLIDE RENDERER (ottimizzato mobile)
+// ─────────────────────────────────────────────
 
-  const total = slides.length;
-  const clamp = (n: number) => Math.max(0, Math.min(total - 1, n));
-  const go = (dir: number) => setI((v) => clamp(v + dir));
-  const goto = (idx: number) => setI(clamp(idx));
+const SPST_ORANGE = "#f7911e";
 
-  // keyboard
-  React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (grid) {
-        if (e.key === 'Escape') setGrid(false);
-        return;
-      }
-      if (e.key === 'ArrowRight' || e.key === 'PageDown') go(1);
-      if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(-1);
-      if (e.key.toLowerCase() === 'g') setGrid((v) => !v);
-      if (e.key.toLowerCase() === 'f') toggleFs();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [grid]);
+function SlideRenderer({ slide }: { slide: any }) {
+  if (slide.videoUrl) {
+    return (
+      <section className="h-screen flex flex-col items-center justify-center text-center px-6">
+        <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4">
+          {slide.title}
+        </h2>
+        <p className="text-white/80 text-base md:text-lg mb-8 max-w-2xl leading-relaxed">
+          {slide.description}
+        </p>
 
-  const startX = React.useRef<number | null>(null);
-  const onTouchStart = (e: React.TouchEvent) => (startX.current = e.touches[0].clientX);
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (startX.current == null) return;
-    const dx = e.changedTouches[0].clientX - startX.current;
-    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
-    startX.current = null;
-  };
+        <div className="relative w-full max-w-3xl aspect-video rounded-2xl overflow-hidden shadow-lg mb-8">
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src={slide.videoUrl}
+            title="SPST Tutorial"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        </div>
 
-  const toggleFs = async () => {
-    const el: any = document.documentElement;
-    if (!document.fullscreenElement) {
-      await el.requestFullscreen?.();
-      setFs(true);
-    } else {
-      await document.exitFullscreen?.();
-      setFs(false);
-    }
-  };
+        <a
+          href="https://spst.it/register"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#f7911e] hover:bg-[#d97812] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md"
+        >
+          Entra in SPST
+        </a>
+      </section>
+    );
+  }
+
+  if (slide.kind === "cta") {
+    return (
+      <section className="h-screen flex flex-col items-center justify-center text-center px-6">
+        <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4">
+          {slide.title}
+        </h2>
+        <p className="text-white/80 text-base md:text-lg mb-8 max-w-2xl leading-relaxed">
+          {slide.description}
+        </p>
+        <a
+          href="https://spst.it/register"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-[#f7911e] hover:bg-[#d97812] text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md"
+        >
+          Entra in SPST
+        </a>
+      </section>
+    );
+  }
 
   return (
-    <main
-      className="min-h-[100svh] font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background:
-          'radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)',
-      }}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur">
-        <div className="mx-auto max-w-[1200px] px-4 h-14 flex items-center justify-between gap-3">
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <button onClick={() => setGrid((v) => !v)} title="Indice (G)" className="rounded-lg hover:bg-white/10 p-2">
-              {grid ? <X className="h-5 w-5" /> : <LayoutGrid className="h-5 w-5" />}
-            </button>
-            <button onClick={toggleFs} title="Fullscreen (F)" className="rounded-lg hover:bg-white/10 p-2">
-              {fs ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-            </button>
-          </div>
-        </div>
-        <div className="h-1 bg-white/10">
-          <div className="h-1 bg-[var(--spst-orange,#f7931e)]" style={{ width: `${((i + 1) / total) * 100}%` }} />
-        </div>
-      </header>
+    <section className="h-screen flex flex-col justify-center items-center text-center px-6">
+      <div className="max-w-3xl w-full">
+        <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4 leading-snug">
+          {slide.title}
+        </h2>
 
-      <section className="mx-auto max-w-[1400px] px-4 py-4 md:py-6">
-        <div
-          className="relative mx-auto w-full rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,.25)]
-                     h-[calc(100svh-56px-4px-2rem)] md:h-auto md:max-w-[1200px] md:aspect-[16/9]"
-        >
-          <div className="md:hidden absolute inset-x-0 bottom-3 flex items-center justify-between px-3 pointer-events-none">
-            <button
-              className="pointer-events-auto p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur hover:bg-white/10"
-              onClick={() => go(-1)}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <button
-              className="pointer-events-auto p-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur hover:bg-white/10"
-              onClick={() => go(1)}
-            >
-              <ArrowRight className="h-5 w-5" />
-            </button>
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.25 }}
-              className="absolute inset-0 md:p-0 overflow-auto md:overflow-hidden"
-              onClick={() => go(1)}
-            >
-              <SlideRenderer slide={slides[i]} />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {grid && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="mt-4 grid gap-3 grid-cols-2 md:grid-cols-3"
-          >
-            {slides.map((s, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  goto(idx);
-                  setGrid(false);
-                }}
-                className="text-left rounded-xl border border-white/10 bg-white/[0.04] p-3 sm:p-4 hover:bg-white/[0.07] transition"
-              >
-                <div className="text-[11px] text-white/60 mb-1">Slide {idx + 1}</div>
-                <Preview slide={s} />
-              </button>
-            ))}
-          </motion.div>
+        {slide.description && (
+          <p className="text-white/80 mt-2 text-base md:text-lg leading-relaxed">
+            {slide.description}
+          </p>
         )}
-      </section>
-    </main>
+
+        <div
+          className="mt-3 h-[2px] w-20 mx-auto rounded-full opacity-70"
+          style={{
+            backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, transparent)`,
+          }}
+        />
+
+        <div className="mt-8 flex flex-col space-y-4 text-left">
+          {slide.points?.map((point: any, i: number) => (
+            <div
+              key={i}
+              className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 rounded-xl shadow-sm hover:bg-white/10 transition"
+            >
+              <h3 className="text-white font-medium text-lg">{point.title}</h3>
+              {point.text && (
+                <p className="text-white/70 text-sm mt-1 leading-relaxed">
+                  {point.text}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-/* ------------- SLIDE RENDERER ------------- */
-function SlideRenderer({ slide }: { slide: Slide }) {
-  if (slide.kind === 'title') {
-    return (
-      <div className="w-full h-full grid place-items-center p-4 sm:p-6 text-center">
-        <div className="max-w-[80ch] px-1">
-          {slide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
-          <h1 className="mt-1 text-[26px] sm:text-[34px] md:text-[44px] font-black leading-tight">{slide.title}</h1>
-          {slide.subtitle && <p className="mt-3 text-white/80 text-[14px] sm:text-base">{slide.subtitle}</p>}
+// ─────────────────────────────────────────────
+// PAGINA PRINCIPALE
+// ─────────────────────────────────────────────
+
+export default function PresentazionePage() {
+  const [index, setIndex] = useState(0);
+
+  const next = () => setIndex((i) => (i + 1) % slides.length);
+  const prev = () => setIndex((i) => (i - 1 + slides.length) % slides.length);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key.toLowerCase() === "f") {
+        document.documentElement.requestFullscreen?.();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return (
+    <main className="relative bg-[#0a0f1a] text-white overflow-hidden">
+      <SlideRenderer slide={slides[index]} />
+
+      {/* Navigazione */}
+      <div className="absolute inset-x-0 bottom-6 flex items-center justify-between px-6 text-white/60 text-sm">
+        <p>Usa ← → per cambiare slide • Premi “F” per fullscreen</p>
+        <div className="flex space-x-2">
+          <button
+            onClick={prev}
+            className="bg-white/10 hover:bg-white/20 rounded-full p-2"
+          >
+            <ArrowLeft size={16} />
+          </button>
+          <button
+            onClick={next}
+            className="bg-white/10 hover:bg-white/20 rounded-full p-2"
+          >
+            <ArrowRight size={16} />
+          </button>
         </div>
       </div>
-    );
-  }
-
-  if (slide.kind === 'column') {
-    return (
-      <div className="w-full h-full p-4 sm:p-6 md:p-10 overflow-y-auto">
-        <div className="mx-auto max-w-[980px] md:h-full md:flex md:flex-col md:justify-center">
-          <div className="mb-3 sm:mb-4">
-            {slide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
-            <h2
-              className="text-[22px] sm:text-[28px] md:text-[34px] font-black"
-              style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}
-            >
-              <span className="bg-clip-text text-transparent">{slide.title}</span>
-            </h2>
-            {slide.description && <p className="text-white/80 mt-2 text-[14px] sm:text-[15px]">{slide.description}</p>}
-          </div>
-
-          {slide.items && (
-            <div className="grid grid-cols-1 gap-3">
-              {slide.items.map((it, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ y: 12, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="rounded-2xl p-4 sm:p-5 border border-white/10 bg-white/[0.04]"
-                >
-                  <div className="flex items-start gap-3">
-                    {it.icon && (
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 grid place-items-center rounded-xl bg-white/5 border border-white/10 shrink-0">
-                        {it.icon}
-                      </div>
-                    )}
-                    <div>
-                      <div className="font-extrabold text-[15px] sm:text-base">{it.title}</div>
-                      {it.desc && <div className="text-white/75 text-[13px] sm:text-sm">{it.desc}</div>}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-
-          {/* 🎥 Link tutorial nella slide "Web App" */}
-          {slide.title.includes('Un’unica piattaforma') && (
-            <div className="mt-6 flex justify-center">
-              <a
-                href={TUTORIAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
-              >
-                <MessageSquareMore className="h-4 w-4" />
-                Guarda il video tutorial
-              </a>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  if (slide.kind === 'cta') {
-    return (
-      <div className="w-full h-full grid place-items-center p-4 sm:p-6 text-center">
-        <div className="max-w-[70ch]">
-          <h2 className="text-[24px] sm:text-[30px] md:text-[34px] font-black">{slide.title}</h2>
-          {slide.bullets && (
-            <ul className="mt-3 text-white/80 text-[14px] sm:text-[15px]">
-              {slide.bullets.map((b, i) => (
-                <li key={i}>• {b}</li>
-              ))}
-            </ul>
-          )}
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href={slide.primary.href}
-              className="px-4 py-2 rounded-full font-bold text-[#0f1720]"
-              style={{ background: SPST_ORANGE }}
-            >
-              {slide.primary.label}
-            </a>
-            {slide.secondary && (
-              <a
-                href={slide.secondary.href}
-                target="_blank"
-                className="px-4 py-2 rounded-full font-bold border border-white/70 hover:bg-white/10"
-              >
-                {slide.secondary.label}
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-function Preview({ slide }: { slide: Slide }) {
-  if (slide.kind === 'title') return <div className="font-semibold">Intro</div>;
-  if (slide.kind === 'column')
-    return (
-      <div>
-        <div className="font-semibold">{slide.title}</div>
-        {slide.items && (
-          <div className="text-white/70 text-[11px]">
-            {slide.items.map((i) => i.title).join(' • ')}
-          </div>
-        )}
-      </div>
-    );
-  if (slide.kind === 'cta') return <div className="font-semibold">{slide.title}</div>;
-  return null;
+    </main>
+  );
 }
