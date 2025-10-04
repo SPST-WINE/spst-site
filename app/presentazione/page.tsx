@@ -111,7 +111,7 @@ const slides: Slide[] = [
     title: 'Pronto a spedire senza pensieri?',
     bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
     primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
-    secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
+    secondary: { label: 'Guarda il video tutorial', href: 'https://youtu.be/R2Kj2EWMk_U' },
   },
 ];
 
