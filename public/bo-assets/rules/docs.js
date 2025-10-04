@@ -34,6 +34,10 @@ function normalizeCountry(input) {
     ["SVIZZERA", "Svizzera"], ["SWITZERLAND", "Svizzera"], ["CH", "Svizzera"],
     // Canada
     ["CANADA", "Canada"],
+
+    // ——— Aggiunta: Lettonia (UE) ———
+    ["LETTONIA", "Lettonia"], ["LATVIA", "Lettonia"], ["LV", "Lettonia"],
+
     // Asia (no Cina)
     ["HONG KONG", "Hong Kong"],
     ["SINGAPORE", "Singapore"],
@@ -50,9 +54,12 @@ function normalizeCountry(input) {
 }
 
 // ———————————————————————————————————————————————————————————
-// Regole documentali
-// Nomi documenti: Lettera_di_Vettura, Fattura_Commerciale, Fattura_Proforma,
-// Dichiarazione_Esportazione, FDA_Prior_Notice, e-DAS, CIQ, Certificato_di_Origine, Certificato_Sanitario
+/*
+Regole documentali
+Nomi documenti: Lettera_di_Vettura, Fattura_Commerciale, Fattura_Proforma,
+Dichiarazione_Esportazione, FDA_Prior_Notice, e-DAS, CIQ,
+Certificato_di_Origine, Certificato_Sanitario
+*/
 // ———————————————————————————————————————————————————————————
 const RULES = [
   // ITALIA (sempre e solo LDV)
