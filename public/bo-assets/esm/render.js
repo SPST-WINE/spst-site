@@ -115,8 +115,15 @@ export function normalizeShipmentRecord(rec){
   const dest_tel   = pickLoose(f,'Destinatario - Telefono','Destinatario – Telefono','Telefono Destinatario');
   const dest_rs    = pickLoose(f,'Destinatario - Ragione sociale','Destinatario – Ragione sociale','Destinatario – ragione sociale','Destinatario');
   const dest_ref   = pickLoose(f,'Destinatario - Referente','Referente Destinatario','Persona di riferimento Destinatario');
-
   const dest_piva  = pickLoose(f,'Destinatario - P.IVA/CF','P.IVA/CF Destinatario','PIVA Destinatario','P.IVA Destinatario','CF Destinatario','Codice Fiscale Destinatario');
+
+  // 🔹 Fatturazione: prima i nuovi FATT*, poi fallback ai legacy "*Destinatario Fattura"
+  const fatt_rs    = pickLoose(f,'FATT Ragione Sociale','Ragione Sociale Destinatario Fattura');
+  const fatt_paese = pickLoose(f,'FATT Paese','Paese Destinatario Fattura');
+  const fatt_citta = pickLoose(f,'FATT Città','Città Destinatario Fattura');
+  const fatt_cap   = pickLoose(f,'FATT CAP','CAP Destinatario Fattura');
+  const fatt_indir = pickLoose(f,'FATT Indirizzo','Indirizzo Destinatario Fattura');
+  const fatt_tel   = pickLoose(f,'FATT Telefono','Telefono Destinatario Fattura');
 
   const statoNew      = pickLoose(f,'Stato');
   const statoLegacyEv = !!pickLoose(f,'Stato Spedizione');
@@ -189,6 +196,14 @@ export function normalizeShipmentRecord(rec){
     dest_referente: dest_ref,
     dest_piva: dest_piva,
     dest_import_ok,
+
+    // 🔹 fatturazione
+    fatt_ragione:   fatt_rs,
+    fatt_paese:     fatt_paese,
+    fatt_citta:     fatt_citta,
+    fatt_cap:       fatt_cap,
+    fatt_indirizzo: fatt_indir,
+    fatt_telefono:  fatt_tel,
 
     // tracking
     tracking_carrier: carrier,
@@ -310,18 +325,18 @@ function renderPrintGrid(rec){
     </div>
   `;
 
-  // ——— Dati per fattura (una colonna)
+  // ——— Dati per fattura (una colonna) — usa FATT* con fallback ai dest_*
   const fattura = `
     <div class="hr"></div>
     <div class="section-title small" style="opacity:.9;margin:0 0 6px 0;"><strong>Dati per fattura</strong></div>
     <div class="print-grid">
-      <div class="k">Cliente</div><div>${rec.dest_ragione || rec.mittente_ragione || '—'}</div>
+      <div class="k">Cliente</div><div>${rec.fatt_ragione || rec.dest_ragione || rec.mittente_ragione || '—'}</div>
       <div class="k">Email</div><div>${rec.email || '—'}</div>
-      <div class="k">Indirizzo</div><div>${rec.dest_indirizzo || '—'}</div>
-      <div class="k">Città</div><div>${rec.dest_citta || '—'}</div>
-      <div class="k">CAP</div><div>${rec.dest_cap || '—'}</div>
-      <div class="k">Paese</div><div>${rec.dest_paese || '—'}</div>
-      <div class="k">P.IVA/CF</div><div>${rec.dest_piva || '—'}</div>
+      <div class="k">Indirizzo</div><div>${rec.fatt_indirizzo || rec.dest_indirizzo || '—'}</div>
+      <div class="k">Città</div><div>${rec.fatt_citta || rec.dest_citta || '—'}</div>
+      <div class="k">CAP</div><div>${rec.fatt_cap || rec.dest_cap || '—'}</div>
+      <div class="k">Paese</div><div>${rec.fatt_paese || rec.dest_paese || '—'}</div>
+      <div class="k">Telefono</div><div>${rec.fatt_telefono || rec.dest_telefono || '—'}</div>
     </div>
   `;
 
