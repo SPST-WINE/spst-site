@@ -19,6 +19,13 @@ import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
 
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/#servizi", label: "Servizi" },
+  { href: "/#vantaggi", label: "Perché SPST" },
+  { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
+  { href: "/spst-paylink", label: "Paylink USA" },
+];
 export default function SpstPaylinkPage() {
   return (
     <main
