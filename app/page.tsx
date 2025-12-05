@@ -37,7 +37,7 @@ export default function Home() {
                 {label}
               </a>
             ))}
-            <a href="https://www.wearewineconnect.com" className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors">Wine Connect</a>
+            <a href="https://www.spst.it/spst-paylink" className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors">Paylink USA</a>
             <a
               href="https://app.spst.it/login"
               className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
