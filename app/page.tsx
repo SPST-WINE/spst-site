@@ -18,7 +18,7 @@ import {
 import { SpstHeader } from "../components/spst/SpstHeader";
 import { SpstFooter } from "../components/spst/SpstFooter";
 import { SpstPaylinkHighlight } from "../components/spst/SpstPaylinkHighlight";
-import { SPST_PUBLIC_BG } from "../lib/spstTheme"; // 👈 nuovo import
+import { SPST_PUBLIC_BG } from "../lib/spstTheme";
 
 const SPST_BLUE = "#0a1722";
 const SPST_BLUE_SOFT = "#1c3e5e";
@@ -38,10 +38,10 @@ export default function Home() {
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{ background: SPST_PUBLIC_BG }} // 👈 gradient condiviso
+      style={{ background: SPST_PUBLIC_BG }}
     >
       {/* HEADER RIUSABILE */}
-      <SpstHeader navItems={navItems} showWineConnect={false} />
+      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
@@ -333,7 +333,7 @@ export default function Home() {
       <section id="preventivo" className="py-12">
         <div className="mx-auto max-w-[1200px] px-5">
           <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,.25)] md:flex-row md:p-7">
-            <h3 className="m-0 text-xl font-bold text-white">
+            <h3 className="m-0 text-xl font-bold text:white">
               Pronto a spedire il tuo vino nel mondo?
             </h3>
             <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto">
@@ -566,7 +566,7 @@ function QuickForm() {
             />
           </Field>
           <Field label="Email">
-            <Mail className="h-4 w-4 text-white/60" />
+            <Mail className="h-4 w-4 text:white/60" />
             <input
               name="email"
               required
