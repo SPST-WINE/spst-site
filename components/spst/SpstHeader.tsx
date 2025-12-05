@@ -1,61 +1,75 @@
-// components/spst/SpstHeader.tsx
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
-const SPST_ORANGE = "#f7931e";
-const LOGO_URL =
-  "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
-
-type NavItem = {
+export type SpstNavItem = {
   href: string;
   label: string;
 };
 
-const NAV_ITEMS: NavItem[] = [
+type SpstHeaderProps = {
+  navItems?: SpstNavItem[];
+  showWineConnect?: boolean;
+};
+
+const DEFAULT_NAV_ITEMS: SpstNavItem[] = [
   { href: "/", label: "Home" },
   { href: "/servizi-e-contatti", label: "Servizi" },
-  { href: "/#vantaggi", label: "Perché SPST" },
   { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
   { href: "/spst-paylink", label: "Paylink USA" },
 ];
 
-export function SpstHeader() {
+export function SpstHeader({
+  navItems = DEFAULT_NAV_ITEMS,
+  showWineConnect = false,
+}: SpstHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/30">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-5">
-        <a href="/" className="flex items-center gap-2 font-extrabold text-white">
-          <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-          <span className="hidden sm:inline">SPST</span>
-        </a>
+    <header className="w-full border-b border-white/10 bg-black/40 backdrop-blur">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between px-5 py-3">
+        {/* LEFT: logo + title */}
+        <Link href="/" className="flex items-center gap-3">
+          <div className="relative h-8 w-8">
+            <Image
+              src="/spst-logo.png"
+              alt="SPST logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold tracking-tight">
+              SPST · Export & Wine Logistics
+            </span>
+            <span className="text-[11px] text-white/60">
+              Vino nel mondo, senza pensieri.
+            </span>
+          </div>
+        </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-3 text-[0.95rem] font-semibold md:flex">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
+        {/* RIGHT: nav */}
+        <nav className="hidden items-center gap-4 text-[13px] text-white/80 sm:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.href + item.label}
               href={item.href}
-              className="rounded-lg px-2 py-1 text-white/85 transition-colors hover:bg-white/6 hover:text-white"
+              className="transition-colors hover:text-white"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
 
-          <a
-            href="https://app.spst.it/login"
-            className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] px-4 py-2 font-bold text-black ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:ring-2 active:translate-y-[1px]"
-          >
-            Area Riservata
-          </a>
+          {showWineConnect && (
+            <a
+              href="https://www.wearewineconnect.com"
+              className="rounded-full border border-white/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 transition hover:bg-white/10"
+            >
+              Wine Connect
+            </a>
+          )}
         </nav>
-
-        {/* CTA mobile rapida */}
-        <a
-          href="/portale-quotazioni"
-          className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] px-3 py-2 text-sm font-bold text-black ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:ring-2 active:translate-y-[1px] md:hidden"
-        >
-          Preventivo
-        </a>
       </div>
     </header>
   );
