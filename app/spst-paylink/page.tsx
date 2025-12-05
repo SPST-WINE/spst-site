@@ -405,7 +405,7 @@ function HeroPaylinkMockup() {
         <img
   src="/paylink-usa-checkout.png"
   alt="Schermata di checkout SPST Paylink USA"
-  className="h-full w-full object-cover translate-y-[72px] scale-[1.08]"
+  className="h-full w-full object-cover translate-y-[24px] scale-[1.06]"
   style={{ objectPosition: "top" }}
 />
         </div>
