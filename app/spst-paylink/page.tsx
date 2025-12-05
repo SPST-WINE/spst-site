@@ -25,7 +25,7 @@ export default function SpstPaylinkPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }} // 👈 gradient centralizzato
     >
-      <SpstHeader />
+      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO PAYLINK ===== */}
       <section className="relative overflow-hidden">
