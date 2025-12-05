@@ -402,10 +402,10 @@ function HeroPaylinkMockup() {
         {/* schermo con screenshot reale */}
         <div className="relative h-[calc(100%-1.75rem)] w-full overflow-hidden rounded-[1.9rem] bg-black/80">
           {/* QUI: carica in /public uno screenshot (es. paylink-usa-checkout.png) della pagina usa-shipping-pay */}
-          <img
+        <img
   src="/paylink-usa-checkout.png"
   alt="Schermata di checkout SPST Paylink USA"
-  className="h-full w-full object-cover translate-y-6"
+  className="h-full w-full object-cover translate-y-[72px] scale-[1.08]"
   style={{ objectPosition: "top" }}
 />
         </div>
