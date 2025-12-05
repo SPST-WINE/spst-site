@@ -12,9 +12,9 @@ import {
   FileCheck2,
   MessageCircle,
 } from "lucide-react";
-import { SpstHeader } from "../components/spst/SpstHeader";
-import { SpstFooter } from "../components/spst/SpstFooter";
-import { SPST_PUBLIC_BG } from "../lib/spstTheme"; // 👈 nuovo import
+import { SpstHeader } from "../../components/spst/SpstHeader";
+import { SpstFooter } from "../../components/spst/SpstFooter";
+import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
