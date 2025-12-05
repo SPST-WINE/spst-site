@@ -1,471 +1,510 @@
 // app/spst-paylink/page.tsx
-export const dynamic = "force-dynamic";
+"use client";
 
-import type { Metadata } from "next";
-import Link from "next/link";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Plane,
+  CreditCard,
+  Smartphone,
+  Globe2,
+  MapPin,
+  Ship,
+  FileCheck2,
+  MessageCircle,
+} from "lucide-react";
+import { SpstHeader } from "@/components/spst/SpstHeader";
+import { SpstFooter } from "@/components/spst/SpstFooter";
 
-export const metadata: Metadata = {
-  title: "SPST Paylink – Spedizioni B2C enoturismo | SPST",
-  description:
-    "Dal tasting in cantina alla porta di casa del cliente. SPST Paylink è il sistema B2C door-to-door con MRN incluso e ritiro in cantina.",
-};
-
-const primary = "bg-[#0A1722]";
-const accent = "#F7921E";
+const SPST_BLUE = "#0a1722";
+const SPST_BLUE_SOFT = "#1c3e5e";
+const SPST_ORANGE = "#f7931e";
 
 export default function SpstPaylinkPage() {
   return (
-    <div className={`${primary} min-h-screen text-white`}>
-      {/* HEADER SEMPLICE – se hai già un SiteHeader, sostituisci questo blocco */}
-      <header className="border-b border-white/5">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5">
-              <span className="text-xs font-semibold tracking-[0.2em]">
-                SP
-              </span>
-            </div>
-            <span className="text-sm font-medium tracking-[0.2em] uppercase text-white/80">
-              SPST
+    <main
+      className="font-sans text-slate-100 selection:bg-orange-300/40"
+      style={{
+        background:
+          "radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)",
+      }}
+    >
+      <SpstHeader
+        navItems={[
+          { href: "#cos-e", label: "Cos'è" },
+          { href: "#funziona", label: "Come funziona" },
+          { href: "#usa-only", label: "Solo USA" },
+          { href: "#quando", label: "Per chi" },
+        ]}
+      />
+
+      {/* ===== HERO PAYLINK ===== */}
+      <section className="relative overflow-hidden">
+        {/* glow brand morbidi */}
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 0.5, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="pointer-events-none absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full blur-3xl"
+          style={{
+            background: `radial-gradient(60% 60% at 30% 30%, ${SPST_ORANGE}55, transparent 60%)`,
+          }}
+        />
+        <motion.div
+          aria-hidden
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 0.35, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="pointer-events-none absolute -bottom-24 right-1/2 h-[520px] w-[520px] translate-x-1/2 rounded-full blur-3xl"
+          style={{
+            background: `radial-gradient(60% 60% at 70% 70%, ${SPST_BLUE_SOFT}66, transparent 60%)`,
+          }}
+        />
+
+        <div className="mx-auto grid max-w-[1200px] items-center gap-8 px-5 pb-12 pt-10 md:grid-cols-[1.05fr_.95fr] md:pt-16">
+          <div className="text-center md:text-left">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              SPST Paylink · Solo turisti americani
             </span>
-          </Link>
-
-          <nav className="hidden gap-6 text-xs uppercase tracking-[0.2em] text-white/60 md:flex">
-            <a href="/#services" className="hover:text-white/95">
-              Soluzioni
-            </a>
-            <a href="/#sectors" className="hover:text-white/95">
-              Settori
-            </a>
-            <a href="/#contact" className="hover:text-white/95">
-              Contatti
-            </a>
-          </nav>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl px-5 py-12 lg:py-16">
-        {/* HERO */}
-        <section className="grid gap-10 lg:grid-cols-[1.1fr,0.9fr] lg:items-center">
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-white/70">
+            <h1 className="mt-3 text-[30px] font-black leading-[1.1] sm:text-[36px] md:text-[50px]">
+              Dal tasting in cantina
               <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: accent }}
-              />
-              SPST PAYLINK · B2C ENOTURISMO
+                className="block bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
+                }}
+              >
+                alla porta di casa negli USA.
+              </span>
+            </h1>
+            <p className="mx-auto mt-3 max-w-[60ch] text-[15px] text-white/85 sm:text-base md:mx-0">
+              SPST Paylink è il servizio B2C pensato per{" "}
+              <strong>turisti americani in visita in Italia</strong>: il cliente
+              paga dal proprio smartphone, inserisce l’indirizzo negli Stati
+              Uniti e SPST gestisce{" "}
+              <span className="font-semibold">MRN, ritiro in cantina</span> e
+              spedizione door-to-door verso gli USA. Nessuna spedizione verso
+              Europa o altri Paesi: <strong>solo America</strong>.
             </p>
 
-            <div className="space-y-4">
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-                Dal tasting in cantina
+            <div className="mt-5 flex flex-wrap justify-center gap-3 md:justify-start">
+              <a
+                href="#contatti"
+                className="rounded-full px-4 py-2 text-sm font-semibold shadow ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
+                style={{ background: SPST_ORANGE, color: "#0f1720" }}
+              >
+                Attiva SPST Paylink
+              </a>
+              <a
+                href="https://spst-operations.vercel.app/usa-shipping-pay"
+                className="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30 active:translate-y-[1px]"
+                style={{ borderColor: `${SPST_ORANGE}55` }}
+              >
+                Guarda la schermata di checkout
+              </a>
+            </div>
+
+            {/* highlight punti chiave */}
+            <div className="mt-6 grid gap-3 text-xs text-white/80 sm:grid-cols-3">
+              <HighlightPill icon={<Smartphone className="h-3 w-3" />}>
+                Pagamento da smartphone
                 <br />
-                alla porta di casa del cliente.
-              </h1>
-              <p className="max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-                SPST Paylink è il sistema{" "}
-                <span className="font-semibold text-white">
-                  B2C door-to-door
-                </span>{" "}
-                per l’enoturismo: il cliente paga da smartphone, inserisce i
-                dati di spedizione e noi gestiamo{" "}
-                <span className="font-semibold">MRN, ritiro in cantina</span> e
-                consegna a domicilio.
+                con carta
+              </HighlightPill>
+              <HighlightPill icon={<Globe2 className="h-3 w-3" />}>
+                Solo spedizioni
+                <br />
+                verso USA
+              </HighlightPill>
+              <HighlightPill icon={<Ship className="h-3 w-3" />}>
+                MRN, export e ritiro
+                <br />
+                gestiti da SPST
+              </HighlightPill>
+            </div>
+          </div>
+
+          {/* HERO VISUAL: iPhone mockup stile SPST */}
+          <HeroPaylinkMockup />
+        </div>
+      </section>
+
+      {/* ===== COS'È ===== */}
+      <section id="cos-e" className="py-10">
+        <SectionHeader
+          kicker="Cos'è SPST Paylink"
+          title="Un link di pagamento che sblocca le spedizioni USA dalla cantina"
+          tone="accent"
+        />
+        <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
+          <Card
+            title="Per la cantina"
+            text="Non devi più gestire spedizionieri, moduli complessi e documenti export per ogni turista americano. Hai un unico Paylink SPST collegato alla tua cantina."
+            icon={<MapPin className="h-5 w-5" />}
+          />
+          <Card
+            title="Per il turista americano"
+            text="Dopo la degustazione, il cliente scansiona un QR o apre un link, inserisce indirizzo USA e paga in pochi minuti. Nessun modulo cartaceo o email avanti-indietro."
+            icon={<Smartphone className="h-5 w-5" />}
+          />
+          <Card
+            title="Per l'operatività"
+            text="SPST riceve i dati completi, genera MRN e documenti, organizza il ritiro in cantina e spedisce direttamente verso gli Stati Uniti con tracking."
+            icon={<FileCheck2 className="h-5 w-5" />}
+          />
+        </div>
+      </section>
+
+      {/* ===== COME FUNZIONA ===== */}
+      <section id="funziona" className="py-12">
+        <SectionHeader
+          kicker="Come funziona"
+          title="Dal tasting al tracking USA, in 3 step"
+          tone="solution"
+        />
+        <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
+          <Card
+            title="1) In cantina: QR o link"
+            text="Al momento della vendita, mostri al turista americano un QR code o gli invii un link SPST Paylink. Ogni link è collegato alla tua cantina e alle tue regole di spedizione."
+            icon={<Plane className="h-5 w-5" />}
+          />
+          <Card
+            title="2) Checkout USA dal telefono"
+            text="Il cliente compila l'indirizzo di consegna negli Stati Uniti, inserisce telefono ed email, accetta le condizioni e paga con carta in un ambiente sicuro."
+            icon={<CreditCard className="h-5 w-5" />}
+          />
+          <Card
+            title="3) MRN, ritiro e spedizione"
+            text="SPST genera MRN e documenti export, programma il ritiro direttamente in cantina e gestisce la spedizione door-to-door verso gli USA, con aggiornamenti e supporto."
+            icon={<Ship className="h-5 w-5" />}
+          />
+        </div>
+      </section>
+
+      {/* ===== SOLO USA ===== */}
+      <section id="usa-only" className="py-12">
+        <SectionHeader
+          kicker="Focus operativo"
+          title="SPST Paylink è pensato solo per spedizioni verso gli Stati Uniti"
+          tone="problem"
+        />
+        <div className="mx-auto max-w-[1200px] px-5">
+          <div className="grid gap-4 md:grid-cols-[1.4fr_.9fr]">
+            <motion.div
+              initial={{ y: 18, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.45 }}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+            >
+              <h3 className="text-lg font-extrabold">
+                Perché solo Stati Uniti (e non Europa o altri Paesi)?
+              </h3>
+              <p className="mt-2 text-sm text-white/80">
+                SPST Paylink nasce per risolvere un problema molto preciso:
+                cantine italiane con <strong>forte flusso di turisti americani</strong> che
+                vogliono spedire il vino direttamente a casa loro negli USA, in modo
+                regolamentato e senza impazzire con burocrazia e corrieri.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                <li>• Normative chiare e processi specifici per il mercato USA.</li>
+                <li>• Partnership dedicate per spedizioni B2C vino verso America.</li>
+                <li>
+                  • Focus su un solo Paese = meno errori, flusso più veloce, esperienza
+                  migliore per la cantina e per il cliente.
+                </li>
+              </ul>
+              <p className="mt-4 text-sm text-orange-200/90">
+                ⚠️ Importante: SPST Paylink <strong>non</strong> gestisce spedizioni verso
+                Europa o altri Paesi extra-USA. È un servizio creato su misura per il{" "}
+                <strong>turismo americano</strong>.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 18, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.015] p-5"
+            >
+              <h4 className="text-sm font-semibold text-white/90">
+                Cosa significa per la tua cantina
+              </h4>
+              <ul className="mt-3 space-y-2 text-sm text-white/80">
+                <li>• Puoi continuare a gestire Europa con altri canali o partner.</li>
+                <li>
+                  • SPST Paylink interviene solo quando il cliente ha
+                  <strong>indirizzo di consegna negli Stati Uniti</strong>.
+                </li>
+                <li>
+                  • Nessun rischio di confusione: il flusso è dichiaratamente
+                  “<strong>USA only</strong>”.
+                </li>
+              </ul>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PER CHI HA SENSO ===== */}
+      <section id="quando" className="py-12">
+        <SectionHeader
+          kicker="Per chi ha senso"
+          title="Quando SPST Paylink è davvero utile"
+          tone="plain"
+        />
+        <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
+          <Card
+            title="Cantine con tanti turisti USA"
+            text="Se una parte importante dei tuoi visitatori arriva dagli Stati Uniti e compra vino in quantità, Paylink ti permette di non perdere queste vendite."
+            icon={<Globe2 className="h-5 w-5" />}
+          />
+          <Card
+            title="Agriturismi e wine resort"
+            text="Strutture che fanno degustazioni con americani e vogliono offrire un servizio premium: 'Non ti preoccupare della valigia, ti spediamo tutto a casa'."
+            icon={<Plane className="h-5 w-5" />}
+          />
+          <Card
+            title="Eventi e fiere con pubblico americano"
+            text="Spedizioni dirette USA a partire dallo stand, senza allestire un sistema complesso: Qr code + Paylink e SPST gestisce il resto."
+            icon={<MessageCircle className="h-5 w-5" />}
+          />
+        </div>
+      </section>
+
+      {/* ===== CTA & CONTATTI ===== */}
+      <section id="contatti" className="py-12">
+        <div className="mx-auto max-w-[1200px] px-5">
+          <div className="flex flex-col gap-5 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,.25)] md:flex-row md:items-center md:justify-between md:p-7">
+            <div>
+              <h3 className="text-xl font-bold text-white m-0">
+                Vuoi attivare SPST Paylink per i tuoi turisti americani?
+              </h3>
+              <p className="mt-2 max-w-xl text-sm text-white/80">
+                Raccontaci quanti turisti USA passano in cantina, quanti cartoni
+                vendi mediamente e da quali regioni arrivano. Ti aiutiamo a capire
+                se ha senso attivare il servizio e come strutturare prezzi e processi.
               </p>
             </div>
-
-            <div className="flex flex-wrap gap-3 text-xs text-white/80">
-              <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                Pagamento online in pochi click
-              </div>
-              <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
-                MRN e documenti gestiti da SPST
-              </div>
-              <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-sky-400" />
-                Ritiro in cantina incluso
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="flex w-full flex-col gap-3 md:w-auto">
               <a
-                href="#how-it-works"
-                className="inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-medium text-[#0A1722]"
-                style={{ backgroundColor: accent }}
+                className="w-full rounded-full px-4 py-2 text-center text-sm font-bold text-[#0f1720] ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
+                style={{ background: SPST_ORANGE }}
+                href="mailto:info@spst.it?subject=Attivazione%20SPST%20Paylink%20turisti%20USA"
               >
-                Come funziona
+                Scrivi a info@spst.it
               </a>
               <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5"
-              >
-                Parla con SPST
-              </a>
-            </div>
-
-            <p className="text-xs text-white/50">
-              Pensato per{" "}
-              <span className="font-semibold">
-                cantine, agriturismi, enoteche
-              </span>{" "}
-              che lavorano con turisti esteri e vogliono spedire in modo
-              regolamentato e professionale.
-            </p>
-          </div>
-
-          {/* MOCKUP VISUALE */}
-          <MockupPaylinkHero />
-        </section>
-
-        {/* SEZIONE: COME FUNZIONA */}
-        <section id="how-it-works" className="mt-16 space-y-8">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-xl font-semibold sm:text-2xl">
-                Come funziona SPST Paylink
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm text-white/70">
-                Una sola infrastruttura per tutto: link di pagamento, raccolta
-                dati di spedizione, documenti doganali, MRN e ritiro in
-                cantina.
-              </p>
-            </div>
-            <p className="text-xs text-white/50">
-              Tutto il flusso è tracciato e supportato dal team SPST.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {/* Step 1 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60">
-                  Per la cantina
-                </span>
-                <span
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: "rgba(247,146,30,0.18)" }}
-                >
-                  1
-                </span>
-              </div>
-              <h3 className="text-sm font-semibold">
-                Generi un Paylink dedicato
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-white/70">
-                SPST crea per te un link o QR code dedicato alla cantina (o
-                all&apos;evento). Lo condividi con il cliente al momento
-                dell&apos;acquisto in cantina.
-              </p>
-              <ul className="mt-3 space-y-1.5 text-xs text-white/65">
-                <li>• Nessun gestionale da installare.</li>
-                <li>• Tariffe e regole impostate da SPST.</li>
-                <li>• Puoi avere più link per aree / listini.</li>
-              </ul>
-            </div>
-
-            {/* Step 2 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60">
-                  Per il cliente enoturista
-                </span>
-                <span
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: "rgba(80, 180, 120, 0.2)" }}
-                >
-                  2
-                </span>
-              </div>
-              <h3 className="text-sm font-semibold">
-                Compila dati & paga in pochi minuti
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-white/70">
-                Dal proprio smartphone il cliente inserisce indirizzo,
-                contatti, eventuale documento richiesto e conferma il pagamento
-                con carta.
-              </p>
-              <ul className="mt-3 space-y-1.5 text-xs text-white/65">
-                <li>• Interfaccia mobile-first.</li>
-                <li>• Dati di spedizione completi e validati.</li>
-                <li>• Email di conferma con riepilogo.</li>
-              </ul>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60">
-                  Operatività SPST
-                </span>
-                <span
-                  className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: "rgba(59,130,246,0.2)" }}
-                >
-                  3
-                </span>
-              </div>
-              <h3 className="text-sm font-semibold">
-                MRN, ritiro in cantina e consegna
-              </h3>
-              <p className="mt-2 text-xs leading-relaxed text-white/70">
-                SPST riceve l&apos;ordine, genera documenti e MRN, programma il
-                ritiro in cantina e segue la spedizione fino alla consegna
-                door-to-door.
-              </p>
-              <ul className="mt-3 space-y-1.5 text-xs text-white/65">
-                <li>• MRN ed export gestiti da SPST.</li>
-                <li>• Ritiro in cantina incluso nel servizio.</li>
-                <li>• Tracking + supporto via WhatsApp/Email.</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* FEATURE GRID */}
-        <section className="mt-16 space-y-8">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-xl font-semibold sm:text-2xl">
-                Cosa fa concretamente SPST Paylink
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm text-white/70">
-                È molto più di un link di pagamento: è una infrastruttura
-                operativa pensata per il vino e l’enoturismo.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {FEATURES.map((feature) => (
-              <div
-                key={feature.title}
-                className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-4"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-black/30 text-xs">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-sm font-semibold">{feature.title}</h3>
-                </div>
-                <p className="text-xs text-white/70">{feature.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* TARGET */}
-        <section className="mt-16 space-y-6">
-          <h2 className="text-xl font-semibold sm:text-2xl">
-            Per chi è pensato SPST Paylink
-          </h2>
-          <div className="grid gap-5 md:grid-cols-3">
-            <TagCard
-              label="Cantine con forte flusso enoturistico"
-              body="Vuoi permettere ai turisti di spedire a casa il vino acquistato in cantina, senza gestire spedizioni, MRN e burocrazia."
-            />
-            <TagCard
-              label="Agriturismi, wine resort, enoteche"
-              body="Strutture che ospitano degustazioni e vendono vino a turisti stranieri che non possono portare tutto in valigia."
-            />
-            <TagCard
-              label="Eventi e fiere B2C"
-              body="Stand che vogliono vendere sul posto e offrire al cliente la spedizione door-to-door come servizio premium."
-            />
-          </div>
-        </section>
-
-        {/* CTA FINALE */}
-        <section
-          id="contact"
-          className="mt-16 mb-10 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-white/10 to-white/5 p-6 sm:p-8"
-        >
-          <div className="grid gap-6 md:grid-cols-[1.3fr,0.7fr] md:items-center">
-            <div className="space-y-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/70">
-                Attivazione SPST Paylink
-              </p>
-              <h2 className="text-xl font-semibold sm:text-2xl">
-                Vuoi offrire la spedizione door-to-door ai tuoi enoturisti?
-              </h2>
-              <p className="text-sm text-white/70">
-                Raccontaci volumi, Paesi di destinazione e tipologia di clientela.
-                Ti aiutiamo a capire se SPST Paylink è la soluzione giusta per la
-                tua struttura e definiamo insieme listini e processi.
-              </p>
-              <ul className="mt-2 space-y-1.5 text-xs text-white/70">
-                <li>• Setup tecnico e operativo gestito da SPST.</li>
-                <li>• Nessun investimento iniziale in software.</li>
-                <li>• Modello a margine per spedizione.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-3 rounded-2xl border border-white/15 bg-[#0A1722]/70 p-4">
-              <p className="text-xs text-white/65">
-                Scrivici o prenota una call:
-              </p>
-              <div className="space-y-1 text-sm">
-                <p className="font-medium">Gianluca Laudante</p>
-                <p className="text-xs text-white/65">Export Manager · SPST</p>
-              </div>
-              <div className="space-y-2 text-xs text-white/80">
-                <p>
-                  📞 <a href="tel:+393201441789">+39 320 144 1789</a>
-                </p>
-                <p>
-                  ✉️{" "}
-                  <a href="mailto:info@spst.it" className="underline">
-                    info@spst.it
-                  </a>
-                </p>
-                <p>
-                  🌐{" "}
-                  <a
-                    href="https://www.spst.it"
-                    className="underline"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    www.spst.it
-                  </a>
-                </p>
-              </div>
-              <a
+                className="w-full rounded-full border border-white/70 px-4 py-2 text-center text-sm font-bold text-white ring-white/30 transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/10 hover:ring-2 active:translate-y-[1px]"
                 href="https://wa.me/393201441789"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium text-[#0A1722]"
-                style={{ backgroundColor: accent }}
               >
-                Scrivici su WhatsApp
+                Parla su WhatsApp con SPST
               </a>
             </div>
           </div>
-        </section>
-      </main>
+          <div className="mt-3 text-center text-[12px] text-white/60">
+            Nessun vincolo minimo iniziale: partiamo dai primi casi reali e
+            cresciamo insieme.
+          </div>
+        </div>
+      </section>
+
+      <SpstFooter />
+    </main>
+  );
+}
+
+/* ------------------------ COMPONENTS LOCALI ------------------------ */
+
+function SectionHeader({
+  kicker,
+  title,
+  tone = "plain",
+}: {
+  kicker: string;
+  title: React.ReactNode;
+  tone?: "problem" | "solution" | "accent" | "plain";
+}) {
+  const gradients: Record<string, string> = {
+    problem: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)`,
+    solution: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)`,
+    accent: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)`,
+    plain: `linear-gradient(90deg, #fff, #fff)`,
+  };
+  return (
+    <div className="mx-auto max-w-[1200px] px-5 pb-5 text-center md:text-left">
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-[11px] uppercase tracking-wider text-white/60"
+      >
+        {kicker}
+      </motion.div>
+      <div className="relative inline-block">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-x-6 -inset-y-2 opacity-25 blur-xl md:blur-2xl"
+          style={{
+            background: `radial-gradient(50% 60% at 50% 55%, rgba(255,255,255,.45) 0%, rgba(247,147,30,.28) 40%, transparent 65%), radial-gradient(90% 120% at 50% 50%, rgba(28,62,94,.18) 0%, transparent 60%)`,
+          }}
+        />
+        <motion.h2
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative mt-1 text-[26px] font-black sm:text-[30px] md:text-[36px]"
+        >
+          <span
+            className="bg-clip-text text-transparent"
+            style={{ backgroundImage: gradients[tone] }}
+          >
+            {title}
+          </span>
+        </motion.h2>
+      </div>
+      <div
+        className="mt-2 h-[3px] w-24 rounded-full"
+        style={{
+          backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, transparent)`,
+        }}
+      />
     </div>
   );
 }
 
-const FEATURES = [
-  {
-    title: "Link di pagamento su misura",
-    icon: "🔗",
-    body: "Paylink collegato ai tuoi listini e alle tue regole: puoi differenziare per Paese, zona, evento o periodo dell’anno.",
-  },
-  {
-    title: "Dati spedizione completi",
-    icon: "📦",
-    body: "Indirizzo, telefono, email, note di consegna, eventuale documento d’identità e dichiarazioni richieste dal Paese di destinazione.",
-  },
-  {
-    title: "MRN e compliance export",
-    icon: "📑",
-    body: "SPST si occupa di MRN e documenti export, integrando le regole doganali nel flusso operativo senza impattare sulla cantina.",
-  },
-  {
-    title: "Ritiro in cantina programmato",
-    icon: "🚚",
-    body: "Organizziamo il ritiro direttamente presso la cantina, con finestre orarie e istruzioni chiare su imballo e colli.",
-  },
-  {
-    title: "Door-to-door enoturista",
-    icon: "🏡",
-    body: "Il cliente riceve il vino a casa sua, con tracking aggiornato e supporto per eventuali dubbi su tempi e procedure.",
-  },
-  {
-    title: "Supporto SPST dedicato",
-    icon: "🧩",
-    body: "Non solo tecnologia: c’è un team che conosce logistica vino, accise, dogane e problemi reali delle cantine.",
-  },
-];
-
-function TagCard({ label, body }: { label: string; body: string }) {
+function Card({
+  title,
+  text,
+  icon,
+}: {
+  title: string;
+  text: string;
+  icon?: React.ReactNode;
+}) {
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-4">
-      <p className="text-sm font-semibold">{label}</p>
-      <p className="text-xs text-white/70">{body}</p>
+    <motion.div
+      initial={{ y: 18, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true, amount: 0.6 }}
+      transition={{ duration: 0.4 }}
+      className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+    >
+      {icon && (
+        <div className="mb-2 grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/90">
+          {icon}
+        </div>
+      )}
+      <h3 className="text-[1.1rem] font-extrabold text-white">{title}</h3>
+      <p className="text-[0.98rem] text-white/80">{text}</p>
+    </motion.div>
+  );
+}
+
+function HighlightPill({
+  children,
+  icon,
+}: {
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-left text-xs font-semibold text-white/80 shadow">
+      {icon && <span>{icon}</span>}
+      <span className="whitespace-normal">{children}</span>
     </div>
   );
 }
 
-function MockupPaylinkHero() {
+/** Hero iPhone mockup in stile SPST */
+function HeroPaylinkMockup() {
   return (
-    <div className="relative mx-auto max-w-sm">
-      {/* bagliore dietro */}
-      <div className="absolute inset-0 translate-y-6 scale-110 rounded-[2.5rem] bg-gradient-to-br from-[#F7921E33] via-[#F7921E11] to-transparent blur-3xl" />
+    <div className="relative mx-auto aspect-[9/16] w-64 sm:w-72 md:w-80">
+      {/* glow dietro */}
+      <div
+        className="absolute inset-[-15%] rounded-[2.5rem] blur-3xl opacity-60"
+        style={{
+          background: `radial-gradient(60% 60% at 50% 20%, ${SPST_ORANGE}44, transparent 70%)`,
+        }}
+      />
       {/* telefono */}
-      <div className="relative z-10 rounded-[2.5rem] border border-white/10 bg-[#050910] p-4 shadow-2xl shadow-black/60">
+      <div className="relative z-10 h-full w-full rounded-[2.5rem] border border-white/15 bg-[#050910] p-4 shadow-2xl shadow-black/50">
         {/* notch */}
-        <div className="mx-auto mb-4 h-1.5 w-24 rounded-full bg-white/10" />
+        <div className="mx-auto mb-4 h-1.5 w-20 rounded-full bg-white/15" />
 
         {/* header app */}
-        <div className="flex items-center justify-between text-xs text-white/60">
-          <span className="text-[11px] uppercase tracking-[0.22em]">
-            SPST PAYLINK
-          </span>
-          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px]">
-            Enoturismo
+        <div className="flex items-center justify-between text-[10px] text-white/65">
+          <span className="uppercase tracking-[0.22em]">SPST PAYLINK</span>
+          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[9px]">
+            USA shipping
           </span>
         </div>
 
         {/* card riepilogo */}
-        <div className="mt-4 space-y-3 rounded-2xl bg-gradient-to-br from-white/10 to-white/[0.02] p-3">
+        <div className="mt-4 space-y-3 rounded-2xl bg-gradient-to-br from-white/12 to-white/[0.03] p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.18em] text-white/60">
-                Spedizione vino
+              <p className="text-[10px] uppercase tracking-[0.16em] text-white/60">
+                Spedizione vino da
               </p>
-              <p className="text-sm font-semibold">Cantina di Montalcino</p>
+              <p className="text-[13px] font-semibold">Cantina in Toscana</p>
             </div>
-            <p className="text-right text-xs">
-              <span className="text-[10px] text-white/55">Totale</span>
+            <p className="text-right text-[11px]">
+              <span className="text-[9px] text-white/55">Totale</span>
               <br />
               <span className="text-sm font-semibold text-white">
-                189,00 €
+                189,00 $
               </span>
             </p>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl bg-black/40 px-3 py-2">
-            <div className="text-[11px] text-white/70">
-              <p className="text-white/60">Destinazione</p>
-              <p className="font-medium text-white">Paris, France</p>
+          <div className="flex items-center justify-between rounded-xl bg-black/40 px-3 py-2 text-[10px]">
+            <div className="text-white/75">
+              <p className="text-white/55">Destinazione</p>
+              <p className="font-medium text-white">
+                New York, NY (United States)
+              </p>
             </div>
-            <div className="text-[11px] text-white/70">
-              <p className="text-white/60">Bottiglie</p>
-              <p className="font-medium text-white">18</p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 text-[9px] text-white/70">
+            <div>
+              <p className="text-white/55">Bottiglie</p>
+              <p className="font-semibold text-white">18</p>
+            </div>
+            <div>
+              <p className="text-white/55">Servizio</p>
+              <p className="font-semibold text-white">Door-to-door USA</p>
+            </div>
+            <div>
+              <p className="text-white/55">MRN</p>
+              <p className="font-semibold text-white">Generato da SPST</p>
             </div>
           </div>
         </div>
 
         {/* step form */}
-        <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-black/40 p-3 text-[11px]">
-          <p className="text-white/70">
-            1. Indirizzo di spedizione ✅
-          </p>
-          <p className="text-white/70">
-            2. Dati contatto & documento ✅
-          </p>
-          <p className="text-white/90">
-            3. Pagamento sicuro con carta
-          </p>
+        <div className="mt-4 space-y-2 rounded-2xl border border-white/12 bg-black/40 p-3 text-[10px]">
+          <p className="text-white/75">1. Indirizzo USA ✅</p>
+          <p className="text-white/75">2. Dati contatto & documento ✅</p>
+          <p className="text-white/90">3. Pagamento sicuro con carta</p>
         </div>
 
-        {/* bottone paga ora */}
+        {/* bottone */}
         <button
           type="button"
-          className="mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium text-[#0A1722]"
-          style={{ backgroundColor: "#F7921E" }}
+          className="mt-4 inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-[11px] font-semibold text-[#0a1722]"
+          style={{ background: SPST_ORANGE }}
         >
-          Paga e conferma spedizione
+          Paga e conferma spedizione USA
         </button>
 
-        {/* footer mini */}
-        <p className="mt-3 text-center text-[10px] text-white/45">
-          MRN, export e ritiro in cantina gestiti da SPST.
+        <p className="mt-3 text-center text-[9px] text-white/45">
+          Solo spedizioni verso Stati Uniti. MRN e ritiro in cantina gestiti da
+          SPST.
         </p>
       </div>
     </div>
