@@ -13,8 +13,8 @@ import {
   FileCheck2,
   MessageCircle,
 } from "lucide-react";
-import { SpstHeader } from "@/components/spst/SpstHeader";
-import { SpstFooter } from "@/components/spst/SpstFooter";
+import { SpstHeader } from "../../components/spst/SpstHeader";
+import { SpstFooter } from "../../components/spst/SpstFooter";
 
 const SPST_BLUE = "#0a1722";
 const SPST_BLUE_SOFT = "#1c3e5e";
