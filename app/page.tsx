@@ -15,8 +15,8 @@ import {
   TrendingUp,
 } from 'lucide-react';
 
-import { SpstHeader } from '@/components/spst/SpstHeader';
-import { SpstFooter } from '@/components/spst/SpstFooter';
+import { SpstHeader } from "../../components/spst/SpstHeader";
+import { SpstFooter } from "../../components/spst/SpstFooter";
 import { SpstPaylinkHighlight } from '@/components/spst/SpstPaylinkHighlight';
 
 const SPST_BLUE = '#0a1722';
