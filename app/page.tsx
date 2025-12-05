@@ -18,7 +18,7 @@ import {
 import { SpstHeader } from "../components/spst/SpstHeader";
 import { SpstFooter } from "../components/spst/SpstFooter";
 import { SpstPaylinkHighlight } from "../components/spst/SpstPaylinkHighlight";
-import { SPST_PUBLIC_BG } from "@/lib/spstTheme"; // 👈 nuovo import
+import { SPST_PUBLIC_BG } from "../lib/spstTheme"; // 👈 nuovo import
 
 const SPST_BLUE = "#0a1722";
 const SPST_BLUE_SOFT = "#1c3e5e";
