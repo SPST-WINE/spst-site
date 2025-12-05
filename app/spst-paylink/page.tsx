@@ -1,4 +1,3 @@
-// app/spst-paylink/page.tsx
 "use client";
 
 import React from "react";
@@ -13,8 +12,9 @@ import {
   FileCheck2,
   MessageCircle,
 } from "lucide-react";
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
+import { SpstHeader } from "../components/spst/SpstHeader";
+import { SpstFooter } from "../components/spst/SpstFooter";
+import { SPST_PUBLIC_BG } from "../lib/spstTheme"; // 👈 nuovo import
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
@@ -23,10 +23,7 @@ export default function SpstPaylinkPage() {
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background:
-          "radial-gradient(140% 140% at 50% -10%, #152b46 0%, #050b13 55%, #020308 140%)",
-      }}
+      style={{ background: SPST_PUBLIC_BG }} // 👈 gradient centralizzato
     >
       <SpstHeader />
 
@@ -276,7 +273,7 @@ export default function SpstPaylinkPage() {
                 Scrivi a info@spst.it
               </a>
               <a
-                className="w-full rounded-full border border-white/70 px-4 py-2 text-center text-sm font-bold text-white ring-white/30 transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/10 hover:ring-2 active:translate-y-[1px]"
+                className="w-full rounded-full border border-white/70 px-4 py-2 text-center text-sm font-bold text-white ring-white/30 transition-all duration-200 hover:-translate-y-[1px] hover:bg:white/10 hover:bg-white/10 hover:ring-2 active:translate-y-[1px]"
                 href="https://wa.me/393201441789"
               >
                 Parla su WhatsApp con SPST
@@ -401,13 +398,12 @@ function HeroPaylinkMockup() {
 
         {/* schermo con screenshot reale */}
         <div className="relative h-[calc(100%-1.75rem)] w-full overflow-hidden rounded-[1.9rem] bg-black/80">
-          {/* QUI: carica in /public uno screenshot (es. paylink-usa-checkout.png) della pagina usa-shipping-pay */}
-        <img
-  src="/paylink-usa-checkout.png"
-  alt="Schermata di checkout SPST Paylink USA"
-  className="h-full w-full object-cover translate-y-[24px] scale-[1.06]"
-  style={{ objectPosition: "top" }}
-/>
+          <img
+            src="/paylink-usa-checkout.png"
+            alt="Schermata di checkout SPST Paylink USA"
+            className="h-full w-full translate-y-[24px] scale-[1.06] object-cover"
+            style={{ objectPosition: "top" }}
+          />
         </div>
       </div>
     </div>
