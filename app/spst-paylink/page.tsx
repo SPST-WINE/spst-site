@@ -58,7 +58,7 @@ export default function SpstPaylinkPage() {
           <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              SPST Paylink · Solo turisti americani
+              SPST Paylink · Spedire in USA è diventato facile
             </span>
             <h1 className="mt-3 text-[30px] font-black leading-[1.08] sm:text-[36px] md:text-[50px]">
               Dalla tua cantina
