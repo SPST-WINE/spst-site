@@ -12,47 +12,34 @@ type NavItem = {
   label: string;
 };
 
-const DEFAULT_NAV: NavItem[] = [
-  { href: "#funziona", label: "Come funziona" },
-  { href: "#servizi", label: "Servizi" },
-  { href: "#chi", label: "Clienti" },
-  { href: "#vantaggi", label: "Perché SPST" },
+const NAV_ITEMS: NavItem[] = [
+  { href: "/", label: "Home" },
+  { href: "/servizi-e-contatti", label: "Servizi" },
+  { href: "/#vantaggi", label: "Perché SPST" },
+  { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
+  { href: "/spst-paylink", label: "Paylink USA" },
 ];
 
-export function SpstHeader({
-  navItems = DEFAULT_NAV,
-  showWineConnect = true,
-}: {
-  navItems?: NavItem[];
-  showWineConnect?: boolean;
-}) {
+export function SpstHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/30">
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-5">
         <a href="/" className="flex items-center gap-2 font-extrabold text-white">
           <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
           <span className="hidden sm:inline">SPST</span>
         </a>
 
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-3 text-[0.95rem] font-semibold md:flex">
-          {navItems.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <a
-              key={item.href + item.label}
+              key={item.href}
               href={item.href}
-              className="rounded-lg px-2 py-1 transition-colors hover:bg-white/5"
+              className="rounded-lg px-2 py-1 text-white/85 transition-colors hover:bg-white/6 hover:text-white"
             >
               {item.label}
             </a>
           ))}
-
-          {showWineConnect && (
-            <a
-              href="https://www.wearewineconnect.com"
-              className="rounded-lg px-2 py-1 transition-colors hover:bg-white/5"
-            >
-              Wine Connect
-            </a>
-          )}
 
           <a
             href="https://app.spst.it/login"
@@ -62,12 +49,12 @@ export function SpstHeader({
           </a>
         </nav>
 
-        {/* CTA compatta per mobile */}
+        {/* CTA mobile rapida */}
         <a
-          href="#contatti"
+          href="/portale-quotazioni"
           className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] px-3 py-2 text-sm font-bold text-black ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:ring-2 active:translate-y-[1px] md:hidden"
         >
-          Contatti
+          Preventivo
         </a>
       </div>
     </header>
