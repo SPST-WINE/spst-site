@@ -1,68 +1,110 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
 
-export function SpstHeader() {
+export function SpstHeader({
+  navItems,
+}: {
+  navItems: { href: string; label: string }[];
+}) {
+  const [open, setOpen] = useState(false);
+
   return (
-    // HEADER IDENTICO A QUELLO DEL PORTALE QUOTAZIONI
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-      <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
-        {/* LOGO + BRAND */}
-        <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-          <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-          <span className="hidden sm:inline">SPST</span>
-        </a>
+    <>
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+        <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
+          {/* LOGO */}
+          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
+            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
+            <span className="hidden sm:inline">SPST</span>
+          </a>
 
-        {/* NAV DESKTOP */}
-        <nav className="hidden md:flex items-center gap-3 text-[0.95rem] font-semibold">
-          {[
-            ["/#funziona", "Come funziona"],
-            ["/#servizi", "Servizi"],
-            ["/#chi", "Clienti"],
-            ["/#vantaggi", "Perché SPST"],
-          ].map(([href, label]) => (
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex items-center gap-5 text-[0.95rem] font-semibold">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+
+            {/* AREA RISERVATA (desktop) */}
             <a
-              key={href as string}
-              href={href as string}
-              className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+              href="https://app.spst.it/login"
+              className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
-              {label}
+              Area Riservata
             </a>
-          ))}
+          </nav>
 
-          <a
-            href="/servizi-e-contatti"
-            className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-          >
-            Contatti
-          </a>
+          {/* MOBILE CTA + MENU BUTTON */}
+          <div className="md:hidden flex items-center gap-3">
+            <button
+              onClick={() => setOpen(true)}
+              className="p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <Menu className="text-white h-6 w-6" />
+            </button>
+          </div>
+        </div>
+      </header>
 
-          <a
-            href="https://www.spst.it/wine-connect-cantina"
-            className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-          >
-            Wine Connect
-          </a>
+      {/* MOBILE MENU OVERLAY */}
+      {open && (
+        <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm">
+          <div className="absolute top-0 right-0 h-full w-[78%] max-w-[300px] bg-[#0a1722] border-l border-white/10 p-6 flex flex-col gap-6 shadow-xl">
 
-          <a
-            href="https://app.spst.it/login"
-            className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-          >
-            Area Riservata
-          </a>
-        </nav>
+            {/* CLOSE BUTTON */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute right-4 top-4 p-2 rounded-lg hover:bg-white/10"
+            >
+              <X className="text-white w-6 h-6" />
+            </button>
 
-        {/* CTA MOBILE */}
-        <a
-          href="/portale-quotazioni"
-          className="md:hidden inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-3 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-        >
-          Richiedi
-        </a>
-      </div>
-    </header>
+            {/* LOGO MOBILE */}
+            <a
+              href="/"
+              className="flex items-center gap-2 text-white font-extrabold mt-2"
+              onClick={() => setOpen(false)}
+            >
+              <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
+              SPST
+            </a>
+
+            {/* MOBILE NAV LINKS */}
+            <nav className="flex flex-col gap-4 mt-6 text-white/90">
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="text-[1.05rem] font-semibold hover:text-white transition"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+
+            {/* AREA RISERVATA (mobile) */}
+            <a
+              href="https://app.spst.it/login"
+              onClick={() => setOpen(false)}
+              className="mt-auto inline-flex items-center justify-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold text-[1rem] transition-all hover:-translate-y-[1px] hover:ring-2 ring-orange-300/50"
+            >
+              Area Riservata
+            </a>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
