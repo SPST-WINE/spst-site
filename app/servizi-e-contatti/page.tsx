@@ -16,6 +16,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 
+import { SpstHeader } from "@/components/spst/SpstHeader";
+
 // Brand palette
 const SPST_BLUE = "#0a1722"; // base blu scuro (sfondo)
 const SPST_BLUE_SOFT = "#1c3e5e"; // accenti
@@ -32,15 +34,24 @@ export default function ServiziContatti() {
         console.assert(typeof f.q === "string" && f.q.length > 0, `FAQ[${i}].q mancante`);
         console.assert(typeof f.a === "string" && f.a.length > 0, `FAQ[${i}].a mancante`);
       });
-      const acciseFaq = FAQS.find((f) => /accise|e‑DAS/i.test(f.q + f.a));
+      const acciseFaq = FAQS.find((f) => /accise|e-DAS/i.test(f.q + f.a));
       console.assert(
-        acciseFaq && /e‑DAS/.test(acciseFaq.a),
-        "La FAQ su accise/e‑DAS deve contenere 'e‑DAS' ed essere una stringa chiusa"
+        acciseFaq && /e-DAS/.test(acciseFaq.a),
+        "La FAQ su accise/e-DAS deve contenere 'e-DAS' ed essere una stringa chiusa"
       );
     } catch (e) {
       console.error("Dev checks FAQS falliti:", e);
     }
   }
+
+  // Nav coerente con la homepage (senza Wine Connect)
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/#servizi", label: "Servizi" },
+    { href: "/#vantaggi", label: "Perché SPST" },
+    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
+    { href: "/spst-paylink", label: "Paylink USA" },
+  ];
 
   return (
     <main
@@ -50,49 +61,8 @@ export default function ServiziContatti() {
           "radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)",
       }}
     >
-      {/* ===== STICKY HEADER (identico alla homepage) ===== */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-        <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-          <nav className="hidden md:flex items-center gap-3 text-[0.95rem] font-semibold">
-            {[
-              ["/#funziona", "Come funziona"],
-              ["/#servizi", "Servizi"],
-              ["/#chi", "Clienti"],
-              ["/#vantaggi", "Perché SPST"],
-            ].map(([href, label]) => (
-              <a
-                key={href}
-                href={href}
-                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-              >
-                {label}
-              </a>
-            ))}
-            <a
-              href="https://www.spst.it/wine-connect-cantina"
-              className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-            >
-              Wine Connect
-            </a>
-            <a
-              href="https://app.spst.it/login"
-              className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-            >
-              Area Riservata
-            </a>
-          </nav>
-          <a
-            href="#contatti"
-            className="md:hidden inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-3 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-          >
-            Contatti
-          </a>
-        </div>
-      </header>
+      {/* ===== HEADER RIUSABILE (identico alla homepage) ===== */}
+      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO (senza logo grande) ===== */}
       <section className="relative overflow-hidden">
@@ -121,7 +91,7 @@ export default function ServiziContatti() {
         <div className="mx-auto max-w-[1200px] px-5 pt-10 md:pt-16 pb-12">
           <div className="text-center md:text-left">
             <span className="inline-block text-xs tracking-wider uppercase text-white/70">
-              Export vino all‑in‑one
+              Export vino all-in-one
             </span>
             <h1 className="mt-2 text-[34px] sm:text-[40px] md:text-[54px] font-black leading-[1.03]">
               Servizi e contatti
@@ -131,13 +101,13 @@ export default function ServiziContatti() {
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                tutto quello che ti serve per spedire e vendere
+                tutto quello che ti serve per spedire in sicurezza
               </span>
             </h1>
             <p className="mt-3 text-white/85 text-[15px] sm:text-base max-w-[60ch] mx-auto md:mx-0">
               Documenti doganali e fiscali, spedizioni express o pallet, deposito e
-              rappresentanza, più supporto commerciale con <strong>Wine Connect</strong>.
-              Un unico partner dall’Italia ai tuoi buyer.
+              rappresentanza, più supporto operativo per strutturare i tuoi flussi export.
+              Un unico partner logistico dall&apos;Italia ai tuoi clienti nel mondo.
             </p>
             <div className="mt-5 flex flex-wrap gap-3 justify-center md:justify-start">
               <a
@@ -170,22 +140,22 @@ export default function ServiziContatti() {
         <div className="mx-auto max-w-[1200px] px-5 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           <Card
             title="Logistica & Spedizioni"
-            text="Express, campionature e pallet in Europa e USA. Consolidamenti e soluzioni temperature‑safe."
+            text="Express, campionature e pallet in Europa, UK, USA e altri mercati. Trasporto via corriere, camion, nave e aereo."
             icon={<Ship className="h-5 w-5" />}
           />
           <Card
             title="Dogana & Fisco"
-            text="Accisa assolta/sospesa, COLA, Prior Notice, e‑DAS. Documenti generati e archiviati in modo smart."
+            text="Accisa assolta/sospesa, COLA, Prior Notice, e-DAS. Documenti generati, verificati e archiviati in modo strutturato."
             icon={<FileCheck2 className="h-5 w-5" />}
           />
           <Card
             title="Deposito & Rappresentanza"
-            text="Stoccaggio e rappresentanza fiscale per semplificare la vendita nei diversi Paesi."
+            text="Stoccaggio, operazioni di consolidamento e rappresentanza fiscale per semplificare vendite e riordini nei diversi Paesi."
             icon={<Warehouse className="h-5 w-5" />}
           />
           <Card
-            title="Wine Connect"
-            text="Matchmaking cantine‑buyer, onboarding, KPI e supporto commerciale per entrare in nuovi mercati."
+            title="Sviluppo mercati esteri"
+            text="Supporto operativo su listini, Incoterm, strategie di spedizione e organizzazione dei flussi export verso nuovi mercati."
             icon={<Globe2 className="h-5 w-5" />}
           />
         </div>
@@ -201,17 +171,17 @@ export default function ServiziContatti() {
         <div className="mx-auto max-w-[1200px] px-5 grid gap-4 md:grid-cols-3">
           <Card
             title="1) Documenti a norma"
-            text="Accise, COLA, Prior Notice, e‑DAS e tutta la parte burocratica per partire in regola."
+            text="Accise, COLA, Prior Notice, e-DAS e tutta la parte burocratica per partire in regola nei diversi Paesi."
             icon={<FileCheck2 className="h-5 w-5" />}
           />
           <Card
             title="2) Spedizione ottimizzata"
-            text="Selezioniamo corrieri e tratte migliori (express o pallet) con tracking e assistenza dedicata."
+            text="Selezioniamo corrieri, vettori e tratte migliori (express, camion, aereo o nave) con tracking e assistenza dedicata."
             icon={<Route className="h-5 w-5" />}
           />
           <Card
-            title="3) Crescita commerciale"
-            text="Con Wine Connect colleghiamo cantine e buyer esteri. Campionature e ordini rapidi e sicuri."
+            title="3) Flussi export stabili"
+            text="Analizziamo volumi, frequenze e mercati per strutturare spedizioni ricorrenti e ridurre costi e complessità nel tempo."
             icon={<ShieldCheck className="h-5 w-5" />}
           />
         </div>
@@ -332,23 +302,23 @@ export default function ServiziContatti() {
 const FAQS = [
   {
     q: "Spedite solo vino?",
-    a: "Sì, siamo specializzati nel vino (B2B e campionature). Possiamo gestire anche prodotti correlati (es. olio) previo check di conformità.",
+    a: "Sì, siamo specializzati nel vino (B2B e campionature). Possiamo gestire anche prodotti correlati come olio o altri alcolici, previo controllo di conformità e requisiti doganali.",
   },
   {
-    q: "Come gestite accise ed e‑DAS?",
-    a: "Produciamo e archiviamo la documentazione necessaria (accisa assolta/sospesa, e‑DAS, COLA, Prior Notice) e verifichiamo HS code e requisiti per Paese di destinazione.",
+    q: "Come gestite accise ed e-DAS?",
+    a: "Produciamo e archiviamo la documentazione necessaria (accisa assolta/sospesa, e-DAS, COLA, Prior Notice) e verifichiamo HS code e requisiti del Paese di destinazione, coordinandoci con cantina e destinatario.",
   },
   {
     q: "Posso inviare campionature?",
-    a: "Sì. Usiamo corrieri espressi con tempi rapidi e tracciamento. Offriamo anche soluzioni a temperatura controllata quando necessario.",
+    a: "Sì. Utilizziamo corrieri espressi con tempi rapidi e tracciamento, e quando necessario possiamo prevedere soluzioni a temperatura controllata o imballaggi rinforzati.",
   },
   {
-    q: "Fornite supporto commerciale?",
-    a: "Con Wine Connect creiamo il match tra cantine e buyer, standardizziamo le campionature e misuriamo KPI per accelerare i primi ordini.",
+    q: "Offrite supporto sul piano export?",
+    a: "Possiamo affiancarvi nella scelta degli Incoterm, nella definizione delle modalità di spedizione (express, groupage pallet, aereo, mare) e nell’organizzazione dei flussi ricorrenti verso i mercati esteri che vi interessano.",
   },
   {
-    q: "Che Paesi coprite?",
-    a: "EU, UK (solo vino, no cibo/medicine), USA e alcuni mercati extra‑UE in espansione. Verifichiamo fattibilità caso per caso.",
+    q: "Che Paesi e modalità di trasporto coprite?",
+    a: "Gestiamo spedizioni di vino in tutta l’Unione Europea, UK (solo vino, no cibo/medicine), USA e diversi mercati extra-UE. Possiamo operare tramite corrieri espressi, camion (groupage o pallet interi), spedizioni via nave e via aereo, valutando caso per caso la soluzione più adatta.",
   },
 ];
 
