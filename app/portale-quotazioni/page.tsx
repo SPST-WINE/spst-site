@@ -16,7 +16,7 @@ import {
   Phone,
 } from "lucide-react";
 
-import { SpstHeader } from "../components/spst/SpstHeader";
+import { SpstHeader } from "../../components/spst/SpstHeader";
 
 // Brand palette coerente
 const SPST_BLUE = "#0a1722";
