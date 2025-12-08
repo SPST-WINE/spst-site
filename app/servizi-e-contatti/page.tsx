@@ -47,7 +47,7 @@ export default function ServiziContatti() {
   // Nav coerente con la homepage (senza Wine Connect)
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/#servizi", label: "Servizi" },
+    { href: "/servizi-e-contatti", label: "Servizi" },
     { href: "/#vantaggi", label: "Perché SPST" },
     { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
     { href: "/spst-paylink", label: "Paylink USA" },
