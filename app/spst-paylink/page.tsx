@@ -21,7 +21,7 @@ const SPST_ORANGE = "#f7931e";
 
 const navItems = [
   { href: "/", label: "Home" },
-  { href: "/#servizi", label: "Servizi" },
+  { href: "/servizi-e-contatti", label: "Servizi" },
   { href: "/#vantaggi", label: "Perché SPST" },
   { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
   { href: "/spst-paylink", label: "Paylink USA" },
