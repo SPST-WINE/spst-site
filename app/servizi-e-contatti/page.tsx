@@ -16,7 +16,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import { SpstHeader } from "@/components/spst/SpstHeader";
+import { SpstHeader } from "../../components/spst/SpstHeader";
 
 // Brand palette
 const SPST_BLUE = "#0a1722"; // base blu scuro (sfondo)
