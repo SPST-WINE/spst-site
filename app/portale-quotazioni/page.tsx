@@ -16,6 +16,8 @@ import {
   Phone,
 } from "lucide-react";
 
+import { SpstHeader } from "@/components/spst/SpstHeader";
+
 // Brand palette coerente
 const SPST_BLUE = "#0a1722";
 const SPST_BLUE_SOFT = "#1c3e5e";
@@ -41,7 +43,11 @@ function useToast() {
   }
   return { toast, show };
 }
-function Toast({ toast }: { toast: { message: string; variant: ToastVariant } | null }) {
+function Toast({
+  toast,
+}: {
+  toast: { message: string; variant: ToastVariant } | null;
+}) {
   if (!toast) return null;
   const ring =
     toast.variant === "success"
@@ -63,6 +69,27 @@ function Toast({ toast }: { toast: { message: string; variant: ToastVariant } | 
 export default function PortaleQuotazioni() {
   const { toast, show } = useToast();
 
+  // nav uguale alla home (senza Wine Connect)
+  const navItems = [
+    { href: "/", label: "Home" },
+    { href: "/#servizi", label: "Servizi" },
+    { href: "/#vantaggi", label: "Perché SPST" },
+    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
+    { href: "/spst-paylink", label: "Paylink USA" },
+  ];
+
+  // collego il bridge dei toast (evento custom -> hook)
+  useEffect(() => {
+    const handler = (e: any) => {
+      const { msg, v } = e.detail || {};
+      if (msg) {
+        show(msg, v || "success");
+      }
+    };
+    window.addEventListener("spst:toast", handler);
+    return () => window.removeEventListener("spst:toast", handler);
+  }, [show]);
+
   // Smoke test veloce per prevenire regressioni
   useEffect(() => {
     const ex = volumetricKg4000(40, 30, 35); // 40*30*35/4000 = 10.5
@@ -77,55 +104,8 @@ export default function PortaleQuotazioni() {
           "radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)",
       }}
     >
-      {/* ===== STICKY HEADER (identico alla home) ===== */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-        <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-          <nav className="hidden md:flex items-center gap-3 text-[0.95rem] font-semibold">
-            {[
-              ["/#funziona", "Come funziona"],
-              ["/#servizi", "Servizi"],
-              ["/#chi", "Clienti"],
-              ["/#vantaggi", "Perché SPST"],
-            ].map(([href, label]) => (
-              <a
-                key={href}
-                href={href}
-                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-              >
-                {label}
-              </a>
-            ))}
-            <a
-              href="/servizi-e-contatti"
-              className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-            >
-              Contatti
-            </a>
-            <a
-              href="https://www.spst.it/wine-connect-cantina"
-              className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
-            >
-              Wine Connect
-            </a>
-            <a
-              href="https://app.spst.it/login"
-              className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-            >
-              Area Riservata
-            </a>
-          </nav>
-          <a
-            href="#quote"
-            className="md:hidden inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-3 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-          >
-            Richiedi
-          </a>
-        </div>
-      </header>
+      {/* ===== HEADER RIUSABILE (come home) ===== */}
+      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
@@ -187,10 +167,12 @@ export default function PortaleQuotazioni() {
                 controllata.
               </InfoRow>
               <InfoRow icon={<FileCheck2 className="h-5 w-5" />} title="Documenti & accise">
-                Possiamo gestire pratiche accise, COLA, Prior Notice e assistenza doganale.
+                Possiamo gestire pratiche accise, COLA, Prior Notice e assistenza
+                doganale.
               </InfoRow>
               <InfoRow icon={<Rocket className="h-5 w-5" />} title="Express opzionale">
-                Spunta &quot;Spedizione express&quot; per priorità e transit time più rapidi.
+                Spunta &quot;Spedizione express&quot; per priorità e transit time più
+                rapidi.
               </InfoRow>
               <InfoRow icon={<ShieldCheck className="h-5 w-5" />} title="Assicurazione">
                 Facoltativa, consigliata per spedizioni di valore o campionature urgenti.
@@ -321,25 +303,6 @@ function ContactFields() {
 
 function QuoteDetailsForm() {
   const [submitting, setSubmitting] = useState(false);
-  const [toastApi] = useState(() => {
-    // micro bus per mostrare toast dal form
-    return {
-      show: (msg: string, v?: "success" | "error" | "info") => {
-        const ev = new CustomEvent("spst:toast", { detail: { msg, v } });
-        window.dispatchEvent(ev);
-      },
-    };
-  });
-
-  // Bridge con Toast in top-level
-  useEffect(() => {
-    const handler = (e: any) => {
-      const { msg, v } = e.detail || {};
-      // re-inoltro: in questa page usiamo il hook locale in parent
-    };
-    window.addEventListener("spst:toast", handler);
-    return () => window.removeEventListener("spst:toast", handler);
-  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // blocca navigazione
@@ -357,21 +320,29 @@ function QuoteDetailsForm() {
       const json = await res.json();
 
       if (json.ok) {
-        // toast globale
         const ev = new CustomEvent("spst:toast", {
-          detail: { msg: "Richiesta inviata! Ti contatteremo a breve.", v: "success" },
+          detail: {
+            msg: "Richiesta inviata! Ti contatteremo a breve.",
+            v: "success",
+          },
         });
         window.dispatchEvent(ev);
         form.reset();
       } else {
         const ev = new CustomEvent("spst:toast", {
-          detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
+          detail: {
+            msg: `Errore invio: ${json.error || "riprovare"}`,
+            v: "error",
+          },
         });
         window.dispatchEvent(ev);
       }
     } catch (err: any) {
       const ev = new CustomEvent("spst:toast", {
-        detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
+        detail: {
+          msg: `Errore invio: ${err?.message || "riprovare"}`,
+          v: "error",
+        },
       });
       window.dispatchEvent(ev);
     } finally {
@@ -382,7 +353,13 @@ function QuoteDetailsForm() {
   return (
     <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4" noValidate>
       {/* Honeypot + ts */}
-      <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="hidden" />
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+      />
       <input type="hidden" name="_ts" value={String(Date.now())} />
 
       {/* Origine/Destinazione */}
@@ -494,12 +471,36 @@ function QuoteDetailsForm() {
       <fieldset className="rounded-2xl p-4 border border-white/10 bg-white/[0.03]">
         <legend className="text-[12px] px-2 text-white/60">Preferenze</legend>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <Check name="express" label="Spedizione express" icon={<Rocket className="h-4 w-4" />} />
-          <Check name="accise" label="Pratica accise" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />
-          <Check name="cola" label="COLA / Prior Notice (USA)" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="temp" label="Temperatura controllata" icon={<Thermometer className="h-4 w-4" />} />
-          <Check name="assicurazione" label="Assicurazione" icon={<ShieldCheck className="h-4 w-4" />} />
+          <Check
+            name="express"
+            label="Spedizione express"
+            icon={<Rocket className="h-4 w-4" />}
+          />
+          <Check
+            name="accise"
+            label="Pratica accise"
+            icon={<FileCheck2 className="h-4 w-4" />}
+          />
+          <Check
+            name="dogana"
+            label="Assistenza doganale"
+            icon={<ShieldCheck className="h-4 w-4" />}
+          />
+          <Check
+            name="cola"
+            label="COLA / Prior Notice (USA)"
+            icon={<FileCheck2 className="h-4 w-4" />}
+          />
+          <Check
+            name="temp"
+            label="Temperatura controllata"
+            icon={<Thermometer className="h-4 w-4" />}
+          />
+          <Check
+            name="assicurazione"
+            label="Assicurazione"
+            icon={<ShieldCheck className="h-4 w-4" />}
+          />
         </div>
       </fieldset>
 
@@ -512,7 +513,9 @@ function QuoteDetailsForm() {
       >
         {submitting ? "Invio in corso..." : "Richiedi preventivo"}
       </motion.button>
-      <div className="text-[11px] text-white/50 text-center">Invio protetto. Nessuno spam.</div>
+      <div className="text-[11px] text-white/50 text-center">
+        Invio protetto. Nessuno spam.
+      </div>
     </form>
   );
 }
@@ -541,7 +544,13 @@ function VolumetricHelper() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="group grid gap-1">
       <div className="text-[11px] text-white/60">{label}</div>
@@ -552,7 +561,15 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function Check({ name, label, icon }: { name: string; label: string; icon?: React.ReactNode }) {
+function Check({
+  name,
+  label,
+  icon,
+}: {
+  name: string;
+  label: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <label className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10 cursor-pointer select-none">
       <input type="checkbox" name={name} className="peer sr-only" />
