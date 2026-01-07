@@ -393,11 +393,12 @@ function HeroPaylinkMockup() {
     <div className="relative mx-auto aspect-[9/16] w-64 sm:w-72 md:w-80">
       {/* glow dietro */}
       <div
-        className="absolute inset-[-15%] rounded-[2.5rem] opacity-60 blur-3xl"
+        className="pointer-events-none absolute inset-[-15%] -z-10 rounded-[2.5rem] opacity-60 blur-3xl"
         style={{
           background: `radial-gradient(60% 60% at 50% 20%, ${SPST_ORANGE}44, transparent 70%)`,
         }}
       />
+
       {/* telefono */}
       <div className="relative z-10 h-full w-full rounded-[2.5rem] border border-white/15 bg-[#050910] p-3 shadow-2xl shadow-black/50">
         {/* notch */}
