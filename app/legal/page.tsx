@@ -11,6 +11,7 @@ import {
   Scale,
   RefreshCcw,
   Lock,
+  Ship,
 } from "lucide-react";
 
 import { SpstHeader } from "../../components/spst/SpstHeader";
