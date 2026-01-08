@@ -1,6 +1,7 @@
+// app/spst-paylink/page.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Plane,
@@ -16,6 +17,12 @@ import { SpstHeader } from "../../components/spst/SpstHeader";
 import { SpstFooter } from "../../components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
+
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
 
@@ -26,7 +33,54 @@ const navItems = [
   { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
   { href: "/spst-paylink", label: "Paylink USA" },
 ];
+
+const CHECKOUT_URL = "https://spst-operations.vercel.app/usa-shipping-pay";
+const WHATSAPP_URL = "https://wa.me/393201441789";
+
 export default function SpstPaylinkPage() {
+  // ---- Meta Pixel custom events (engaged view + WA intent) ----
+  useEffect(() => {
+    let engagedFired = false;
+
+    const t = setTimeout(() => {
+      if (engagedFired) return;
+      engagedFired = true;
+      window.fbq?.("trackCustom", "ViewPaylinkLanding", { engaged: true, sec: 8 });
+    }, 8000);
+
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const scrolled = doc.scrollTop || document.body.scrollTop || 0;
+      const height = doc.scrollHeight - doc.clientHeight;
+      if (height <= 0) return;
+
+      const pct = scrolled / height;
+      if (pct >= 0.5) {
+        if (!engagedFired) {
+          engagedFired = true;
+          window.fbq?.("trackCustom", "ViewPaylinkLanding", { engaged: true, scroll: 50 });
+        }
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const trackWhatsApp = () => {
+    window.fbq?.("trackCustom", "ClickWhatsApp", { source: "paylink_landing" });
+    window.fbq?.("track", "Lead");
+  };
+
+  const trackCheckout = () => {
+    window.fbq?.("trackCustom", "ClickCheckoutPreview", { source: "paylink_landing" });
+  };
+
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
@@ -86,6 +140,7 @@ export default function SpstPaylinkPage() {
               con indirizzo USA, integrato nell’operatività internazionale SPST.
             </p>
 
+            {/* HERO CTAs: CHANGE REQUEST ✅ */}
             <div className="mt-5 flex flex-wrap justify-center gap-3 md:justify-start">
               <a
                 href="#contatti"
@@ -94,12 +149,15 @@ export default function SpstPaylinkPage() {
               >
                 Attiva SPST Paylink
               </a>
+
+              {/* WhatsApp moved here (replaces "checkout" CTA) */}
               <a
-                href="https://spst-operations.vercel.app/usa-shipping-pay"
+                href={WHATSAPP_URL}
+                onClick={trackWhatsApp}
                 className="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30 active:translate-y-[1px]"
                 style={{ borderColor: `${SPST_ORANGE}55` }}
               >
-                Guarda la schermata di checkout
+                Parla su WhatsApp con SPST
               </a>
             </div>
           </div>
@@ -271,6 +329,8 @@ export default function SpstPaylinkPage() {
                 prezzi e processi.
               </p>
             </div>
+
+            {/* CTA buttons: CHANGE REQUEST ✅ */}
             <div className="flex w-full flex-col gap-3 md:w-auto">
               <a
                 className="w-full rounded-full px-4 py-2 text-center text-sm font-bold text-[#0f1720] ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
@@ -279,14 +339,20 @@ export default function SpstPaylinkPage() {
               >
                 Scrivi a info@spst.it
               </a>
+
+              {/* Checkout preview moved here (replaces WhatsApp in bottom CTA) */}
               <a
-                className="w-full rounded-full border border-white/70 px-4 py-2 text-center text-sm font-bold text-white ring-white/30 transition-all duration-200 hover:-translate-y-[1px] hover:bg:white/10 hover:bg-white/10 hover:ring-2 active:translate-y-[1px]"
-                href="https://wa.me/393201441789"
+                className="w-full rounded-full border border-white/70 px-4 py-2 text-center text-sm font-bold text-white ring-white/30 transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/10 hover:ring-2 active:translate-y-[1px]"
+                href={CHECKOUT_URL}
+                onClick={trackCheckout}
+                target="_blank"
+                rel="noreferrer"
               >
-                Parla su WhatsApp con SPST
+                Guarda la schermata di checkout
               </a>
             </div>
           </div>
+
           <div className="mt-3 text-center text-[12px] text-white/60">
             Nessun vincolo minimo iniziale: partiamo dai primi casi reali e
             cresciamo insieme.
