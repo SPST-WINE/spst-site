@@ -10,7 +10,12 @@
     "skipLibCheck": true,
     "noEmit": true,
     "strict": false,
-    "types": ["node", "react"]
+    "types": ["node", "react"],
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
