@@ -295,8 +295,8 @@ export default function BlogCampioniVinoUsaPage() {
               <ArticleCard id="collegati" icon={<LinkIcon className="h-5 w-5" />} title="Articoli collegati consigliati">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <RelatedLink
-                    href="/blog/spedire-vino-cliente-finale-usa"
-                    title="Come spedire vino al cliente finale negli Stati Uniti"
+                    href="/blog/spedire-vino-b2c-europa"
+                    title="Come spedire vino al cliente finale in Europa"
                     desc="Perché la spedizione diretta non è legale e qual è il modello corretto."
                   />
                   <RelatedLink
