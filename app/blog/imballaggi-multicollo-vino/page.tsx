@@ -9,7 +9,7 @@ import {
   AlertTriangle,
   PackageCheck,
   Truck,
-  Pallet,
+  Package, // ✅ FIX: lucide-react non esporta "Pallet"
   Table2,
   MessageCircle,
   ArrowRight,
@@ -127,7 +127,7 @@ export default function BlogImballaggiMulticolloVinoPage() {
               text="Nastratura, hub, rulli, cadute: qui l’imballo tecnico fa la differenza."
             />
             <MiniCard
-              icon={<Pallet className="h-5 w-5" />}
+              icon={<Package className="h-5 w-5" />} // ✅ FIX
               title="Pallet = unità stabile"
               text="Movimentazione meccanizzata e poca manipolazione del singolo cartone."
             />
@@ -271,7 +271,7 @@ export default function BlogImballaggiMulticolloVinoPage() {
 
               <ArticleCard
                 id="pallet"
-                icon={<Pallet className="h-5 w-5" />}
+                icon={<Package className="h-5 w-5" />} // ✅ FIX (ex Pallet)
                 title="5) Perché usare questi imballaggi sul pallet è inutile (e fa solo spendere di più)"
               >
                 <P>
@@ -281,7 +281,8 @@ export default function BlogImballaggiMulticolloVinoPage() {
                 </P>
 
                 <QuoteStrong>
-                  Usare imballaggi antiurto da multicollo su un pallet non aumenta la sicurezza: aumenta i costi e riduce efficienza.
+                  Usare imballaggi antiurto da multicollo su un pallet non aumenta la sicurezza:
+                  aumenta i costi e riduce efficienza.
                 </QuoteStrong>
 
                 <P className="m-0">
@@ -303,8 +304,8 @@ export default function BlogImballaggiMulticolloVinoPage() {
                 />
 
                 <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-[13px] text-white/75">
-                  Risultato: rotture nei pacchi, costi inutili sui bancali e discussioni su responsabilità/rimborsi.
-                  È l’opposto di ciò che andrebbe fatto.
+                  Risultato: rotture nei pacchi, costi inutili sui bancali e discussioni su
+                  responsabilità/rimborsi. È l’opposto di ciò che andrebbe fatto.
                 </div>
               </ArticleCard>
 
@@ -354,15 +355,17 @@ export default function BlogImballaggiMulticolloVinoPage() {
 
               <ArticleCard id="faq" icon={<LinkIcon className="h-5 w-5" />} title="FAQ">
                 <FaqItem q="Quindi sul pallet non serve mai un imballo “premium”?">
-                  Sul pallet conta la stabilità dell’unità: pallettizzazione, fissaggio, regge/film, protezioni angolari.
-                  Un antiurto da multicollo raramente aggiunge valore e spesso riduce efficienza (spazio/costi).
+                  Sul pallet conta la stabilità dell’unità: pallettizzazione, fissaggio, regge/film,
+                  protezioni angolari. Un antiurto da multicollo raramente aggiunge valore e spesso
+                  riduce efficienza (spazio/costi).
                 </FaqItem>
                 <FaqItem q="Nel multicollo basta un cartone doppia onda?">
-                  Aiuta, ma il punto chiave è bloccare la bottiglia e separare vetro-vetro.
-                  Gli inserti dedicati riducono drasticamente movimenti e urti.
+                  Aiuta, ma il punto chiave è bloccare la bottiglia e separare vetro-vetro. Gli
+                  inserti dedicati riducono drasticamente movimenti e urti.
                 </FaqItem>
                 <FaqItem q="Per spedizioni assicurate cosa cambia?">
-                  Spesso l’idoneità dell’imballo è un requisito essenziale: se l’imballo non è adeguato, le coperture/reclami possono diventare complicati.
+                  Spesso l’idoneità dell’imballo è un requisito essenziale: se l’imballo non è
+                  adeguato, le coperture/reclami possono diventare complicati.
                 </FaqItem>
               </ArticleCard>
             </div>
@@ -384,7 +387,8 @@ function CtaBox() {
         Vuoi un consiglio rapido sul tuo caso?
       </div>
       <div className="mt-2 text-sm text-white/80">
-        Dimmi: multicollo o pallet, quante bottiglie e destinazione. Ti diciamo subito l’imballo corretto.
+        Dimmi: multicollo o pallet, quante bottiglie e destinazione. Ti diciamo subito l’imballo
+        corretto.
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
@@ -410,11 +414,10 @@ function CtaBox() {
 function InlineCta() {
   return (
     <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-      <div className="text-sm font-semibold text-white/90">
-        Se fai multicollo, non improvvisare
-      </div>
+      <div className="text-sm font-semibold text-white/90">Se fai multicollo, non improvvisare</div>
       <div className="mt-1 text-[13px] text-white/75">
-        L’imballo idoneo riduce rotture e contestazioni. SPST può fornirlo su richiesta quando ha senso.
+        L’imballo idoneo riduce rotture e contestazioni. SPST può fornirlo su richiesta quando ha
+        senso.
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
@@ -432,11 +435,10 @@ function InlineCta() {
 function FinalCta() {
   return (
     <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-      <div className="text-sm font-semibold text-white/90">
-        Vuoi evitare rotture e costi inutili?
-      </div>
+      <div className="text-sm font-semibold text-white/90">Vuoi evitare rotture e costi inutili?</div>
       <div className="mt-1 text-[13px] text-white/75">
-        Scrivici: ti diciamo subito se serve imballo tecnico (multicollo) o se basta lavorare sulla pallettizzazione (pallet).
+        Scrivici: ti diciamo subito se serve imballo tecnico (multicollo) o se basta lavorare sulla
+        pallettizzazione (pallet).
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
@@ -530,18 +532,14 @@ function ArticleCard({
           />
         </div>
       </div>
-      <div className="mt-4 space-y-3 text-[14px] leading-relaxed text-white/80">
-        {children}
-      </div>
+      <div className="mt-4 space-y-3 text-[14px] leading-relaxed text-white/80">{children}</div>
     </section>
   );
 }
 
 function H4({ children }: { children: React.ReactNode }) {
   return (
-    <h4 className="pt-2 text-[13px] font-bold uppercase tracking-wider text-white/85">
-      {children}
-    </h4>
+    <h4 className="pt-2 text-[13px] font-bold uppercase tracking-wider text-white/85">{children}</h4>
   );
 }
 
@@ -563,10 +561,7 @@ function Quote({ children }: { children: React.ReactNode }) {
   return (
     <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-[13px] text-white/75">
       <div className="flex items-start gap-2">
-        <span
-          className="mt-0.5 h-2 w-2 rounded-full"
-          style={{ background: SPST_ORANGE }}
-        />
+        <span className="mt-0.5 h-2 w-2 rounded-full" style={{ background: SPST_ORANGE }} />
         <span>{children}</span>
       </div>
     </div>
