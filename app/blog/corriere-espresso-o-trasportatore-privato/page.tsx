@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   AlertTriangle,
   Boxes,
-  Pallet,
+  Layers,
   ArrowRight,
   MessageCircle,
   Info,
@@ -161,9 +161,15 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 </div>
                 <div className="mt-3 grid gap-2 text-sm">
                   <TocLink href="#due-mondi" label="1. Due mondi diversi" />
-                  <TocLink href="#espresso" label="2. Quando ha senso l’espresso" />
+                  <TocLink
+                    href="#espresso"
+                    label="2. Quando ha senso l’espresso"
+                  />
                   <TocLink href="#privato" label="3. Perché il privato è B2B" />
-                  <TocLink href="#movimentazione" label="4. Il fattore movimentazione" />
+                  <TocLink
+                    href="#movimentazione"
+                    label="4. Il fattore movimentazione"
+                  />
                   <TocLink href="#multicollo" label="5. Multicollo: zona grigia" />
                   <TocLink href="#pallet" label="6. Pallet: scelta naturale" />
                   <TocLink href="#tempi-rischi" label="7. Tempi vs rischi" />
@@ -251,7 +257,8 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 />
 
                 <Quote>
-                  Il corriere non distingue una bottiglia di vino da un altro pacco fragile, se non tramite l’imballo.
+                  Il corriere non distingue una bottiglia di vino da un altro
+                  pacco fragile, se non tramite l’imballo.
                 </Quote>
               </ArticleCard>
 
@@ -333,8 +340,9 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 title="5) Multicollo: la zona grigia"
               >
                 <P>
-                  “Sono solo 5–10 cartoni, vado di espresso” è spesso la scelta che genera più danni.
-                  È qui che l’imballaggio diventa cruciale e la decisione sbagliata si paga dopo.
+                  “Sono solo 5–10 cartoni, vado di espresso” è spesso la scelta
+                  che genera più danni. È qui che l’imballaggio diventa cruciale
+                  e la decisione sbagliata si paga dopo.
                 </P>
 
                 <List
@@ -351,12 +359,13 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
 
               <ArticleCard
                 id="pallet"
-                icon={<Pallet className="h-5 w-5" />}
+                icon={<Layers className="h-5 w-5" />}
                 title="6) Pallet: qui il corriere espresso non è la scelta giusta"
               >
                 <P>
-                  Sui pallet, il discorso è lineare: sono unità di carico pensate per movimentazione meccanica e camion.
-                  Gli hub espressi sono un compromesso forzato.
+                  Sui pallet, il discorso è lineare: sono unità di carico pensate
+                  per movimentazione meccanica e camion. Gli hub espressi sono un
+                  compromesso forzato.
                 </P>
 
                 <List
@@ -373,12 +382,13 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 title="7) Tempi vs rischi: cosa stai davvero comprando"
               >
                 <P>
-                  Se scegli l’espresso, stai comprando velocità.
-                  Se scegli il privato, stai comprando controllo.
+                  Se scegli l’espresso, stai comprando velocità. Se scegli il
+                  privato, stai comprando controllo.
                 </P>
 
                 <Quote>
-                  Nel vino, spesso un giorno in più vale più di una bottiglia rotta, una contestazione o un cliente scontento.
+                  Nel vino, spesso un giorno in più vale più di una bottiglia
+                  rotta, una contestazione o un cliente scontento.
                 </Quote>
               </ArticleCard>
 
@@ -411,7 +421,11 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 <CompareTable />
               </ArticleCard>
 
-              <ArticleCard id="sintesi" icon={<ShieldCheck className="h-5 w-5" />} title="In sintesi">
+              <ArticleCard
+                id="sintesi"
+                icon={<ShieldCheck className="h-5 w-5" />}
+                title="In sintesi"
+              >
                 <List
                   items={[
                     "Non esiste “il miglior trasporto” in assoluto.",
@@ -424,7 +438,8 @@ export default function BlogCorriereEspressoVsTrasportatorePrivatoPage() {
                 <FinalCta />
 
                 <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">
-                  Nota finale: nel trasporto del vino, la differenza tra un buon risultato e un problema nasce quasi sempre prima del ritiro,
+                  Nota finale: nel trasporto del vino, la differenza tra un buon
+                  risultato e un problema nasce quasi sempre prima del ritiro,
                   nella scelta del canale logistico.
                 </div>
               </ArticleCard>
@@ -447,7 +462,8 @@ function CtaBox() {
         Hai dubbi sul canale giusto?
       </div>
       <div className="mt-2 text-sm text-white/80">
-        Inviaci volumi, destinazione e urgenza: ti diciamo subito se conviene espresso o privato (e cosa cambia in rischio/costi).
+        Inviaci volumi, destinazione e urgenza: ti diciamo subito se conviene
+        espresso o privato (e cosa cambia in rischio/costi).
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
@@ -477,7 +493,8 @@ function FinalCta() {
         Vuoi scegliere il canale giusto al primo colpo?
       </div>
       <div className="mt-1 text-[13px] text-white/75">
-        SPST ti aiuta a bilanciare tempi, rischio e continuità del flusso (senza sorprese dopo).
+        SPST ti aiuta a bilanciare tempi, rischio e continuità del flusso (senza
+        sorprese dopo).
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <a
@@ -604,7 +621,10 @@ function Quote({ children }: { children: React.ReactNode }) {
   return (
     <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-[13px] text-white/75">
       <div className="flex items-start gap-2">
-        <span className="mt-0.5 h-2 w-2 rounded-full" style={{ background: SPST_ORANGE }} />
+        <span
+          className="mt-0.5 h-2 w-2 rounded-full"
+          style={{ background: SPST_ORANGE }}
+        />
         <span>{children}</span>
       </div>
     </div>
