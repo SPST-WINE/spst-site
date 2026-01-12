@@ -543,17 +543,15 @@ function H4({ children }: { children: React.ReactNode }) {
   );
 }
 
-function P({ children }: { children: React.ReactNode }) {
-  return <p className="m-0">{children}</p>;
-}
-
-function List({ items }: { items: string[] }) {
+function P({
+  children,
+  className = "",
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement> & { children: React.ReactNode }) {
   return (
-    <ul className="ml-4 list-disc space-y-1 text-white/80">
-      {items.map((x, i) => (
-        <li key={i}>{x}</li>
-      ))}
-    </ul>
+    <p className={`m-0 ${className}`.trim()} {...props}>
+      {children}
+    </p>
   );
 }
 
