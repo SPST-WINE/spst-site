@@ -35,7 +35,12 @@ const navItems = [
 ];
 
 const CHECKOUT_URL = "https://spst-operations.vercel.app/usa-shipping-pay";
-const WHATSAPP_URL = "https://wa.me/393201441789";
+
+// ✅ WhatsApp con messaggio precompilato
+const WA_PREFILL = encodeURIComponent(
+  "Ciao, ho visitato Paylink USA e vorrei capire se è adatto alla mia cantina."
+);
+const WHATSAPP_URL = `https://wa.me/393201441789?text=${WA_PREFILL}`;
 
 export default function SpstPaylinkPage() {
   // ---- Meta Pixel custom events (engaged view + WA intent) ----
@@ -45,7 +50,10 @@ export default function SpstPaylinkPage() {
     const t = setTimeout(() => {
       if (engagedFired) return;
       engagedFired = true;
-      window.fbq?.("trackCustom", "ViewPaylinkLanding", { engaged: true, sec: 8 });
+      window.fbq?.("trackCustom", "ViewPaylinkLanding", {
+        engaged: true,
+        sec: 8,
+      });
     }, 8000);
 
     const onScroll = () => {
@@ -58,7 +66,10 @@ export default function SpstPaylinkPage() {
       if (pct >= 0.5) {
         if (!engagedFired) {
           engagedFired = true;
-          window.fbq?.("trackCustom", "ViewPaylinkLanding", { engaged: true, scroll: 50 });
+          window.fbq?.("trackCustom", "ViewPaylinkLanding", {
+            engaged: true,
+            scroll: 50,
+          });
         }
         window.removeEventListener("scroll", onScroll);
       }
@@ -78,7 +89,9 @@ export default function SpstPaylinkPage() {
   };
 
   const trackCheckout = () => {
-    window.fbq?.("trackCustom", "ClickCheckoutPreview", { source: "paylink_landing" });
+    window.fbq?.("trackCustom", "ClickCheckoutPreview", {
+      source: "paylink_landing",
+    });
   };
 
   return (
@@ -245,7 +258,10 @@ export default function SpstPaylinkPage() {
               </p>
               <ul className="mt-4 space-y-2 text-sm text-white/80">
                 <li>• Normative e processi export dedicati agli USA.</li>
-                <li>• Listini e tratte ottimizzate per spedizioni B2C vino verso America.</li>
+                <li>
+                  • Listini e tratte ottimizzate per spedizioni B2C vino verso
+                  America.
+                </li>
                 <li>
                   • Un flusso separato che ti permette di gestire i clienti USA
                   senza complicare il resto dell’export.
