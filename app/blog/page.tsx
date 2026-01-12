@@ -37,6 +37,9 @@ type BlogPost = {
 };
 
 const POSTS: BlogPost[] = [
+  // =========================
+  // USA / Paylink
+  // =========================
   {
     slug: "/blog/come-spedire-vino-negli-usa",
     title: "Come spedire vino al cliente finale negli Stati Uniti",
@@ -49,6 +52,30 @@ const POSTS: BlogPost[] = [
     featured: true,
   },
   {
+    slug: "/blog/spedire-vino-usa-b2c",
+    title: "Perché è impossibile spedire vino direttamente al cliente negli USA",
+    description:
+      "COLA, Importer of Record, three-tier system e perché “spedisco e basta” non funziona. Chiarezza tra trasporto e diritto di importare.",
+    date: "10/01/2026",
+    isoDate: "2026-01-10",
+    readingTime: "7 min",
+    tags: ["USA", "B2C", "Compliance", "Dogane"],
+  },
+  {
+    slug: "/blog/campioni-vino-usa",
+    title: "Campioni di vino negli Stati Uniti: cosa è possibile, cosa no",
+    description:
+      "Perché “sono solo campioni” non è una scusa valida: importatore, COLA/esenzioni limitate, controlli e rischi su invii ripetuti.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "7 min",
+    tags: ["USA", "Campioni", "Campionature", "Compliance"],
+  },
+
+  // =========================
+  // Europa / Accise
+  // =========================
+  {
     slug: "/blog/spedire-senza-codice-accisa",
     title: "Spedire vino B2B in Europa quando il buyer non ha un codice accisa",
     description:
@@ -59,7 +86,7 @@ const POSTS: BlogPost[] = [
     tags: ["Europa", "B2B", "Accise", "Rappresentanza fiscale"],
   },
   {
-    slug: "/blog/accise-b2b-vino-europa",
+    slug: "/blog/spedire-vino-b2b-europa-accise",
     title: "B2B di vino in UE: cosa è legale, cosa no, come funzionano davvero le accise",
     description:
       "Accisa sospesa vs accisa assolta, EMCS, e-AD, e-DAS, documenti e perché su pallet/multicollo non esistono scorciatoie.",
@@ -67,16 +94,6 @@ const POSTS: BlogPost[] = [
     isoDate: "2026-01-10",
     readingTime: "7 min",
     tags: ["Europa", "B2B", "Accise", "Pallet"],
-  },
-  {
-    slug: "/blog/campionature-vino-europa",
-    title: "Come spedire campionature di vino in Europa: tra normativa e prassi reale",
-    description:
-      "Onestà operativa: prassi di mercato vs quadro normativo. Quando la campionatura è “occasionale” e quando diventa un modello rischioso.",
-    date: "10/01/2026",
-    isoDate: "2026-01-10",
-    readingTime: "6 min",
-    tags: ["Europa", "Campionature", "Accise", "Prassi"],
   },
   {
     slug: "/blog/spedire-vino-b2c-europa",
@@ -88,22 +105,140 @@ const POSTS: BlogPost[] = [
     readingTime: "8 min",
     tags: ["Europa", "B2C", "Accise", "E-commerce"],
   },
+  {
+    slug: "/blog/spedire-campionature-vino-europa",
+    title: "Come spedire campionature di vino in Europa: tra normativa e prassi reale",
+    description:
+      "Onestà operativa: prassi di mercato vs quadro normativo. Quando la campionatura è “occasionale” e quando diventa un modello rischioso.",
+    date: "10/01/2026",
+    isoDate: "2026-01-10",
+    readingTime: "6 min",
+    tags: ["Europa", "Campionature", "Accise", "Prassi"],
+  },
+
+  // =========================
+  // Extra-UE / Asia
+  // =========================
+  {
+    slug: "/blog/campionature-vino-extra-ue",
+    title: "Come spedire campionature di vino fuori dall’Unione Europea",
+    description:
+      "Perché “campionatura” non è una categoria doganale. Documenti minimi, valore dichiarato credibile, tolleranze e quando iniziano i problemi.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "7 min",
+    tags: ["Extra-UE", "Campionature", "Dogane", "Documenti"],
+  },
+  {
+    slug: "/blog/campionature-vino-asia",
+    title: "Come spedire campionature di vino in Asia",
+    description:
+      "Asia ≠ mercato unico: regole diverse per Giappone, Cina, Hong Kong, Singapore, Corea. Documenti, alcohol tax e rischi su volumi/frequenza.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "7 min",
+    tags: ["Asia", "Extra-UE", "Campionature", "Dogane"],
+  },
+
+  // =========================
+  // Operatività / Trasporto / Packaging
+  // =========================
+  {
+    slug: "/blog/corriere-espresso-o-trasportatore-privato",
+    title: "Spedizioni di vino: corriere espresso o trasportatore privato?",
+    description:
+      "Differenze operative reali, pro/contro e come scegliere. Multicollo, pallet, movimentazione e trade-off tra velocità e controllo.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "6 min",
+    tags: ["Trasporto", "Corrieri", "Pallet", "Multicollo"],
+  },
+  {
+    slug: "/blog/imballaggi-multicollo-vino",
+    title: "Perché usare imballaggi specifici per il trasporto multicollo di vino",
+    description:
+      "Nel multicollo l’imballaggio tecnico riduce rotture e contenziosi. Sul pallet è spesso inutile: conta la pallettizzazione, non il cartone super rinforzato.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "5 min",
+    tags: ["Imballaggi", "Packaging", "Multicollo", "B2C"],
+  },
+  {
+    slug: "/blog/pallettizzazione-vino-b2b",
+    title: "Pallettizzazione corretta del vino nelle spedizioni B2B",
+    description:
+      "Reggette, film, angolari, altezza, layout e perché un pallet non sovrapponibile costa sempre di più. Come ridurre rischi e extra.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "7 min",
+    tags: ["Pallet", "B2B", "Pallettizzazione", "Trasporto"],
+  },
+
+  // =========================
+  // Processo / Valore / Documenti
+  // =========================
+  {
+    slug: "/blog/prezzo-non-unica-variabile",
+    title: "Spedizioni di vino: perché il prezzo non è sempre l’unica variabile",
+    description:
+      "Supporto, tecnologia e dati contano più di qualche euro in meno. Perché il prezzo è una fotografia e la logistica è un processo.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "6 min",
+    tags: ["Supporto", "Tecnologia", "Dati", "Prezzo"],
+  },
+  {
+    slug: "/blog/documenti-dogane-spedizioni-vino",
+    title: "Documenti per le spedizioni di vino e dogane",
+    description:
+      "Cosa sono le dogane, quando esistono e quando no, quali documenti servono per spedire vino e perché i blocchi nascono quasi sempre a monte.",
+    date: "12/01/2026",
+    isoDate: "2026-01-12",
+    readingTime: "8 min",
+    tags: ["Documenti", "Dogane", "Compliance", "Extra-UE"],
+  },
 ];
 
 const TAG_ORDER = [
   "Featured",
+
+  // macro
   "USA",
-  "Paylink",
   "Europa",
+  "Extra-UE",
+  "Asia",
+
+  // modelli
   "B2C",
   "B2B",
+  "E-commerce",
+
+  // compliance
   "Accise",
   "Rappresentanza fiscale",
-  "Campionature",
-  "Pallet",
   "Compliance",
-  "E-commerce",
+  "Dogane",
+  "Documenti",
   "Prassi",
+
+  // operatività
+  "Trasporto",
+  "Corrieri",
+  "Multicollo",
+  "Pallet",
+  "Pallettizzazione",
+  "Imballaggi",
+  "Packaging",
+
+  // valore
+  "Supporto",
+  "Tecnologia",
+  "Dati",
+  "Prezzo",
+
+  // campioni
+  "Campionature",
+  "Campioni",
 ];
 
 export default function BlogIndexPage() {
@@ -123,11 +258,13 @@ export default function BlogIndexPage() {
     const set = new Set<string>();
     POSTS.forEach((p) => p.tags.forEach((t) => set.add(t)));
     const base = Array.from(set);
+
     // ordine “curato”
     const ordered = [
       ...TAG_ORDER.filter((t) => base.includes(t)),
       ...base.filter((t) => !TAG_ORDER.includes(t)).sort(),
     ];
+
     return ordered;
   }, []);
 
@@ -135,6 +272,7 @@ export default function BlogIndexPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+
     const byTag = (p: BlogPost) => {
       if (activeTag === "All") return true;
       if (activeTag === "Featured") return !!p.featured;
@@ -201,8 +339,8 @@ export default function BlogIndexPage() {
 
           <p className="mx-auto mt-3 max-w-[100ch] text-center text-[14px] text-white/80 sm:text-base md:mx-0 md:text-left">
             Articoli pratici (non ideologici) su accise, documenti e flussi reali:
-            Europa B2B/B2C, campionature, USA e Paylink. Se vuoi un supporto rapido,
-            scrivici su WhatsApp.
+            Europa B2B/B2C, campionature, Extra-UE/Asia, USA e Paylink. Se vuoi un
+            supporto rapido, scrivici su WhatsApp.
           </p>
 
           {/* Search + quick CTA */}
@@ -215,7 +353,7 @@ export default function BlogIndexPage() {
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Cerca: USA, accise, campionature, buyer senza codice…"
+                  placeholder="Cerca: USA, dogane, accise, buyer senza codice, pallet…"
                   className="w-full bg-transparent text-sm text-white/90 placeholder:text-white/45 outline-none"
                 />
               </div>
@@ -236,6 +374,7 @@ export default function BlogIndexPage() {
             <TagChip active={activeTag === "All"} onClick={() => setActiveTag("All")}>
               Tutti
             </TagChip>
+
             <TagChip
               active={activeTag === "Featured"}
               onClick={() => setActiveTag("Featured")}
@@ -280,7 +419,7 @@ export default function BlogIndexPage() {
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {featured.tags.slice(0, 5).map((t) => (
+                    {featured.tags.slice(0, 6).map((t) => (
                       <span
                         key={t}
                         className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-[12px] text-white/70"
@@ -309,7 +448,8 @@ export default function BlogIndexPage() {
         <div className="mx-auto max-w-[1200px] px-5">
           <div className="flex items-center justify-between gap-3">
             <div className="text-sm text-white/70">
-              Risultati: <span className="font-semibold text-white/90">{filtered.length}</span>
+              Risultati:{" "}
+              <span className="font-semibold text-white/90">{filtered.length}</span>
             </div>
 
             <a
@@ -361,7 +501,7 @@ export default function BlogIndexPage() {
 
           {filtered.length === 0 && (
             <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center text-white/75">
-              Nessun risultato. Prova a cercare “USA”, “accise”, “buyer”, “campionature”.
+              Nessun risultato. Prova a cercare “USA”, “dogane”, “accise”, “pallet”.
             </div>
           )}
         </div>
@@ -429,7 +569,7 @@ function PostCard({ post }: { post: BlogPost }) {
       </p>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {post.tags.slice(0, 6).map((t) => (
+        {post.tags.slice(0, 7).map((t) => (
           <span
             key={t}
             className="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-[12px] text-white/70"
