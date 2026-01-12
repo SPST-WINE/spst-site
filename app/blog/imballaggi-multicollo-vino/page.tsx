@@ -623,3 +623,13 @@ function Table() {
     </div>
   );
 }
+
+function List({ items }: { items: string[] }) {
+  return (
+    <ul className="ml-4 list-disc space-y-1 text-white/80">
+      {items.map((x, i) => (
+        <li key={i}>{x}</li>
+      ))}
+    </ul>
+  );
+}
