@@ -150,7 +150,7 @@ export default function ServiziContatti() {
           />
           <Card
             title="Deposito & Rappresentanza"
-            text="Stoccaggio, operazioni di consolidamento e rappresentanza fiscale per semplificare vendite e riordini nei diversi Paesi."
+            text="Vendi ai tuoi buyer anche se non hanno un codice accisa tramite la rappresentanza fiscale SPST."
             icon={<Warehouse className="h-5 w-5" />}
           />
           <Card
