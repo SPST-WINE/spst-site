@@ -62,47 +62,6 @@ const esc = (v: any) => String(v ?? '').replace(/'/g, "\\'");
 
 /* ───────── GET /api/spedizioni ───────── */
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
-  const q        = url.searchParams.get('search') || url.searchParams.get('q') || '';
-  const onlyOpen = url.searchParams.get('onlyOpen') ?? '0';
-  const pageSize = Number(url.searchParams.get('pageSize') || '50') || 50;
-  const offset   = url.searchParams.get('offset') || undefined;
-
-  // ⬅️ Toggle "solo non evase" => solo STATO = "nuova"
-  const onlyNuova = (onlyOpen === '1' || onlyOpen === 'true');
-  const filterNuova = `LOWER({Stato})='nuova'`;
-
-  // Campi per la ricerca full-text
-  const searchFields = [
-    'ID Spedizione',
-    'ID',
-    'Creato da',
-    'Mittente - Ragione Sociale',
-    'Mittente - Città',
-    'Mittente - CAP',
-    'Destinatario - Ragione Sociale',
-    'Destinatario - Paese',
-    'Destinatario - Città',
-    'Destinatario - CAP',
-  ];
-
-  const clauses: string[] = [];
-
-  if (q) {
-    const lowered = esc(q.toLowerCase());
-    const textOr = `OR(${searchFields
-      .map(f => `FIND('${lowered}', LOWER({${f}}&''))>0`)
-      .join(',')})`;
-    clauses.push(textOr);
-  }
-
-  if (onlyNuova) clauses.push(filterNuova);
-
-  const formula = clauses.length ? `AND(${clauses.join(',')})` : '';
-
-  const { ok: okAt, status, json } = await listWithFormula(TB_SPED, formula, pageSize, offset);
-  if (okAt) {
-    return ok(req, { ok: true, records: json.records || [], offset: json.offset || null });
-  }
-  return ok(req, { ok: false, error: json?.error || `Airtable ${status}` }, { status });
+  // Airtable disabilitato - servizio non disponibile
+  return ok(req, { ok: false, error: 'Service unavailable: Airtable has been disabled' }, { status: 503 });
 }

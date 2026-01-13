@@ -142,69 +142,12 @@ function resolveTablesInOrder() {
 
 /* GET dettaglio */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
-  const recId = ctx.params.id;
-  try {
-    const direct = await airtableGetById(TBL, recId);
-    if (direct.ok) {
-      const j = await direct.json().catch(() => ({}));
-      if (j && j.id) return okJson(req, j);
-    }
-    const s = recId.replace(/"/g, '\\"').toLowerCase();
-    const formula = `OR(LOWER({ID Spedizione} & "")="${s}", LOWER({Tracking Number} & "")="${s}")`;
-    const res = await airtableSearch(TBL, formula);
-    const j = await res.json().catch(() => ({}));
-    if (!res.ok) return okJson(req, { ok:false, error: j }, { status: res.status });
-    const records = Array.isArray(j.records) ? j.records : [];
-    if (records.length === 1) return okJson(req, records[0]);
-    return okJson(req, { ok:true, records });
-  } catch (err: any) {
-    return okJson(req, { ok:false, error: String(err?.message||err) }, { status: 500 });
-  }
+  // Airtable disabilitato - servizio non disponibile
+  return okJson(req, { ok: false, error: 'Service unavailable: Airtable has been disabled' }, { status: 503 });
 }
 
 /* PATCH aggiornamento */
 export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
-  try {
-    const id = ctx.params.id || '';
-    if (!id) return okJson(req, { ok:false, error: 'Missing record id' }, { status: 400 });
-
-    const bodyRaw = await req.json().catch(() => ({} as any));
-    const fieldsIn: Record<string, any> = { ...(bodyRaw?.fields || {}) };
-
-    if (typeof bodyRaw?.tracking === 'string' && bodyRaw.tracking.trim()) {
-      fieldsIn['Tracking Number'] = bodyRaw.tracking.trim();
-    }
-    if (typeof bodyRaw?.carrier !== 'undefined') {
-      const norm = normalizeCarrier(bodyRaw.carrier);
-      if (norm) fieldsIn['Corriere'] = norm;
-    }
-    if (typeof bodyRaw?.stato === 'string' && bodyRaw.stato.trim()) {
-      fieldsIn['Stato'] = bodyRaw.stato.trim();
-      delete fieldsIn['Stato Spedizione'];
-    } else if (typeof bodyRaw?.statoEvasa === 'boolean') {
-      fieldsIn['Stato'] = bodyRaw.statoEvasa ? 'Evasa' : 'Nuova';
-      delete fieldsIn['Stato Spedizione'];
-    }
-    if (bodyRaw?.docs && typeof bodyRaw.docs === 'object') {
-      Object.assign(fieldsIn, mapDocsToAirtable(bodyRaw.docs));
-    }
-
-    const fields: Record<string, any> = {};
-    for (const [k, v] of Object.entries(fieldsIn)) {
-      fields[normalizeFieldKey(k)] = v;
-    }
-    if (!Object.keys(fields).length) {
-      return okJson(req, { ok:false, error: 'No fields to update' }, { status: 400 });
-    }
-
-    let last = { status: 500, ok: false, data: { error: 'No attempt' } as any };
-    for (const table of resolveTablesInOrder()) {
-      const attempt = await airtablePatch(table, id, fields);
-      if (attempt.ok) return okJson(req, attempt.data);
-      last = attempt;
-    }
-    return okJson(req, { ok:false, error: last.data || last.status }, { status: last.status || 500 });
-  } catch (err: any) {
-    return okJson(req, { ok:false, error: String(err?.message||err) }, { status: 500 });
-  }
+  // Airtable disabilitato - servizio non disponibile
+  return okJson(req, { ok: false, error: 'Service unavailable: Airtable has been disabled' }, { status: 503 });
 }

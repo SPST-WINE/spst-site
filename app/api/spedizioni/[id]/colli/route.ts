@@ -95,50 +95,6 @@ function normalizeRows(recs: any[]) {
 
 /* ───────── GET /api/spedizioni/[id]/colli ───────── */
 export async function GET(req: NextRequest, ctx: { params: { id: string } }) {
-  const recId = ctx.params.id;
-  if (!recId) return ok(req, { ok:false, error:'Missing record id' }, { status: 400 });
-
-  try {
-    // A) prova a leggere il record spedizione e trovare un campo link (array di recId)
-    try {
-      const { r, j } = await fetchJson(`${api(TB_SPED)}/${encodeURIComponent(recId)}`);
-      if (r.ok) {
-        const f = (j?.fields ?? {}) as Record<string, any>;
-        let linked: string[] = [];
-        const preferred = f['COLLI'];
-        if (Array.isArray(preferred) && preferred.every(x=>typeof x==='string' && x.startsWith('rec'))) {
-          linked = preferred;
-        } else {
-          const candidates = Object.entries(f)
-            .filter(([k,v]) => Array.isArray(v) && (v as any[]).every(x=>typeof x==='string' && x.startsWith('rec')))
-            .sort((a,b) => (/(coll|coli|collo)/i.test(b[0])?1:0) - (/(coll|coli|collo)/i.test(a[0])?1:0));
-          if (candidates.length) linked = candidates[0][1] as string[];
-        }
-        if (linked.length) {
-          const rows = await fetchColliByIds(linked);
-          return ok(req, { ok:true, rows: normalizeRows(rows) });
-        }
-      }
-    } catch {/* ignore and fallback */}
-
-    // B) fallback: cerca in TB_COLLI usando vari possibili campi link testuali
-    const candidateFields = [
-      process.env.AIRTABLE_COLLI_LINK_FIELD, // priorità a env se presente
-      'Spedizione','SPEDIZIONE','Spedizioni','Shipment','Sped'
-    ].filter(Boolean) as string[];
-
-    for (const field of candidateFields) {
-      const formula = `FIND("${recId}", ARRAYJOIN({${field}} & ""))`;
-      const { r, j } = await fetchJson(`${api(TB_COLLI)}?${new URLSearchParams({ filterByFormula: formula, pageSize:'100' })}`);
-      if (r.status === 422) continue; // campo non esiste in questa base
-      if (!r.ok) continue;
-      const recs = Array.isArray(j?.records) ? j.records : [];
-      if (recs.length) return ok(req, { ok:true, rows: normalizeRows(recs) });
-    }
-
-    // Nessun colli trovato
-    return ok(req, { ok:true, rows: [] });
-  } catch (err: any) {
-    return ok(req, { ok:false, error: String(err?.message || err) }, { status: 502 });
-  }
+  // Airtable disabilitato - servizio non disponibile
+  return ok(req, { ok: false, error: 'Service unavailable: Airtable has been disabled' }, { status: 503 });
 }
