@@ -70,7 +70,7 @@ export default function RegisterPage() {
               Home
             </a>
             <a
-              href="https://app.spst.it/login"
+              href="https://spst-operations.vercel.app/login"
               className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
               Area Riservata

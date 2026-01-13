@@ -162,7 +162,7 @@ export async function POST(req: NextRequest) {
       'https://www.spst.it/logo-email.png';
     const AREA_RISERVATA_URL =
       process.env.AREA_RISERVATA_URL ||
-      'https://app.spst.it/login';
+      'https://spst-operations.vercel.app/login';
     const WHATSAPP_URL =
       process.env.WHATSAPP_URL ||
       'https://wa.me/393201441789';

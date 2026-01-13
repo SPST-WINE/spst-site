@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const RESEND_API_KEY   = process.env.RESEND_API_KEY;
     const EMAIL_FROM       = process.env.EMAIL_FROM         || 'notification@spst.it';
     const EMAIL_LOGO_URL   = process.env.EMAIL_LOGO_URL     || 'https://www.spst.it/logo-email.png';
-    const AREA_RISERVATA   = process.env.AREA_RISERVATA_URL || 'https://www.spst.it/area-riservata';
+    const AREA_RISERVATA   = process.env.AREA_RISERVATA_URL || 'https://spst-operations.vercel.app/login';
     const WHATSAPP_URL     = process.env.WHATSAPP_URL       || 'https://wa.me/393000000000';
 
     if (!RESEND_API_KEY) return okJson(req, { ok:false, error:'RESEND_API_KEY missing' }, { status: 500 });
