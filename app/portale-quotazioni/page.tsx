@@ -341,57 +341,101 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault(); // blocca navigazione
-  if (submitting) return;
-  setSubmitting(true);
+    e.preventDefault(); // blocca navigazione
+    if (submitting) return;
+    setSubmitting(true);
 
-  try {
-    const form = e.currentTarget;
-    const fd = new FormData(form);
+    try {
+      const form = e.currentTarget;
+      const fd = new FormData(form);
 
-    // Honeypot + timestamp
-    if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
-    if (!fd.get("_gotcha")) fd.append("_gotcha", "");
+      // Honeypot + timestamp
+      if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
+      if (!fd.get("_gotcha")) fd.append("_gotcha", "");
 
-    const res = await fetch("/api/quote", { method: "POST", body: fd });
-    const json = await res.json();
+      // 1) invio lead (tua API esistente)
+      const res = await fetch("/api/quote", { method: "POST", body: fd });
+      const json = await res.json();
 
-    if (json.ok) {
-      // ✅ GTM custom event (conversione lead, senza thank-you page)
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "spst_generate_lead",
-        form: "portale_quotazioni",
-      });
+      if (json.ok) {
+        // ✅ GTM custom event (conversione lead, senza thank-you page)
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "spst_generate_lead",
+          form: "portale_quotazioni",
+        });
 
+        // ✅ chiamata callback (se ti serve)
+        onLead?.();
+
+        // 2) invio mail cliente (nuova API)
+        const L = Number(fd.get("lunghezza") || 0);
+        const W = Number(fd.get("larghezza") || 0);
+        const H = Number(fd.get("altezza") || 0);
+        const pesoVol = volumetricKg4000(L, W, H);
+
+        await fetch("/api/portale-quotazioni-inviato", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            azienda: String(fd.get("azienda") || ""),
+            email: String(fd.get("email") || ""),
+            telefono: String(fd.get("telefono") || ""),
+            indirizzo: String(fd.get("indirizzo") || ""),
+
+            paese_partenza: String(fd.get("paese_partenza") || ""),
+            cap_partenza: String(fd.get("cap_partenza") || ""),
+            paese_destinazione: String(fd.get("paese_destinazione") || ""),
+            cap_destinazione: String(fd.get("cap_destinazione") || ""),
+
+            contenuto: String(fd.get("contenuto") || ""),
+
+            lunghezza: L,
+            larghezza: W,
+            altezza: H,
+            peso: Number(fd.get("peso") || 0),
+            pesoVolumetrico: pesoVol,
+
+            prefs: {
+              express: !!fd.get("express"),
+              accise: !!fd.get("accise"),
+              dogana: !!fd.get("dogana"),
+              cola: !!fd.get("cola"),
+              temp: !!fd.get("temp"),
+              assicurazione: !!fd.get("assicurazione"),
+            },
+
+            createdAtIso: new Date().toISOString(),
+          }),
+        });
+
+        window.dispatchEvent(
+          new CustomEvent("spst:toast", {
+            detail: {
+              msg: "Richiesta inviata! Ti abbiamo mandato una mail di conferma.",
+              v: "success",
+            },
+          })
+        );
+
+        form.reset();
+      } else {
+        window.dispatchEvent(
+          new CustomEvent("spst:toast", {
+            detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
+          })
+        );
+      }
+    } catch (err: any) {
       window.dispatchEvent(
         new CustomEvent("spst:toast", {
-          detail: {
-            msg: "Richiesta inviata! Ti contatteremo a breve.",
-            v: "success",
-          },
+          detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
         })
       );
-
-      form.reset();
-    } else {
-      window.dispatchEvent(
-        new CustomEvent("spst:toast", {
-          detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
-        })
-      );
+    } finally {
+      setSubmitting(false);
     }
-  } catch (err: any) {
-    window.dispatchEvent(
-      new CustomEvent("spst:toast", {
-        detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
-      })
-    );
-  } finally {
-    setSubmitting(false);
-  }
-};
-
+  };
 
   return (
     <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4" noValidate>
