@@ -341,49 +341,57 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // blocca navigazione
-    if (submitting) return;
-    setSubmitting(true);
+  e.preventDefault(); // blocca navigazione
+  if (submitting) return;
+  setSubmitting(true);
 
-    try {
-      const form = e.currentTarget;
-      const fd = new FormData(form);
+  try {
+    const form = e.currentTarget;
+    const fd = new FormData(form);
 
-      // Honeypot + timestamp
-      if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
-      if (!fd.get("_gotcha")) fd.append("_gotcha", "");
+    // Honeypot + timestamp
+    if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
+    if (!fd.get("_gotcha")) fd.append("_gotcha", "");
 
-      const res = await fetch("/api/quote", { method: "POST", body: fd });
-      const json = await res.json();
+    const res = await fetch("/api/quote", { method: "POST", body: fd });
+    const json = await res.json();
 
-      if (json.ok) {
-        // ✅ GA4 lead event
-        onLead?.();
+    if (json.ok) {
+      // ✅ GTM custom event (conversione lead, senza thank-you page)
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "spst_generate_lead",
+        form: "portale_quotazioni",
+      });
 
-        window.dispatchEvent(
-          new CustomEvent("spst:toast", {
-            detail: { msg: "Richiesta inviata! Ti contatteremo a breve.", v: "success" },
-          })
-        );
-
-        form.reset();
-      } else {
-        window.dispatchEvent(
-          new CustomEvent("spst:toast", {
-            detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
-          })
-        );
-      }
-    } catch (err: any) {
       window.dispatchEvent(
         new CustomEvent("spst:toast", {
-          detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
+          detail: {
+            msg: "Richiesta inviata! Ti contatteremo a breve.",
+            v: "success",
+          },
         })
       );
-    } finally {
-      setSubmitting(false);
+
+      form.reset();
+    } else {
+      window.dispatchEvent(
+        new CustomEvent("spst:toast", {
+          detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
+        })
+      );
     }
-  };
+  } catch (err: any) {
+    window.dispatchEvent(
+      new CustomEvent("spst:toast", {
+        detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
+      })
+    );
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <form id="quoteForm" onSubmit={onSubmit} className="grid gap-4" noValidate>
