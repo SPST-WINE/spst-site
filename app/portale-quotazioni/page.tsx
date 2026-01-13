@@ -1,4 +1,6 @@
+// app/portale-quotazioni/page.tsx
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -25,6 +27,14 @@ const SPST_ORANGE = "#f7931e";
 const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
 
+// GA4
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
+  }
+}
+
 // Helper volumetrico (non esportare named export in una page.tsx)
 function volumetricKg4000(l: number, w: number, h: number): number {
   if (!isFinite(l) || !isFinite(w) || !isFinite(h)) return 0;
@@ -36,13 +46,16 @@ type ToastVariant = "success" | "error" | "info";
 function useToast() {
   const [toast, setToast] =
     useState<{ message: string; variant: ToastVariant } | null>(null);
+
   function show(message: string, variant: ToastVariant = "success") {
     setToast({ message, variant });
     window.clearTimeout((show as any)._t);
     (show as any)._t = window.setTimeout(() => setToast(null), 3000);
   }
+
   return { toast, show };
 }
+
 function Toast({
   toast,
 }: {
@@ -82,9 +95,7 @@ export default function PortaleQuotazioni() {
   useEffect(() => {
     const handler = (e: any) => {
       const { msg, v } = e.detail || {};
-      if (msg) {
-        show(msg, v || "success");
-      }
+      if (msg) show(msg, v || "success");
     };
     window.addEventListener("spst:toast", handler);
     return () => window.removeEventListener("spst:toast", handler);
@@ -95,6 +106,17 @@ export default function PortaleQuotazioni() {
     const ex = volumetricKg4000(40, 30, 35); // 40*30*35/4000 = 10.5
     console.assert(ex === 10.5, `volumetricKg4000 atteso 10.5, ottenuto ${ex}`);
   }, []);
+
+  // helper tracking
+  const track = (name: string, params?: Record<string, any>) => {
+    try {
+      if (typeof window !== "undefined" && typeof window.gtag === "function") {
+        window.gtag("event", name, params || {});
+      }
+    } catch {
+      // silenzioso
+    }
+  };
 
   return (
     <main
@@ -182,7 +204,15 @@ export default function PortaleQuotazioni() {
 
           {/* Colonna destra: dettagli spedizione */}
           <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
-            <QuoteDetailsForm />
+            <QuoteDetailsForm
+              onLead={() => {
+                // ✅ GA4 lead event (no thank-you page needed)
+                track("generate_lead", {
+                  event_category: "Lead",
+                  event_label: "Portale Quotazioni",
+                });
+              }}
+            />
           </div>
         </div>
       </section>
@@ -205,6 +235,12 @@ export default function PortaleQuotazioni() {
               <a
                 className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
                 href="https://wa.me/393201441789"
+                onClick={() =>
+                  track("contact", {
+                    method: "whatsapp",
+                    event_label: "Portale Quotazioni CTA",
+                  })
+                }
               >
                 Supporto WhatsApp
               </a>
@@ -301,13 +337,14 @@ function ContactFields() {
   );
 }
 
-function QuoteDetailsForm() {
+function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // blocca navigazione
     if (submitting) return;
     setSubmitting(true);
+
     try {
       const form = e.currentTarget;
       const fd = new FormData(form);
@@ -320,31 +357,29 @@ function QuoteDetailsForm() {
       const json = await res.json();
 
       if (json.ok) {
-        const ev = new CustomEvent("spst:toast", {
-          detail: {
-            msg: "Richiesta inviata! Ti contatteremo a breve.",
-            v: "success",
-          },
-        });
-        window.dispatchEvent(ev);
+        // ✅ GA4 lead event
+        onLead?.();
+
+        window.dispatchEvent(
+          new CustomEvent("spst:toast", {
+            detail: { msg: "Richiesta inviata! Ti contatteremo a breve.", v: "success" },
+          })
+        );
+
         form.reset();
       } else {
-        const ev = new CustomEvent("spst:toast", {
-          detail: {
-            msg: `Errore invio: ${json.error || "riprovare"}`,
-            v: "error",
-          },
-        });
-        window.dispatchEvent(ev);
+        window.dispatchEvent(
+          new CustomEvent("spst:toast", {
+            detail: { msg: `Errore invio: ${json.error || "riprovare"}`, v: "error" },
+          })
+        );
       }
     } catch (err: any) {
-      const ev = new CustomEvent("spst:toast", {
-        detail: {
-          msg: `Errore invio: ${err?.message || "riprovare"}`,
-          v: "error",
-        },
-      });
-      window.dispatchEvent(ev);
+      window.dispatchEvent(
+        new CustomEvent("spst:toast", {
+          detail: { msg: `Errore invio: ${err?.message || "riprovare"}`, v: "error" },
+        })
+      );
     } finally {
       setSubmitting(false);
     }
@@ -471,36 +506,12 @@ function QuoteDetailsForm() {
       <fieldset className="rounded-2xl p-4 border border-white/10 bg-white/[0.03]">
         <legend className="text-[12px] px-2 text-white/60">Preferenze</legend>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <Check
-            name="express"
-            label="Spedizione express"
-            icon={<Rocket className="h-4 w-4" />}
-          />
-          <Check
-            name="accise"
-            label="Pratica accise"
-            icon={<FileCheck2 className="h-4 w-4" />}
-          />
-          <Check
-            name="dogana"
-            label="Assistenza doganale"
-            icon={<ShieldCheck className="h-4 w-4" />}
-          />
-          <Check
-            name="cola"
-            label="COLA / Prior Notice (USA)"
-            icon={<FileCheck2 className="h-4 w-4" />}
-          />
-          <Check
-            name="temp"
-            label="Temperatura controllata"
-            icon={<Thermometer className="h-4 w-4" />}
-          />
-          <Check
-            name="assicurazione"
-            label="Assicurazione"
-            icon={<ShieldCheck className="h-4 w-4" />}
-          />
+          <Check name="express" label="Spedizione express" icon={<Rocket className="h-4 w-4" />} />
+          <Check name="accise" label="Pratica accise" icon={<FileCheck2 className="h-4 w-4" />} />
+          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />
+          <Check name="cola" label="COLA / Prior Notice (USA)" icon={<FileCheck2 className="h-4 w-4" />} />
+          <Check name="temp" label="Temperatura controllata" icon={<Thermometer className="h-4 w-4" />} />
+          <Check name="assicurazione" label="Assicurazione" icon={<ShieldCheck className="h-4 w-4" />} />
         </div>
       </fieldset>
 
@@ -513,6 +524,7 @@ function QuoteDetailsForm() {
       >
         {submitting ? "Invio in corso..." : "Richiedi preventivo"}
       </motion.button>
+
       <div className="text-[11px] text-white/50 text-center">
         Invio protetto. Nessuno spam.
       </div>
@@ -522,9 +534,11 @@ function QuoteDetailsForm() {
 
 function VolumetricHelper() {
   const [vol, setVol] = useState(0);
+
   useEffect(() => {
     const form = document.getElementById("quoteForm") as HTMLFormElement | null;
     if (!form) return;
+
     const handler = () => {
       const fd = new FormData(form);
       const L = parseFloat(String(fd.get("lunghezza") || ""));
@@ -532,10 +546,12 @@ function VolumetricHelper() {
       const H = parseFloat(String(fd.get("altezza") || ""));
       setVol(volumetricKg4000(L, W, H));
     };
+
     form.addEventListener("input", handler);
     handler();
     return () => form.removeEventListener("input", handler);
   }, []);
+
   return (
     <div className="rounded-xl p-3 border border-white/10 bg-white/[0.03] text-xs text-white/70">
       Peso volumetrico stimato (cm/4000):{" "}
@@ -544,13 +560,7 @@ function VolumetricHelper() {
   );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="group grid gap-1">
       <div className="text-[11px] text-white/60">{label}</div>
