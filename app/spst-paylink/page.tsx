@@ -34,7 +34,7 @@ const navItems = [
   { href: "/spst-paylink", label: "Paylink USA" },
 ];
 
-const CHECKOUT_URL = "https://spst-operations.vercel.app/usa-shipping-pay";
+const CHECKOUT_URL = "https://dashboard.spst.it/usa-shipping-pay";
 
 // ✅ WhatsApp con messaggio precompilato
 const WA_PREFILL = encodeURIComponent(

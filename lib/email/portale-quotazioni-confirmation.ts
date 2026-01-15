@@ -36,7 +36,8 @@ const SPST_BLUE = "#1c3e5e";
 const SPST_ORANGE = "#f7911e";
 
 // Usa lo stesso logo della tua mail back-office (coerenza totale)
-const LOGO_URL = "https://spst-operations.vercel.app/spst-logo.png";
+// Nota: il logo dovrebbe essere ospitato su un CDN o sul sito pubblico
+const LOGO_URL = "https://www.spst.it/logo-email.png";
 
 // WhatsApp e sito
 const WA_URL = "https://wa.me/393201441789";
