@@ -144,4 +144,66 @@ export function getTranslations(locale: Locale = defaultLocale) {
   return translations[locale];
 }
 
-export type Translations = typeof translations.it;
+// Define a common structure type that works for both locales
+export type Translations = {
+  nav: {
+    home: string;
+    services: string;
+    whySpst: string;
+    quote: string;
+    usaShipping: string;
+    forBuyers: string;
+    areaRiservata: string;
+  };
+  hero: {
+    kicker: string;
+    title: string;
+    titleHighlight: string;
+    description: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    scroll: string;
+  };
+  sections: {
+    problems: {
+      kicker: string;
+      title: string;
+    };
+    howItWorks: {
+      kicker: string;
+      title: string;
+    };
+    services: {
+      kicker: string;
+      title: string;
+    };
+    whoWeWorkFor: {
+      kicker: string;
+      title: string;
+    };
+    whySpst: {
+      kicker: string;
+      title: string;
+    };
+    forBuyers: {
+      kicker: string;
+      title: string;
+      description: string;
+    };
+    partners: {
+      kicker: string;
+      title: string;
+    };
+    cta: {
+      title: string;
+      quote: string;
+      whatsapp: string;
+      usaShipping: string;
+    };
+    contact: {
+      kicker: string;
+      title: string;
+      subtitle: string;
+    };
+  };
+};
