@@ -132,7 +132,7 @@ function HomeContent() {
         </div>
       </header>
 
-      {/* ===== HERO - STILE TECH ===== */}
+      {/* ===== HERO - STILE TECH CENTRATO ===== */}
       <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24">
         {/* Tech grid background */}
         <div className="absolute inset-0 opacity-10">
@@ -167,115 +167,113 @@ function HomeContent() {
           }}
         />
 
-        <div className="relative mx-auto max-w-[1400px] px-5">
-          <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
-            <div className="text-center md:text-left">
-              {/* Kicker badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm"
-              >
-                <Zap className="h-3 w-3" />
-                {t.hero.kicker}
-              </motion.div>
+        {/* Animated side elements - Left */}
+        <div className="pointer-events-none absolute left-0 top-1/2 hidden -translate-y-1/2 lg:block">
+          <HeroSideAnimation side="left" />
+        </div>
 
-              {/* Main title */}
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mt-6 text-[36px] font-black leading-[1.05] sm:text-[48px] md:text-[64px] lg:text-[72px]"
-              >
-                {t.hero.title}
-                <br />
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: `linear-gradient(135deg, ${SPST_ORANGE} 0%, ${SPST_BLUE_SOFT} 100%)`,
-                  }}
-                >
-                  {t.hero.titleHighlight}
-                </span>
-              </motion.h1>
+        {/* Animated side elements - Right */}
+        <div className="pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 lg:block">
+          <HeroSideAnimation side="right" />
+        </div>
 
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mx-auto mt-6 max-w-[65ch] text-lg leading-relaxed text-white/85 md:mx-0"
-              >
-                {t.hero.description}
-              </motion.p>
-
-              {/* CTA Buttons - Tech style */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start"
-              >
-                <a
-                  href="/portale-quotazioni"
-                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
-                >
-                  <span className="relative z-10">{t.hero.ctaPrimary}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 transition-opacity group-hover:opacity-100" />
-                </a>
-                <a
-                  href="/servizi-e-contatti"
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/10"
-                >
-                  {t.hero.ctaSecondary}
-                </a>
-              </motion.div>
-
-              {/* Stats pills */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-10 flex flex-wrap justify-center gap-3 md:justify-start"
-              >
-                {[
-                  { label: "50+", sub: locale === "it" ? "Cantine" : "Wineries" },
-                  { label: "20+", sub: locale === "it" ? "Buyer attivi" : "Active buyers" },
-                  { label: "USA, ASIA, UE", sub: locale === "it" ? "Mercati" : "Markets" },
-                ].map((stat, i) => (
-                  <div
-                    key={i}
-                    className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm"
-                  >
-                    <div className="text-lg font-bold text-white">{stat.label}</div>
-                    <div className="text-xs text-white/60">{stat.sub}</div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Hero Visual - Tech style */}
+        <div className="relative mx-auto max-w-[1200px] px-5">
+          <div className="flex flex-col items-center text-center">
+            {/* Kicker badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative mx-auto aspect-square w-full max-w-md"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm"
             >
-              <div className="absolute inset-0 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm">
-                <div className="relative h-full w-full">
-                  <img
-                    src={LOGO_URL}
-                    alt="SPST"
-                    className="h-full w-full object-contain drop-shadow-[0_8px_30px_rgba(247,147,30,.4)]"
-                  />
-                </div>
-              </div>
-              {/* Tech glow */}
-              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-2xl" />
+              <Zap className="h-3 w-3" />
+              {t.hero.kicker}
+            </motion.div>
+
+            {/* Main title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mt-6 text-[36px] font-black leading-[1.05] sm:text-[48px] md:text-[64px] lg:text-[72px]"
+            >
+              {t.hero.title}
+              <br />
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${SPST_ORANGE} 0%, ${SPST_BLUE_SOFT} 100%)`,
+                }}
+              >
+                {t.hero.titleHighlight}
+              </span>
+            </motion.h1>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mx-auto mt-6 max-w-[65ch] text-lg leading-relaxed text-white/85"
+            >
+              {t.hero.description}
+            </motion.p>
+
+            {/* CTA Buttons - Centered */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 flex flex-wrap justify-center gap-4"
+            >
+              <a
+                href="/portale-quotazioni"
+                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
+              >
+                <span className="relative z-10">{t.hero.ctaPrimary}</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
+              <a
+                href="/servizi-e-contatti"
+                className="inline-flex items-center gap-2 rounded-lg border-2 border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/10"
+              >
+                {t.hero.ctaSecondary}
+              </a>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* ===== STATS SECTION (spostata dopo hero) ===== */}
+      <section className="relative -mt-8 pb-12 md:-mt-12 md:pb-16">
+        <div className="mx-auto max-w-[1200px] px-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-3 gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm md:gap-8 md:p-8"
+          >
+            {[
+              { label: "50+", sub: locale === "it" ? "Cantine" : "Wineries" },
+              { label: "20+", sub: locale === "it" ? "Buyer attivi" : "Active buyers" },
+              { label: "USA, ASIA, UE", sub: locale === "it" ? "Mercati" : "Markets" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <div className="text-3xl font-black text-white md:text-4xl lg:text-5xl">
+                  {stat.label}
+                </div>
+                <div className="mt-2 text-sm text-white/70 md:text-base">{stat.sub}</div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -666,5 +664,111 @@ function TechCard({
       {/* Tech accent line */}
       <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#f7931e] to-transparent transition-all group-hover:w-full" />
     </motion.div>
+  );
+}
+
+/* Hero Side Animation - Tech style inspired by nais.ai */
+function HeroSideAnimation({ side }: { side: "left" | "right" }) {
+  const isLeft = side === "left";
+
+  return (
+    <div className={`relative ${isLeft ? "left-8" : "right-8"} w-64`}>
+      {/* Floating geometric shapes */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{
+          opacity: [0.3, 0.6, 0.3],
+          y: [0, -30, 0],
+          rotate: [0, 180, 360],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className={`absolute ${isLeft ? "left-0 top-0" : "right-0 top-0"} h-32 w-32 rounded-lg border border-white/10 bg-gradient-to-br from-[#f7931e]/20 to-transparent backdrop-blur-sm`}
+        style={{
+          transform: isLeft ? "rotate(-45deg)" : "rotate(45deg)",
+        }}
+      />
+
+      {/* Animated lines */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: [0.2, 0.5, 0.2],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+        className={`absolute ${isLeft ? "left-16 top-32" : "right-16 top-32"} h-24 w-1 bg-gradient-to-b from-[#f7931e]/40 to-transparent`}
+      />
+
+      {/* Orbiting circles */}
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+            rotate: isLeft ? [0, 360] : [360, 0],
+          }}
+          transition={{
+            duration: 10 + i * 2,
+            repeat: Infinity,
+            ease: "linear",
+            delay: i * 0.5,
+          }}
+          className={`absolute ${isLeft ? "left-8" : "right-8"} top-40 h-16 w-16 rounded-full border border-white/10`}
+          style={{
+            transform: `translate(${isLeft ? "-" : ""}${(i + 1) * 40}px, ${i * 20}px)`,
+          }}
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f7931e]/10 to-transparent" />
+        </motion.div>
+      ))}
+
+      {/* Tech grid pattern */}
+      <motion.div
+        animate={{
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className={`absolute ${isLeft ? "left-0 top-64" : "right-0 top-64"} h-32 w-32`}
+        style={{
+          backgroundImage: `linear-gradient(rgba(247,147,30,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(247,147,30,0.2) 1px, transparent 1px)`,
+          backgroundSize: "20px 20px",
+          transform: isLeft ? "rotate(-15deg)" : "rotate(15deg)",
+        }}
+      />
+
+      {/* Floating particles */}
+      {[0, 1, 2, 3].map((i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: [0, 0.6, 0],
+            y: [0, -100, -200],
+            x: isLeft ? [0, 20, 40] : [0, -20, -40],
+          }}
+          transition={{
+            duration: 5 + i,
+            repeat: Infinity,
+            ease: "easeOut",
+            delay: i * 1.2,
+          }}
+          className={`absolute ${isLeft ? "left-12" : "right-12"} top-${20 + i * 40} h-2 w-2 rounded-full bg-[#f7931e]/60`}
+        />
+      ))}
+    </div>
   );
 }
