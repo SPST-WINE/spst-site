@@ -133,9 +133,6 @@ export default function LandingSpedireSenzaCodiceAccisa() {
 
   const waPrefillText = useMemo(() => {
     const attr = typeof window !== "undefined" ? readAttribution() : {};
-    const sourceLine = `• Fonte: ${attr.utm_source || "-"} / ${
-      attr.utm_campaign || "-"
-    } / ${attr.utm_content || "-"}`;
 
     const lines = [
       "Ciao Gianluca, vorrei avere più informazioni su come spedire a un cliente senza codice accisa.",
@@ -147,7 +144,6 @@ export default function LandingSpedireSenzaCodiceAccisa() {
       `• Tipo cliente: ${buyerType || "-"}`,
       `• Modalità: ${transport || "-"}`,
       `• Volumi/frequenza: ${volumi || "-"}`,
-      sourceLine,
     ];
     return lines.join("\n");
   }, [nome, email, paese, buyerType, transport, volumi]);
