@@ -1,7 +1,7 @@
 // app/landing/spedire-senza-codice-accisa/page.tsx
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -34,27 +34,63 @@ const SPST_BLUE_SOFT = "#1c3e5e";
 const WHATSAPP_NUMBER = "393201441789";
 const CHECK_ID = "check-immediato";
 
+type Attribution = {
+  utm_source?: string;
+  utm_campaign?: string;
+  utm_adset?: string;
+  utm_content?: string;
+  fbclid?: string;
+  gclid?: string;
+};
+
 function pushDataLayer(event: string, payload?: Record<string, any>) {
   try {
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event,
-      ...payload,
-    });
+    window.dataLayer.push({ event, ...(payload || {}) });
   } catch {}
+}
+
+/** -------- Attribution (UTM + fbclid) ---------- */
+function getAttributionFromUrl(): Attribution {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const attr: Attribution = {
+      utm_source: p.get("utm_source") || "",
+      utm_campaign: p.get("utm_campaign") || "",
+      utm_adset: p.get("utm_adset") || "",
+      utm_content: p.get("utm_content") || "",
+      fbclid: p.get("fbclid") || "",
+      gclid: p.get("gclid") || "",
+    };
+    sessionStorage.setItem("spst_attr", JSON.stringify(attr));
+    return attr;
+  } catch {
+    return {};
+  }
+}
+
+function readAttribution(): Attribution {
+  try {
+    const raw = sessionStorage.getItem("spst_attr");
+    return raw ? (JSON.parse(raw) as Attribution) : {};
+  } catch {
+    return {};
+  }
 }
 
 /**
  * ✅ Evento unico per Meta: ClickWhatsApp
- * (così puoi ottimizzare la conversione personalizzata)
+ * Include sempre attribution (utm_*, fbclid) per capire quale creativa converte.
  */
 function trackWhatsApp(metaPayload?: Record<string, any>) {
+  const attr = typeof window !== "undefined" ? readAttribution() : {};
+  const payload = { ...(metaPayload || {}), ...attr };
+
   try {
-    window.fbq?.("trackCustom", "ClickWhatsApp", metaPayload || {});
+    window.fbq?.("trackCustom", "ClickWhatsApp", payload);
   } catch {}
 
-  // opzionale: anche su GTM se vuoi
-  pushDataLayer("spst_whatsapp_click", metaPayload || {});
+  pushDataLayer("spst_whatsapp_click", payload);
 }
 
 function buildWaLink(message: string) {
@@ -77,15 +113,30 @@ export default function LandingSpedireSenzaCodiceAccisa() {
   const [transport, setTransport] = useState("Multicollo");
   const [loading, setLoading] = useState(false);
 
-  // ✅ messaggio fisso richiesto
+  // salva attribution al primo load (e anche se l’utente scrolla e clicca dopo)
+  useEffect(() => {
+    getAttributionFromUrl();
+
+    // evento utile per debugging/funnel (non necessario per ottimizzazione, ma comodo)
+    try {
+      window.fbq?.("trackCustom", "ViewLandingAccisa", readAttribution());
+    } catch {}
+
+    pushDataLayer("spst_view_landing_accisa", readAttribution());
+  }, []);
+
   const waFixed = useMemo(() => {
     return buildWaLink(
-      "Ciao Gianluca, vorrei avere più informazioni su come spedire a un cliente senza codice accisa"
+      "Ciao Gianluca, vorrei avere più informazioni su come spedire a un cliente senza codice accisa."
     );
   }, []);
 
-  // ✅ messaggio dinamico con i dati (come prima)
   const waPrefillText = useMemo(() => {
+    const attr = typeof window !== "undefined" ? readAttribution() : {};
+    const sourceLine = `• Fonte: ${attr.utm_source || "-"} / ${
+      attr.utm_campaign || "-"
+    } / ${attr.utm_content || "-"}`;
+
     const lines = [
       "Ciao Gianluca, vorrei avere più informazioni su come spedire a un cliente senza codice accisa.",
       "",
@@ -96,6 +147,7 @@ export default function LandingSpedireSenzaCodiceAccisa() {
       `• Tipo cliente: ${buyerType || "-"}`,
       `• Modalità: ${transport || "-"}`,
       `• Volumi/frequenza: ${volumi || "-"}`,
+      sourceLine,
     ];
     return lines.join("\n");
   }, [nome, email, paese, buyerType, transport, volumi]);
@@ -129,7 +181,7 @@ export default function LandingSpedireSenzaCodiceAccisa() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      {/* Top bar minimal (mobile-first) */}
+      {/* Top bar */}
       <div className="sticky top-0 z-50 border-b border-white/10 bg-[#0b1220]/75 backdrop-blur">
         <div className="mx-auto flex max-w-[1180px] items-center justify-between px-4 py-3 md:px-5">
           <a
@@ -149,7 +201,6 @@ export default function LandingSpedireSenzaCodiceAccisa() {
             </div>
           </a>
 
-          {/* CTA top: solo WhatsApp (chiaro, no rumore) */}
           <a
             href={waFixed}
             target="_blank"
@@ -188,14 +239,12 @@ export default function LandingSpedireSenzaCodiceAccisa() {
         />
 
         <div className="mx-auto max-w-[1180px] px-4 pb-8 pt-8 md:px-5 md:pt-12">
-          {/* Badge */}
           <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             Spedizioni vino B2B UE • piccoli ordini
           </span>
 
           <div className="mt-5 grid gap-6 md:grid-cols-[1.05fr_.95fr] md:items-start">
-            {/* Copy */}
             <div>
               <h1 className="text-[30px] font-black leading-[1.06] sm:text-[40px]">
                 Spedire vino B2B in Europa{" "}
@@ -207,21 +256,26 @@ export default function LandingSpedireSenzaCodiceAccisa() {
               <p className="mt-3 max-w-[72ch] text-[14px] leading-relaxed text-white/80 sm:text-base">
                 Succede spesso: un bar, ristorante o enoteca non ha codice accisa o
                 deposito fiscale → piccoli ordini bloccati. SPST sblocca il flusso
-                con la soluzione corretta (accisa assolta + rappresentanza fiscale)
+                con la soluzione corretta (accisa assolta + rappresentanza fiscale).
               </p>
 
+              {/* micro-riga super chiara */}
+              <div className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2 text-[12px] text-white/75">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Soluzione operativa • tempi • costo indicativo (via WhatsApp)
+              </div>
+
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                {/* CTA 1: richiedi info -> scroll al check */}
                 <button
                   type="button"
                   onClick={scrollToCheck}
                   className="w-full rounded-2xl px-5 py-3 text-sm font-extrabold shadow ring-orange-300/50 transition-all hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px] sm:w-auto"
                   style={{ background: SPST_ORANGE, color: "#0f1720" }}
                 >
-                  Richiedi informazioni <ArrowRight className="ml-2 inline h-4 w-4" />
+                  Richiedi informazioni{" "}
+                  <ArrowRight className="ml-2 inline h-4 w-4" />
                 </button>
 
-                {/* CTA 2: WhatsApp fixed */}
                 <a
                   href={waFixed}
                   target="_blank"
@@ -235,17 +289,22 @@ export default function LandingSpedireSenzaCodiceAccisa() {
                 </a>
               </div>
 
-              {/* Trust pills (ridotte e mobile-friendly) */}
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <Pill icon={<Clock className="h-4 w-4" />} text="Risposta veloce" />
-                <Pill icon={<ShieldCheck className="h-4 w-4" />} text="Flusso operativo" />
+                <Pill
+                  icon={<ShieldCheck className="h-4 w-4" />}
+                  text="Flusso operativo"
+                />
                 <Pill icon={<BadgeCheck className="h-4 w-4" />} text="Zero improvvisazione" />
               </div>
 
-              {/* micro-note (non legale) */}
               <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-[12px] text-white/70">
                 Ti chiediamo poche info e ti diciamo subito cosa fare: nella maggior parte dei casi,
-                la soluzione è <span className="font-semibold text-white/80">accisa assolta + rappresentanza fiscale</span>.
+                la soluzione è{" "}
+                <span className="font-semibold text-white/80">
+                  accisa assolta + rappresentanza fiscale
+                </span>
+                .
               </div>
             </div>
 
@@ -263,7 +322,8 @@ export default function LandingSpedireSenzaCodiceAccisa() {
                     Check immediato (senza call)
                   </div>
                   <div className="mt-1 text-[13px] text-white/70">
-                    Compila 4 campi: apriamo WhatsApp con messaggio già pronto.
+                    Ti rispondiamo con: <span className="font-semibold text-white/80">soluzione + tempi + costo indicativo</span>.
+                    (Apriamo WhatsApp con messaggio già pronto.)
                   </div>
                 </div>
               </div>
@@ -329,22 +389,23 @@ export default function LandingSpedireSenzaCodiceAccisa() {
                   {loading ? "Apro WhatsApp..." : "Apri WhatsApp con richiesta pronta"}
                 </button>
 
-                {/* call (opzionale ma utile) */}
+                {/* call (secondaria) */}
                 <a
                   href="tel:+393201441789"
                   onClick={() =>
                     pushDataLayer("spst_call_click", {
                       page: "landing_spedire_senza_codice_accisa",
+                      ...readAttribution(),
                     })
                   }
-                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/[0.04]"
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-white/70 hover:bg-white/[0.04]"
                 >
                   <Phone className="h-4 w-4" />
                   Preferisci chiamare? +39 320 144 1789
                 </a>
 
                 <div className="pt-1 text-center text-[11px] text-white/55">
-                  I dati restano nel messaggio WhatsApp.
+                  I dati restano nel messaggio WhatsApp (non vengono salvati nel sito).
                 </div>
               </form>
             </div>
@@ -352,14 +413,14 @@ export default function LandingSpedireSenzaCodiceAccisa() {
         </div>
       </section>
 
-      {/* Sezione “perché funziona” (snella, no rumore) */}
+      {/* Perché funziona */}
       <section className="pb-24">
         <div className="mx-auto max-w-[1180px] px-4 md:px-5">
           <div className="grid gap-4 md:grid-cols-3">
             <Card
               icon={<AlertTriangle className="h-5 w-5" />}
               title="Il problema reale"
-              text="Molti clienti finali “business” (bar/enoteche) non hanno struttura accisa: l’ordine si blocca subito."
+              text="Molti clienti business (bar/enoteche) non hanno struttura accisa: l’ordine si blocca subito."
             />
             <Card
               icon={<CheckCircle2 className="h-5 w-5" />}
@@ -375,7 +436,7 @@ export default function LandingSpedireSenzaCodiceAccisa() {
         </div>
       </section>
 
-      {/* Sticky CTA mobile (super chiara) */}
+      {/* Sticky CTA mobile */}
       <div className="fixed bottom-3 left-0 right-0 z-50 px-4 md:hidden">
         <div className="mx-auto flex max-w-[640px] items-center justify-between gap-2 rounded-2xl border border-white/10 bg-[#0b1220]/88 p-2 backdrop-blur">
           <button
