@@ -2,11 +2,14 @@
 "use client";
 
 import React from "react";
+import { useLocale } from "../i18n/LocaleProvider";
 
 const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
 
 export function SpstFooter() {
+  const { t } = useLocale();
+
   return (
     <footer className="relative border-t border-white/10 py-12">
       <div className="mx-auto max-w-[1400px] px-5">
@@ -21,7 +24,7 @@ export function SpstFooter() {
                 href="https://www.spst.it/legal"
                 className="text-white/70 hover:text-white transition-colors"
               >
-                Termini e Condizioni
+                {t.footer.termsAndConditions}
               </a>
             </div>
             <small className="text-white/80 leading-relaxed">

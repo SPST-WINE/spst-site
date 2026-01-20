@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { useLocale } from "../i18n/LocaleProvider";
 
 const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
@@ -12,6 +14,12 @@ export function SpstHeader({
   navItems: { href: string; label: string }[];
 }) {
   const [open, setOpen] = useState(false);
+  const { locale, setLocale } = useLocale();
+
+  // Toggle lingua semplice (un click)
+  const toggleLocale = () => {
+    setLocale(locale === "it" ? "en" : "it");
+  };
 
   return (
     <>
@@ -30,11 +38,29 @@ export function SpstHeader({
               <a
                 key={item.href}
                 href={item.href}
-                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors"
+                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors text-white/90 hover:text-white"
               >
                 {item.label}
               </a>
             ))}
+
+            {/* LANGUAGE TOGGLE - Un click per cambiare */}
+            <button
+              onClick={toggleLocale}
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition-all"
+              aria-label="Toggle language"
+            >
+              <span className="text-xs font-semibold text-white/70">
+                {locale === "it" ? "IT" : "EN"}
+              </span>
+              <motion.div
+                animate={{ rotate: locale === "en" ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-white/60"
+              >
+                <Globe2 className="h-3.5 w-3.5" />
+              </motion.div>
+            </button>
 
             {/* AREA RISERVATA (desktop) */}
             <a
@@ -93,6 +119,21 @@ export function SpstHeader({
                 </a>
               ))}
             </nav>
+
+            {/* LANGUAGE TOGGLE (mobile) */}
+            <button
+              onClick={() => {
+                toggleLocale();
+                setOpen(false);
+              }}
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition-all text-white/90"
+              aria-label="Toggle language"
+            >
+              <span className="text-sm font-semibold">
+                {locale === "it" ? "IT" : "EN"}
+              </span>
+              <Globe2 className="h-4 w-4" />
+            </button>
 
             {/* AREA RISERVATA (mobile) */}
             <a

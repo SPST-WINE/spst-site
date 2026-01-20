@@ -61,75 +61,6 @@ function HomeContent() {
         minHeight: "100vh",
       }}
     >
-      {/* HEADER CON LANGUAGE SWITCHER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30 relative z-10">
-        <div className="mx-auto max-w-[1400px] px-5 h-16 flex items-center justify-between gap-4">
-          {/* LOGO */}
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-
-          {/* DESKTOP NAV */}
-          <nav className="hidden lg:flex items-center gap-5 text-[0.95rem] font-semibold">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors text-white/90 hover:text-white"
-              >
-                {item.label}
-              </a>
-            ))}
-
-            {/* LANGUAGE TOGGLE - Un click per cambiare */}
-            <button
-              onClick={toggleLocale}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition-all"
-              aria-label="Toggle language"
-            >
-              <span className="text-xs font-semibold text-white/70">
-                {locale === "it" ? "IT" : "EN"}
-              </span>
-              <motion.div
-                animate={{ rotate: locale === "en" ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-white/60"
-              >
-                <Globe2 className="h-3.5 w-3.5" />
-              </motion.div>
-            </button>
-
-            {/* AREA RISERVATA */}
-            <a
-              href="https://dashboard.spst.it"
-              className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-            >
-              {t.nav.areaRiservata}
-            </a>
-          </nav>
-
-          {/* MOBILE MENU */}
-          <div className="lg:hidden flex items-center gap-2">
-            <button
-              onClick={toggleLocale}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5"
-            >
-              <span className="text-xs font-semibold text-white">
-                {locale === "it" ? "IT" : "EN"}
-              </span>
-              <Globe2 className="h-3 w-3 text-white/70" />
-            </button>
-            <a
-              href="https://dashboard.spst.it"
-              className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-3 py-1.5 text-sm font-bold"
-            >
-              {t.nav.areaRiservata}
-            </a>
-          </div>
-        </div>
-      </header>
-
       {/* ===== HERO - STILE TECH CENTRATO ===== */}
       <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32 min-h-[85vh] flex items-center">
 
@@ -745,9 +676,6 @@ function HomeContent() {
           </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <SpstFooter />
     </main>
   );
 }

@@ -277,6 +277,10 @@ export const translations = {
       ctaTitle: 'Hai un caso specifico (Paese, volumi, buyer, accise)?',
       ctaDesc: 'Ti diciamo subito il modello corretto e cosa serve davvero.',
     },
+    // Footer
+    footer: {
+      termsAndConditions: 'Termini e Condizioni',
+    },
   },
   en: {
     // Navigation
@@ -547,6 +551,10 @@ export const translations = {
       ctaTitle: 'Have a specific case (Country, volumes, buyer, excise)?',
       ctaDesc: 'We\'ll tell you right away the correct model and what you really need.',
     },
+    // Footer
+    footer: {
+      termsAndConditions: 'Terms and Conditions',
+    },
   },
 } as const;
 
@@ -646,5 +654,8 @@ export type Translations = {
   };
   blog: {
     [key: string]: string;
+  };
+  footer: {
+    termsAndConditions: string;
   };
 };

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { LocaleProvider } from "../components/i18n/LocaleProvider";
+import { SpstLayout } from "../components/spst/SpstLayout";
 
 export const metadata: Metadata = {
   title: "SPST - Export & Wine Logistics",
@@ -78,7 +79,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* End Meta Pixel (noscript) */}
 
         <LocaleProvider>
-          {children}
+          <SpstLayout>
+            {children}
+          </SpstLayout>
         </LocaleProvider>
       </body>
     </html>
