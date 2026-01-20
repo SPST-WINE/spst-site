@@ -646,4 +646,7 @@ export type Translations = {
   register: {
     [key: string]: string;
   };
+  blog: {
+    [key: string]: string;
+  };
 };
