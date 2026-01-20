@@ -226,7 +226,7 @@ function HomeContent() {
                 className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
               >
                 <span className="relative z-10">{t.hero.ctaPrimary}</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 transition-opacity group-hover:opacity-100" />
               </a>
               <a
@@ -237,42 +237,36 @@ function HomeContent() {
               </a>
             </motion.div>
 
-            {/* Stats counters nell'hero con animazione fluida al caricamento */}
+            {/* Stats counters nell'hero con animazione fluida al caricamento - Card elegante */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 grid grid-cols-3 gap-4 md:gap-8 w-full max-w-2xl mx-auto"
+              className="mt-12 w-full max-w-xl mx-auto"
             >
-              <CounterStat
-                from={49}
-                to={50}
-                suffix="+"
-                label={locale === "it" ? "Cantine" : "Wineries"}
-                delay={0.5}
-                autoStart={true}
-              />
-              <CounterStat
-                from={19}
-                to={20}
-                suffix="+"
-                label={locale === "it" ? "Buyer attivi" : "Active buyers"}
-                delay={0.7}
-                autoStart={true}
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.9 }}
-                className="text-center"
-              >
-                <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl whitespace-nowrap">
-                  USA, ASIA, UE
+              <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl shadow-black/20">
+                {/* Subtle glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
+                
+                <div className="relative grid grid-cols-2 gap-6 md:gap-8">
+                  <CounterStat
+                    from={49}
+                    to={50}
+                    suffix="+"
+                    label={locale === "it" ? "Cantine" : "Wineries"}
+                    delay={0.5}
+                    autoStart={true}
+                  />
+                  <CounterStat
+                    from={19}
+                    to={20}
+                    suffix="+"
+                    label={locale === "it" ? "Buyer attivi" : "Active buyers"}
+                    delay={0.7}
+                    autoStart={true}
+                  />
                 </div>
-                <div className="mt-2 text-xs text-white/70 md:text-sm">
-                  {locale === "it" ? "Mercati" : "Markets"}
-                </div>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </motion.div>
@@ -846,7 +840,7 @@ function CounterStat({
       setHasAnimated(true);
       
       // Animazione ultra-fluida con easing elegante
-      const duration = 2500; // 2.5 secondi per massima fluidità
+      const duration = 2000; // 2 secondi per animazione elegante
       const startTime = Date.now();
       const startValue = from;
       const endValue = to;

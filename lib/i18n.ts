@@ -23,7 +23,7 @@ export const translations = {
     hero: {
       kicker: 'Export vino all-in-one',
       title: 'Il tuo vino nel mondo,',
-      titleHighlight: 'senza pensieri.',
+      titleHighlight: 'in un click',
       description: 'SPST gestisce documenti doganali e fiscali, organizza la spedizione (express o pallet) e costruisce flussi export stabili verso USA, Europa e altri mercati, con un unico partner operativo.',
       ctaPrimary: 'Richiedi una quotazione',
       ctaSecondary: 'Servizi e contatti',
@@ -88,7 +88,7 @@ export const translations = {
     hero: {
       kicker: 'Wine export all-in-one',
       title: 'Your wine worldwide,',
-      titleHighlight: 'worry-free.',
+      titleHighlight: 'in one click',
       description: 'SPST handles customs and tax documents, organizes shipping (express or pallet) and builds stable export flows to USA, Europe and other markets, with a single operational partner.',
       ctaPrimary: 'Request a quote',
       ctaSecondary: 'Services and contacts',
