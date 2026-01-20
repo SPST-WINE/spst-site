@@ -43,6 +43,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   // Funzione setLocale memoizzata per evitare ri-render inutili
   const setLocale = useCallback((newLocale: Locale) => {
+    // Aggiorna immediatamente lo stato
     setLocaleState(newLocale);
     try {
       localStorage.setItem("spst-locale", newLocale);
@@ -54,8 +55,15 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   // Memoizza le traduzioni per evitare ri-calcoli inutili
   const t = useMemo(() => getTranslations(locale), [locale]);
 
+  // Memoizza il valore del context per evitare ri-render inutili
+  // ma assicurati che cambi quando cambia locale o t
+  const contextValue = useMemo(
+    () => ({ locale, setLocale, t }),
+    [locale, setLocale, t]
+  );
+
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, t }}>
+    <LocaleContext.Provider value={contextValue}>
       {children}
     </LocaleContext.Provider>
   );

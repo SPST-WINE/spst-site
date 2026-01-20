@@ -19,7 +19,7 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
   }
 
   // Memoizza i navItems per evitare ri-creazioni inutili
-  // Include locale come dipendenza per aggiornare quando cambia la lingua
+  // Include locale e tutte le traduzioni come dipendenza per aggiornare quando cambia la lingua
   const defaultNavItems = useMemo(
     () => [
       { href: "/", label: t.nav.home },
