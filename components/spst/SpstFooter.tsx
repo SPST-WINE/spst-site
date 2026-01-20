@@ -8,14 +8,22 @@ const LOGO_URL =
 
 export function SpstFooter() {
   return (
-    <footer className="py-8">
-      <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-5 sm:flex-row">
-        <a className="flex items-center gap-2 font-extrabold text-white" href="/">
-          <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-        </a>
-        <small className="text-center text-white/80 leading-tight sm:text-right">
-          © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
-        </small>
+    <footer className="relative border-t border-white/10 py-12">
+      <div className="mx-auto max-w-[1400px] px-5">
+        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <a className="flex items-center gap-2 font-extrabold text-white" href="/">
+            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
+            <span className="hidden sm:inline">SPST</span>
+          </a>
+          <div className="flex flex-col items-center gap-2 text-center md:items-end md:text-right">
+            <small className="text-white/80 leading-relaxed">
+              © SPST SRL · P.IVA IT03218840647
+            </small>
+            <small className="text-white/60 text-sm leading-relaxed">
+              Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
+            </small>
+          </div>
+        </div>
       </div>
     </footer>
   );

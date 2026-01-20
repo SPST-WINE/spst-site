@@ -57,14 +57,16 @@ function HomeContent() {
 
   return (
     <main
-      className="font-sans text-slate-100 selection:bg-orange-300/40"
+      className="font-sans text-slate-100 selection:bg-orange-300/40 relative"
       style={{
         background: SPST_PUBLIC_BG,
         minHeight: "100vh",
       }}
     >
+      {/* Gradient wave effect per ogni sezione */}
+      <GradientWaveSection />
       {/* HEADER CON LANGUAGE SWITCHER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30 relative z-10">
         <div className="mx-auto max-w-[1400px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">
@@ -133,7 +135,7 @@ function HomeContent() {
       </header>
 
       {/* ===== HERO - STILE TECH CENTRATO ===== */}
-      <section className="relative overflow-hidden pt-20 pb-20 md:pt-28 md:pb-32 min-h-[85vh] flex items-center">
+      <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32 min-h-[85vh] flex items-center">
 
         {/* Tech grid background */}
         <div className="absolute inset-0 opacity-10">
@@ -248,55 +250,51 @@ function HomeContent() {
               </a>
             </motion.div>
 
+            {/* Stats counters nell'hero con animazione fluida al caricamento */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-12 grid grid-cols-3 gap-4 md:gap-8 w-full max-w-2xl mx-auto"
+            >
+              <CounterStat
+                from={49}
+                to={50}
+                suffix="+"
+                label={locale === "it" ? "Cantine" : "Wineries"}
+                delay={0.5}
+                autoStart={true}
+              />
+              <CounterStat
+                from={19}
+                to={20}
+                suffix="+"
+                label={locale === "it" ? "Buyer attivi" : "Active buyers"}
+                delay={0.7}
+                autoStart={true}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9 }}
+                className="text-center"
+              >
+                <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl whitespace-nowrap">
+                  USA, ASIA, UE
+                </div>
+                <div className="mt-2 text-xs text-white/70 md:text-sm">
+                  {locale === "it" ? "Mercati" : "Markets"}
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
-      </section>
-
-      {/* ===== STATS SECTION (card con counters animati) ===== */}
-      <section className="relative -mt-8 pb-12 md:-mt-12 md:pb-16">
-        <div className="mx-auto max-w-[1200px] px-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-3 gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm md:gap-8 md:p-8"
-          >
-            <CounterStat
-              from={49}
-              to={50}
-              suffix="+"
-              label={locale === "it" ? "Cantine" : "Wineries"}
-              delay={0.2}
-            />
-            <CounterStat
-              from={19}
-              to={20}
-              suffix="+"
-              label={locale === "it" ? "Buyer attivi" : "Active buyers"}
-              delay={0.4}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="text-center"
-            >
-              <div className="text-3xl font-black text-white md:text-4xl lg:text-5xl">
-                USA, ASIA, UE
-              </div>
-              <div className="mt-2 text-sm text-white/70 md:text-base">
-                {locale === "it" ? "Mercati" : "Markets"}
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
       </section>
 
 
       {/* ===== FOR WINERIES SECTION ===== */}
       <section id="for-wineries" className="relative py-16 md:py-24">
+        <SectionGradientWave index={0} />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <motion.div
@@ -414,6 +412,7 @@ function HomeContent() {
 
       {/* ===== FOR BUYERS SECTION ===== */}
       <section id="for-buyers" className="relative py-16 md:py-24">
+        <SectionGradientWave index={1} />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <div>
@@ -518,6 +517,7 @@ function HomeContent() {
 
       {/* ===== PROBLEMS + HOW IT WORKS UNIFICATI CON ANIMAZIONI ===== */}
       <section id="scopri-funziona" className="relative py-16 md:py-24">
+        <SectionGradientWave index={2} />
         <div className="mx-auto max-w-[1400px] px-5">
           {/* Header */}
           <div className="text-center mb-12">
@@ -678,6 +678,7 @@ function HomeContent() {
 
       {/* ===== PARTNERS CAROUSEL ===== */}
       <section className="relative py-16 md:py-24">
+        <SectionGradientWave index={3} />
         <div className="mx-auto max-w-[1400px] px-5">
           <div className="text-center mb-12">
             <motion.h2
@@ -704,6 +705,7 @@ function HomeContent() {
 
       {/* ===== CTA SECTION - BOTTONI MIGLIORATI ===== */}
       <section id="preventivo" className="relative py-16 md:py-24">
+        <SectionGradientWave index={4} />
         <div className="mx-auto max-w-[1400px] px-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -753,6 +755,7 @@ function HomeContent() {
 
       {/* ===== CONTACT FORM ===== */}
       <section id="contatti" className="relative py-16 md:py-24">
+        <SectionGradientWave index={5} />
         <div className="mx-auto max-w-[1400px] px-5">
           <SectionHeader
             kicker={t.sections.contact.kicker}
@@ -842,12 +845,14 @@ function CounterStat({
   suffix = "",
   label,
   delay = 0,
+  autoStart = false,
 }: {
   from: number;
   to: number;
   suffix?: string;
   label: string;
   delay?: number;
+  autoStart?: boolean;
 }) {
   const [count, setCount] = useState(from);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -856,74 +861,119 @@ function CounterStat({
   useEffect(() => {
     if (hasAnimated) return;
 
-    // Usa Intersection Observer per animare quando entra in viewport
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setHasAnimated(true);
-          
-          // Animazione fluida con easing
-          const duration = 2000; // 2 secondi per un'animazione più elegante
-          const startTime = Date.now();
-          const startValue = from;
-          const endValue = to;
-          const diff = endValue - startValue;
+    const startAnimation = () => {
+      setHasAnimated(true);
+      
+      // Animazione ultra-fluida con easing elegante
+      const duration = 2500; // 2.5 secondi per massima fluidità
+      const startTime = Date.now();
+      const startValue = from;
+      const endValue = to;
+      const diff = endValue - startValue;
 
-          const animate = () => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Easing function (ease-out-cubic per un'animazione elegante)
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            const currentValue = Math.round(startValue + diff * easeOutCubic);
-            
-            setCount(currentValue);
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out-expo per animazione molto fluida ed elegante)
+        const easeOutExpo = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const currentValue = Math.round(startValue + diff * easeOutExpo);
+        
+        setCount(currentValue);
 
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              setCount(endValue); // Assicura che finisca esattamente al valore target
-            }
-          };
-
-          setTimeout(() => {
-            requestAnimationFrame(animate);
-          }, delay * 1000);
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setCount(endValue); // Assicura che finisca esattamente al valore target
         }
-      },
-      { threshold: 0.3 }
-    );
+      };
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      setTimeout(() => {
+        requestAnimationFrame(animate);
+      }, delay * 1000);
     };
-  }, [from, to, delay, hasAnimated]);
+
+    if (autoStart) {
+      // Se autoStart è true, parte automaticamente al caricamento
+      startAnimation();
+    } else {
+      // Altrimenti usa Intersection Observer
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            startAnimation();
+          }
+        },
+        { threshold: 0.3 }
+      );
+
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+
+      return () => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      };
+    }
+  }, [from, to, delay, hasAnimated, autoStart]);
 
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ delay, duration: 0.5 }}
       className="text-center"
     >
       <motion.div
-        className="text-3xl font-black text-white md:text-4xl lg:text-5xl"
-        animate={hasAnimated ? { scale: [1, 1.1, 1] } : {}}
-        transition={{ duration: 0.3, times: [0, 0.5, 1] }}
+        className="text-2xl font-black text-white md:text-3xl lg:text-4xl"
+        animate={
+          hasAnimated && count === to
+            ? {
+                scale: [1, 1.15, 1],
+              }
+            : {}
+        }
+        transition={{
+          duration: 0.4,
+          times: [0, 0.5, 1],
+          ease: "easeOut",
+        }}
       >
         {count}
         {suffix}
       </motion.div>
-      <div className="mt-2 text-sm text-white/70 md:text-base">{label}</div>
+      <div className="mt-2 text-xs text-white/70 md:text-sm">{label}</div>
     </motion.div>
+  );
+}
+
+/* Gradient Wave Effect - Onde blu→nero→blu per ogni sezione */
+function GradientWaveSection() {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0">
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          background: `radial-gradient(ellipse 100% 60% at 50% 50%, rgba(10,23,34,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(10,23,34,0.8) 100%)`,
+        }}
+      />
+    </div>
+  );
+}
+
+function SectionGradientWave({ index }: { index: number }) {
+  const offset = index * 15; // Offset per variare l'onda tra le sezioni
+  
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none opacity-20"
+      style={{
+        background: `radial-gradient(ellipse 120% 80% at 50% ${50 + offset}%, rgba(10,23,34,0.4) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.8) 60%, rgba(10,23,34,0.4) 100%)`,
+      }}
+    />
   );
 }
 
