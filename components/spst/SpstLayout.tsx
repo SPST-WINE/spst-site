@@ -24,12 +24,11 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
     () => [
       { href: "/", label: t.nav.home },
       { href: "/servizi-e-contatti", label: t.nav.services },
-      { href: "/#vantaggi", label: t.nav.whySpst },
       { href: "/portale-quotazioni", label: t.nav.quote },
       { href: "/spst-paylink", label: t.nav.usaShipping },
       { href: "/#for-buyers", label: t.nav.forBuyers },
     ],
-    [t.nav.home, t.nav.services, t.nav.whySpst, t.nav.quote, t.nav.usaShipping, t.nav.forBuyers, locale]
+    [t.nav.home, t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.forBuyers, locale]
   );
 
   return (
