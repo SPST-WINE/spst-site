@@ -247,7 +247,7 @@ export default function PresentationPage() {
               className="absolute inset-0 md:p-0 overflow-auto md:overflow-hidden"
               onClick={() => go(1)}
             >
-              <SlideRenderer slide={slides[i]} />
+              <SlideRenderer slide={slides[i]} t={t} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -284,7 +284,7 @@ export default function PresentationPage() {
 }
 
 /* ---------------- RENDERERS ---------------- */
-function SlideRenderer({ slide }: { slide: Slide }) {
+function SlideRenderer({ slide, t }: { slide: Slide; t: any }) {
   if (slide.kind === 'title') {
     return (
       <div className="w-full h-full grid place-items-center p-4 sm:p-6 text-center">
@@ -298,18 +298,19 @@ function SlideRenderer({ slide }: { slide: Slide }) {
   }
 
   if (slide.kind === 'column') {
+    const columnSlide = slide;
     return (
       <div className="w-full h-full p-4 sm:p-6 md:p-10">
         {/* contenuto centrato su desktop; su mobile è scrollabile */}
         <div className="mx-auto max-w-[980px] md:h-full md:flex md:flex-col md:justify-center">
           <div className="mb-3 sm:mb-4">
-            {slide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
+            {columnSlide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{columnSlide.kicker}</div>}
             <h2 className="text-[22px] sm:text-[28px] md:text-[34px] font-black">
               <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, #fff)` }}>
-                {slide.title}
+                {columnSlide.title}
               </span>
             </h2>
-            {slide.description && <p className="text-white/80 mt-2 text-[14px] sm:text-[15px]">{slide.description}</p>}
+            {columnSlide.description && <p className="text-white/80 mt-2 text-[14px] sm:text-[15px]">{columnSlide.description}</p>}
             {/* underline alleggerita e più stabile */}
             <div
               className="mt-3 h-[2px] w-20 rounded-full opacity-70"
@@ -317,9 +318,9 @@ function SlideRenderer({ slide }: { slide: Slide }) {
             />
           </div>
 
-          {slide.items && (
+          {columnSlide.items && (
             <div className="grid grid-cols-1 gap-3">
-              {slide.items.map((it, i) => (
+              {columnSlide.items.map((it, i) => (
                 <motion.div
                   key={i}
                   initial={{ y: 12, opacity: 0 }}
@@ -363,32 +364,33 @@ function SlideRenderer({ slide }: { slide: Slide }) {
   }
 
   if (slide.kind === 'cta') {
+    const ctaSlide = slide;
     return (
       <div className="w-full h-full grid place-items-center p-4 sm:p-6 text-center">
         <div className="max-w-[70ch]">
-          <h2 className="text-[24px] sm:text-[30px] md:text-[34px] font-black">{slide.title}</h2>
-          {slide.bullets && (
+          <h2 className="text-[24px] sm:text-[30px] md:text-[34px] font-black">{ctaSlide.title}</h2>
+          {ctaSlide.bullets && (
             <ul className="mt-3 text-white/80 text-[14px] sm:text-[15px]">
-              {slide.bullets.map((b, i) => (
+              {ctaSlide.bullets.map((b, i) => (
                 <li key={i}>• {b}</li>
               ))}
             </ul>
           )}
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href="https://spst.it/register"
+              href={ctaSlide.primary.href}
               className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
               style={{ background: SPST_ORANGE }}
             >
-              {t.locale === 'it' ? 'Entra in SPST' : 'Join SPST'}
+              {ctaSlide.primary.label}
             </a>
             <a
-              href={TUTORIAL_URL}
+              href={ctaSlide.secondary.href}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
             >
-              {t.locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
+              {ctaSlide.secondary.label}
             </a>
           </div>
         </div>
