@@ -57,8 +57,8 @@ export const translations = {
         description: 'SPST facilita l\'accesso al mercato italiano del vino per importatori e buyer internazionali. Offriamo supporto completo per sourcing, documentazione, logistica e compliance.',
       },
       partners: {
-        kicker: 'Lavorano con noi',
-        title: 'Cantine partner',
+        kicker: '',
+        title: 'I nostri partner',
       },
       cta: {
         title: 'Pronto a spedire il tuo vino nel mondo?',
@@ -122,8 +122,8 @@ export const translations = {
         description: 'SPST facilitates access to the Italian wine market for importers and international buyers. We offer complete support for sourcing, documentation, logistics and compliance.',
       },
       partners: {
-        kicker: 'Work with us',
-        title: 'Partner wineries',
+        kicker: '',
+        title: 'Our partners',
       },
       cta: {
         title: 'Ready to ship your wine worldwide?',

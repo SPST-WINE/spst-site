@@ -133,7 +133,7 @@ function HomeContent() {
       </header>
 
       {/* ===== HERO - STILE TECH CENTRATO CON GRADIENTE MIGLIORATO ===== */}
-      <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 min-h-[85vh] flex items-center">
+      <section className="relative overflow-hidden pt-20 pb-20 md:pt-28 md:pb-32 min-h-[85vh] flex items-center">
         {/* Background gradient migliorato */}
         <div
           className="absolute inset-0 opacity-90"
@@ -291,8 +291,9 @@ function HomeContent() {
 
 
       {/* ===== FOR WINERIES SECTION ===== */}
-      <section id="for-wineries" className="relative py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
+      <section id="for-wineries" className="relative -mt-8 pt-4 pb-16 md:-mt-12 md:pt-8 md:py-24">
+        {/* Fade transition dal hero */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <motion.div
@@ -676,11 +677,23 @@ function HomeContent() {
       {/* ===== PARTNERS CAROUSEL ===== */}
       <section className="relative py-16 md:py-24">
         <div className="mx-auto max-w-[1400px] px-5">
-          <SectionHeader
-            kicker={t.sections.partners.kicker}
-            title={t.sections.partners.title}
-            tone="plain"
-          />
+          <div className="text-center mb-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl font-black sm:text-4xl md:text-5xl text-white"
+            >
+              {t.sections.partners.title}
+            </motion.h2>
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto"
+            />
+          </div>
           <div className="mt-12">
             <PartnersCarousel />
           </div>
@@ -708,7 +721,7 @@ function HomeContent() {
             </div>
 
             <div className="relative flex flex-col items-center justify-between gap-6 md:flex-row">
-              <h3 className="text-xl font-bold text-white md:text-2xl lg:text-3xl text-center md:text-left whitespace-nowrap">
+              <h3 className="text-base font-bold text-white sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-center md:text-left whitespace-nowrap">
                 {t.sections.cta.title}
               </h3>
               <div className="flex flex-wrap justify-center gap-3 md:justify-end">
