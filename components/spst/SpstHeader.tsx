@@ -16,11 +16,11 @@ export function SpstHeader({
   const [open, setOpen] = useState(false);
   const { locale, setLocale } = useLocale();
 
-  // Toggle lingua semplice (un click)
-  const toggleLocale = () => {
+  // Toggle lingua semplice (un click) - usa useCallback per stabilità
+  const toggleLocale = React.useCallback(() => {
     const newLocale = locale === "it" ? "en" : "it";
     setLocale(newLocale);
-  };
+  }, [locale, setLocale]);
 
   return (
     <>
@@ -37,7 +37,7 @@ export function SpstHeader({
           <nav className="hidden md:flex items-center gap-5 text-[0.95rem] font-semibold">
             {navItems.map((item) => (
               <a
-                key={item.href}
+                key={`${item.href}-${locale}`}
                 href={item.href}
                 className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors text-white/90 hover:text-white"
               >
@@ -112,7 +112,7 @@ export function SpstHeader({
             <nav className="flex flex-col gap-4 mt-6 text-white/90">
               {navItems.map((item) => (
                 <a
-                  key={item.href}
+                  key={`${item.href}-${locale}`}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className="text-[1.05rem] font-semibold hover:text-white transition"

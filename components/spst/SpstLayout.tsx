@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { SpstHeader } from "./SpstHeader";
 import { SpstFooter } from "./SpstFooter";
@@ -10,7 +10,7 @@ import { useLocale } from "../i18n/LocaleProvider";
 const EXCLUDED_PATHS = ["/back-office"];
 
 export function SpstLayout({ children }: { children: React.ReactNode }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const pathname = usePathname();
 
   // Se la pagina è esclusa, renderizza solo i children
@@ -18,18 +18,23 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const defaultNavItems = [
-    { href: "/", label: t.nav.home },
-    { href: "/servizi-e-contatti", label: t.nav.services },
-    { href: "/#vantaggi", label: t.nav.whySpst },
-    { href: "/portale-quotazioni", label: t.nav.quote },
-    { href: "/spst-paylink", label: t.nav.usaShipping },
-    { href: "/#for-buyers", label: t.nav.forBuyers },
-  ];
+  // Memoizza i navItems per evitare ri-creazioni inutili
+  // Include locale come dipendenza per aggiornare quando cambia la lingua
+  const defaultNavItems = useMemo(
+    () => [
+      { href: "/", label: t.nav.home },
+      { href: "/servizi-e-contatti", label: t.nav.services },
+      { href: "/#vantaggi", label: t.nav.whySpst },
+      { href: "/portale-quotazioni", label: t.nav.quote },
+      { href: "/spst-paylink", label: t.nav.usaShipping },
+      { href: "/#for-buyers", label: t.nav.forBuyers },
+    ],
+    [t.nav.home, t.nav.services, t.nav.whySpst, t.nav.quote, t.nav.usaShipping, t.nav.forBuyers, locale]
+  );
 
   return (
     <>
-      <SpstHeader navItems={defaultNavItems} />
+      <SpstHeader key={locale} navItems={defaultNavItems} />
       {children}
       <SpstFooter />
     </>
