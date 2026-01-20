@@ -28,7 +28,7 @@ export function SpstHeader({
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md" style={{ backgroundColor: '#0a1722' }}>
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md" style={{ backgroundColor: 'rgba(10, 23, 34, 0.85)' }}>
         <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">
