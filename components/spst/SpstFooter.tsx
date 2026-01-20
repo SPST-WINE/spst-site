@@ -15,7 +15,15 @@ export function SpstFooter() {
             <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
             <span className="hidden sm:inline">SPST</span>
           </a>
-          <div className="flex flex-col items-center gap-2 text-center md:items-end md:text-right">
+          <div className="flex flex-col items-center gap-3 text-center md:items-end md:text-right">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm md:justify-end">
+              <a
+                href="https://www.spst.it/legal"
+                className="text-white/70 hover:text-white transition-colors"
+              >
+                Termini e Condizioni
+              </a>
+            </div>
             <small className="text-white/80 leading-relaxed">
               © SPST SRL · P.IVA IT03218840647
             </small>

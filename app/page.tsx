@@ -16,8 +16,6 @@ import {
   Building2,
   ArrowRight,
   CheckCircle2,
-  Package,
-  Truck,
   MapPin,
   Gauge,
 } from "lucide-react";
@@ -57,14 +55,12 @@ function HomeContent() {
 
   return (
     <main
-      className="font-sans text-slate-100 selection:bg-orange-300/40 relative"
+      className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{
         background: SPST_PUBLIC_BG,
         minHeight: "100vh",
       }}
     >
-      {/* Gradient wave effect per ogni sezione */}
-      <GradientWaveSection />
       {/* HEADER CON LANGUAGE SWITCHER */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30 relative z-10">
         <div className="mx-auto max-w-[1400px] px-5 h-16 flex items-center justify-between gap-4">
@@ -170,15 +166,6 @@ function HomeContent() {
           }}
         />
 
-        {/* Animated side elements - Left (più vicini e tematici vino/logistica) */}
-        <div className="pointer-events-none absolute left-4 top-1/2 hidden -translate-y-1/2 xl:block lg:left-8">
-          <WineLogisticsAnimation side="left" />
-        </div>
-
-        {/* Animated side elements - Right */}
-        <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 xl:block lg:right-8">
-          <WineLogisticsAnimation side="right" />
-        </div>
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
@@ -294,7 +281,6 @@ function HomeContent() {
 
       {/* ===== FOR WINERIES SECTION ===== */}
       <section id="for-wineries" className="relative py-16 md:py-24">
-        <SectionGradientWave index={0} />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <motion.div
@@ -412,7 +398,6 @@ function HomeContent() {
 
       {/* ===== FOR BUYERS SECTION ===== */}
       <section id="for-buyers" className="relative py-16 md:py-24">
-        <SectionGradientWave index={1} />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <div>
@@ -517,7 +502,6 @@ function HomeContent() {
 
       {/* ===== PROBLEMS + HOW IT WORKS UNIFICATI CON ANIMAZIONI ===== */}
       <section id="scopri-funziona" className="relative py-16 md:py-24">
-        <SectionGradientWave index={2} />
         <div className="mx-auto max-w-[1400px] px-5">
           {/* Header */}
           <div className="text-center mb-12">
@@ -678,7 +662,6 @@ function HomeContent() {
 
       {/* ===== PARTNERS CAROUSEL ===== */}
       <section className="relative py-16 md:py-24">
-        <SectionGradientWave index={3} />
         <div className="mx-auto max-w-[1400px] px-5">
           <div className="text-center mb-12">
             <motion.h2
@@ -705,7 +688,6 @@ function HomeContent() {
 
       {/* ===== CTA SECTION - BOTTONI MIGLIORATI ===== */}
       <section id="preventivo" className="relative py-16 md:py-24">
-        <SectionGradientWave index={4} />
         <div className="mx-auto max-w-[1400px] px-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -755,7 +737,6 @@ function HomeContent() {
 
       {/* ===== CONTACT FORM ===== */}
       <section id="contatti" className="relative py-16 md:py-24">
-        <SectionGradientWave index={5} />
         <div className="mx-auto max-w-[1400px] px-5">
           <SectionHeader
             kicker={t.sections.contact.kicker}
@@ -950,167 +931,3 @@ function CounterStat({
   );
 }
 
-/* Gradient Wave Effect - Onde blu→nero→blu per ogni sezione */
-function GradientWaveSection() {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0">
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: `radial-gradient(ellipse 100% 60% at 50% 50%, rgba(10,23,34,0.8) 0%, rgba(0,0,0,0.6) 50%, rgba(10,23,34,0.8) 100%)`,
-        }}
-      />
-    </div>
-  );
-}
-
-function SectionGradientWave({ index }: { index: number }) {
-  const offset = index * 15; // Offset per variare l'onda tra le sezioni
-  
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none opacity-20"
-      style={{
-        background: `radial-gradient(ellipse 120% 80% at 50% ${50 + offset}%, rgba(10,23,34,0.4) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.8) 60%, rgba(10,23,34,0.4) 100%)`,
-      }}
-    />
-  );
-}
-
-/* Wine & Logistics Animation - Tematiche del mondo vino/logistica */
-function WineLogisticsAnimation({ side }: { side: "left" | "right" }) {
-  const isLeft = side === "left";
-
-  return (
-    <div className={`relative w-48 ${isLeft ? "" : ""}`}>
-      {/* Bottiglie di vino fluttuanti */}
-      {[0, 1, 2].map((i) => (
-        <motion.div
-          key={`bottle-${i}`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            y: [0, -40 - i * 20, 0],
-            rotate: [0, 10 - i * 5, 0],
-          }}
-          transition={{
-            duration: 4 + i * 0.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.8,
-          }}
-          className={`absolute ${isLeft ? "left-0" : "right-0"} top-${i * 40}`}
-          style={{
-            top: `${i * 40}px`,
-          }}
-        >
-          <Package className="h-8 w-8 text-[#f7931e]/40" />
-        </motion.div>
-      ))}
-
-      {/* Camion/Truck animato */}
-      <motion.div
-        initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-        animate={{
-          opacity: [0.4, 0.7, 0.4],
-          x: isLeft ? [0, 30, 0] : [0, -30, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className={`absolute ${isLeft ? "left-8" : "right-8"} top-24`}
-      >
-        <Truck className="h-10 w-10 text-[#f7931e]/50" />
-      </motion.div>
-
-      {/* Mappa/Globe con rotte */}
-      <motion.div
-        animate={{
-          rotate: isLeft ? [0, 360] : [360, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        className={`absolute ${isLeft ? "left-4" : "right-4"} top-40`}
-      >
-        <Globe2 className="h-12 w-12 text-[#1c3e5e]/60" />
-      </motion.div>
-
-      {/* Linee di percorso (route lines) */}
-      {[0, 1].map((i) => (
-        <motion.div
-          key={`route-${i}`}
-          initial={{ pathLength: 0 }}
-          animate={{
-            pathLength: [0, 1, 0],
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 1.5,
-          }}
-          className={`absolute ${isLeft ? "left-12" : "right-12"} top-${20 + i * 60}`}
-          style={{
-            top: `${20 + i * 60}px`,
-          }}
-        >
-          <Route className="h-16 w-16 text-[#f7931e]/30" />
-        </motion.div>
-      ))}
-
-      {/* Pallettizzazione (stack) */}
-      <motion.div
-        animate={{
-          y: [0, -10, 0],
-          opacity: [0.5, 0.8, 0.5],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-        className={`absolute ${isLeft ? "left-0" : "right-0"} top-56`}
-      >
-        <div className="flex flex-col gap-1">
-          <div className="h-3 w-12 bg-[#f7931e]/30 rounded" />
-          <div className="h-3 w-12 bg-[#f7931e]/40 rounded ml-2" />
-          <div className="h-3 w-12 bg-[#f7931e]/50 rounded" />
-        </div>
-      </motion.div>
-
-      {/* Particelle fluttuanti (vino) */}
-      {[0, 1, 2, 3].map((i) => (
-        <motion.div
-          key={`particle-${i}`}
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: [0, 0.8, 0],
-            y: [0, -120 - i * 30],
-            x: isLeft ? [0, 30, 60] : [0, -30, -60],
-          }}
-          transition={{
-            duration: 6 + i,
-            repeat: Infinity,
-            ease: "easeOut",
-            delay: i * 1.5,
-          }}
-          className={`absolute ${isLeft ? "left-16" : "right-16"} top-${30 + i * 40}`}
-          style={{
-            top: `${30 + i * 40}px`,
-          }}
-        >
-          <div className="h-2 w-2 rounded-full bg-[#f7931e]/60" />
-        </motion.div>
-      ))}
-    </div>
-  );
-}
