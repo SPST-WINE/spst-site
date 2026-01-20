@@ -19,6 +19,8 @@ import {
   LineChart,
   MessageSquareMore,
 } from 'lucide-react';
+import { useLocale } from '../../components/i18n/LocaleProvider';
+import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
 
 const SPST_BLUE_SOFT = '#1c3e5e';
 const SPST_ORANGE = '#f7931e';
@@ -57,64 +59,63 @@ const slides: Slide[] = [
     subtitle:
       'SPST semplifica l’export per le cantine: documenti doganali, spedizioni e accesso ai buyer — in un’unica piattaforma con assistenza reale.',
   },
-  {
-    kind: 'column',
-    kicker: 'I problemi reali',
-    title: 'Perché è complicato spedire vino',
-    description:
-      'Ogni Paese ha prassi diverse. Senza processi chiari si perdono tempo e margini, con maggior rischio di blocchi.',
-    items: [
-      { icon: <TriangleAlert className="h-5 w-5" />, title: 'Documenti complessi', desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.' },
-      { icon: <Ship className="h-5 w-5" />, title: 'Costi e rotte variabili', desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.' },
-      { icon: <Globe2 className="h-5 w-5" />, title: 'Accesso ai buyer', desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.' },
-    ],
-  },
-  {
-    kind: 'column',
-    kicker: 'Come funziona',
-    title: 'Dalla carta al tracking, in 3 step',
-    description:
-      'Ti seguiamo dall’impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
-    items: [
-      { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Generiamo e archiviamo modulistica fiscale e doganale.' },
-      { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.' },
-      { icon: <TrendingUp className="h-5 w-5" />, title: '3) Crescita commerciale', desc: 'Wine Connect ti collega a buyer internazionali qualificati.' },
-    ],
-  },
-  {
-    kind: 'column',
-    kicker: 'La Web App',
-    title: 'Un’unica piattaforma per tutto',
-    description:
-      'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
-    items: [
-      { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.' },
-      { icon: <LineChart className="h-5 w-5" />, title: 'Dati e KPI', desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.' },
-      { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Assistenza integrata', desc: 'WhatsApp/telefono direttamente dalla piattaforma.' },
-    ],
-  },
-  {
-    kind: 'column',
-    kicker: 'Perché SPST',
-    title: 'Tecnologia + persone',
-    description:
-      'La piattaforma riduce tempi ed errori; il team garantisce continuità e risoluzione. Dalla prima spedizione, non sei mai solo.',
-    items: [
-      { title: 'Unico partner', desc: 'Documenti, logistica e supporto commerciale coordinati.' },
-      { title: 'Tariffe ottimizzate', desc: 'Multi-corriere e rotte selezionate su dati reali.' },
-      { title: 'SLA chiari', desc: 'Tempi certi e comunicazione proattiva sugli stati.' },
-    ],
-  },
-  {
-    kind: 'cta',
-    title: 'Pronto a spedire senza pensieri?',
-    bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
-    primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
-    secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
-  },
-];
+    {
+      kind: 'column',
+      kicker: t.sections.problems.kicker,
+      title: t.sections.problems.title,
+      description: 'Ogni Paese ha prassi diverse. Senza processi chiari si perdono tempo e margini, con maggior rischio di blocchi.',
+      items: [
+        { icon: <TriangleAlert className="h-5 w-5" />, title: 'Documenti complessi', desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.' },
+        { icon: <Ship className="h-5 w-5" />, title: 'Costi e rotte variabili', desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.' },
+        { icon: <Globe2 className="h-5 w-5" />, title: 'Accesso ai buyer', desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.' },
+      ],
+    },
+    {
+      kind: 'column',
+      kicker: t.sections.howItWorks.kicker,
+      title: t.sections.howItWorks.title,
+      description: 'Ti seguiamo dall'impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
+      items: [
+        { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Generiamo e archiviamo modulistica fiscale e doganale.' },
+        { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.' },
+        { icon: <TrendingUp className="h-5 w-5" />, title: '3) Crescita commerciale', desc: 'Wine Connect ti collega a buyer internazionali qualificati.' },
+      ],
+    },
+    {
+      kind: 'column',
+      kicker: 'La Web App',
+      title: 'Un'unica piattaforma per tutto',
+      description: 'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
+      items: [
+        { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.' },
+        { icon: <LineChart className="h-5 w-5" />, title: 'Dati e KPI', desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Assistenza integrata', desc: 'WhatsApp/telefono direttamente dalla piattaforma.' },
+      ],
+    },
+    {
+      kind: 'column',
+      kicker: t.sections.whySpst.kicker,
+      title: 'Tecnologia + persone',
+      description: 'La piattaforma riduce tempi ed errori; il team garantisce continuità e risoluzione. Dalla prima spedizione, non sei mai solo.',
+      items: [
+        { title: 'Unico partner', desc: 'Documenti, logistica e supporto commerciale coordinati.' },
+        { title: 'Tariffe ottimizzate', desc: 'Multi-corriere e rotte selezionate su dati reali.' },
+        { title: 'SLA chiari', desc: 'Tempi certi e comunicazione proattiva sugli stati.' },
+      ],
+    },
+    {
+      kind: 'cta',
+      title: t.sections.cta.title,
+      bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
+      primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
+      secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
+    },
+  ];
+}
 
 export default function PresentationPage() {
+  const { t } = useLocale();
+  const slides = getSlides(t);
   const [i, setI] = React.useState(0);
   const [grid, setGrid] = React.useState(false);
   const [fs, setFs] = React.useState(false);
@@ -165,10 +166,7 @@ export default function PresentationPage() {
   return (
     <main
       className="min-h-[100svh] antialiased font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background:
-          'radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)',
-      }}
+      style={{ background: SPST_PUBLIC_BG }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -266,7 +264,7 @@ export default function PresentationPage() {
                   }}
                   className="text-left rounded-xl border border-white/10 bg-white/[0.04] p-3 sm:p-4 hover:bg-white/[0.07] transition"
                 >
-                  <div className="text-[11px] text-white/60 mb-1">Slide {idx + 1}</div>
+                  <div className="text-[11px] text-white/60 mb-1">{t.locale === 'it' ? 'Slide' : 'Slide'} {idx + 1}</div>
                   <Preview slide={s} />
                 </button>
               ))}
@@ -345,7 +343,7 @@ function SlideRenderer({ slide }: { slide: Slide }) {
           )}
 
           {/* link tutorial per la slide Web App */}
-          {slide.title.includes('Un’unica piattaforma') && (
+          {slide.title.includes('Un'unica piattaforma') && (
             <div className="mt-4">
               <a
                 href={TUTORIAL_URL}
@@ -354,7 +352,7 @@ function SlideRenderer({ slide }: { slide: Slide }) {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
               >
                 <MessageSquareMore className="h-4 w-4" />
-                Guarda il video tutorial
+                {t.locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
               </a>
             </div>
           )}
@@ -381,7 +379,7 @@ function SlideRenderer({ slide }: { slide: Slide }) {
               className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
               style={{ background: SPST_ORANGE }}
             >
-              Entra in SPST
+              {t.locale === 'it' ? 'Entra in SPST' : 'Join SPST'}
             </a>
             <a
               href={TUTORIAL_URL}
@@ -389,7 +387,7 @@ function SlideRenderer({ slide }: { slide: Slide }) {
               rel="noopener noreferrer"
               className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
             >
-              Guarda il video tutorial
+              {t.locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
             </a>
           </div>
         </div>
