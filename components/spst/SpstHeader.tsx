@@ -18,13 +18,14 @@ export function SpstHeader({
 
   // Toggle lingua semplice (un click)
   const toggleLocale = () => {
-    setLocale(locale === "it" ? "en" : "it");
+    const newLocale = locale === "it" ? "en" : "it";
+    setLocale(newLocale);
   };
 
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30">
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md" style={{ backgroundColor: '#0a1722' }}>
         <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">
@@ -46,6 +47,7 @@ export function SpstHeader({
 
             {/* LANGUAGE TOGGLE - Un click per cambiare */}
             <button
+              type="button"
               onClick={toggleLocale}
               className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition-all"
               aria-label="Toggle language"
@@ -122,6 +124,7 @@ export function SpstHeader({
 
             {/* LANGUAGE TOGGLE (mobile) */}
             <button
+              type="button"
               onClick={() => {
                 toggleLocale();
                 setOpen(false);
