@@ -41,24 +41,25 @@ type Slide =
     }
   | { kind: 'cta'; title: string; bullets?: string[]; primary: { label: string; href: string }; secondary?: { label: string; href: string } };
 
-const slides: Slide[] = [
-  {
-    kind: 'title',
-    kicker: 'Export vino all-in-one',
-    title: (
-      <>
-        Il tuo vino nel mondo,{' '}
-        <span
-          className="text-transparent bg-clip-text"
-          style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})` }}
-        >
-          senza pensieri.
-        </span>
-      </>
-    ),
-    subtitle:
-      'SPST semplifica l’export per le cantine: documenti doganali, spedizioni e accesso ai buyer — in un’unica piattaforma con assistenza reale.',
-  },
+// Slides will be generated dynamically based on locale
+function getSlides(t: any): Slide[] {
+  return [
+    {
+      kind: 'title',
+      kicker: t.hero.kicker,
+      title: (
+        <>
+          {t.hero.title}{' '}
+          <span
+            className="text-transparent bg-clip-text"
+            style={{ backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})` }}
+          >
+            {t.hero.titleHighlight}
+          </span>
+        </>
+      ),
+      subtitle: t.hero.description,
+    },
     {
       kind: 'column',
       kicker: t.sections.problems.kicker,
