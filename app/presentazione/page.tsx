@@ -74,7 +74,7 @@ const slides: Slide[] = [
       kind: 'column',
       kicker: t.sections.howItWorks.kicker,
       title: t.sections.howItWorks.title,
-      description: 'Ti seguiamo dall'impostazione documentale alla consegna, con KPI e tracciabilità chiari.',
+      description: "Ti seguiamo dall'impostazione documentale alla consegna, con KPI e tracciabilità chiari.",
       items: [
         { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Generiamo e archiviamo modulistica fiscale e doganale.' },
         { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.' },
@@ -84,7 +84,7 @@ const slides: Slide[] = [
     {
       kind: 'column',
       kicker: 'La Web App',
-      title: 'Un'unica piattaforma per tutto',
+      title: "Un'unica piattaforma per tutto",
       description: 'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
       items: [
         { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.' },
