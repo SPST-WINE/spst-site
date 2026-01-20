@@ -18,6 +18,7 @@ import {
 import { SpstHeader } from "@/components/spst/SpstHeader";
 import { SpstFooter } from "@/components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "@/lib/spstTheme";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
@@ -25,12 +26,14 @@ const SPST_ORANGE = "#f7931e";
 const LAST_UPDATED = "10/01/2026"; // dd/mm/yyyy
 
 export default function BlogSpedireCampionatureVinoEuropaPage() {
+  const { t } = useLocale();
+  
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/servizi-e-contatti", label: "Servizi" },
-    { href: "/#vantaggi", label: "Perché SPST" },
-    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-    { href: "/spst-paylink", label: "Paylink USA" },
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
     { href: "/blog", label: "Blog" },
   ];
 

@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { useLocale } from '../../components/i18n/LocaleProvider';
 import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
+import { SpstHeader } from '../../components/spst/SpstHeader';
+import { SpstFooter } from '../../components/spst/SpstFooter';
 
 const SPST_BLUE_SOFT = '#1c3e5e';
 const SPST_ORANGE = '#f7931e';
@@ -121,6 +123,14 @@ export default function PresentationPage() {
   const [grid, setGrid] = React.useState(false);
   const [fs, setFs] = React.useState(false);
 
+  const navItems = [
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
+  ];
+
   const total = slides.length;
   const clamp = (n: number) => Math.max(0, Math.min(total - 1, n));
   const go = (dir: number) => setI((v) => clamp(v + dir));
@@ -171,29 +181,25 @@ export default function PresentationPage() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-        <div className="mx-auto max-w-[1200px] px-4 h-14 flex items-center justify-between gap-3">
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-
-          <div className="flex items-center gap-1 sm:gap-2">
-            <button onClick={() => setGrid((v) => !v)} title="Indice (G)" className="rounded-lg hover:bg-white/10 p-2">
-              {grid ? <X className="h-5 w-5" /> : <LayoutGrid className="h-5 w-5" />}
-            </button>
-            <button onClick={toggleFs} title="Fullscreen (F)" className="rounded-lg hover:bg-white/10 p-2">
-              {fs ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-            </button>
-          </div>
+      {/* Header con controlli presentazione */}
+      <div className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+        <SpstHeader navItems={navItems} />
+        
+        {/* Controlli presentazione */}
+        <div className="mx-auto max-w-[1200px] px-4 h-12 flex items-center justify-end gap-1 sm:gap-2">
+          <button onClick={() => setGrid((v) => !v)} title="Indice (G)" className="rounded-lg hover:bg-white/10 p-2">
+            {grid ? <X className="h-5 w-5" /> : <LayoutGrid className="h-5 w-5" />}
+          </button>
+          <button onClick={toggleFs} title="Fullscreen (F)" className="rounded-lg hover:bg-white/10 p-2">
+            {fs ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+          </button>
         </div>
 
         {/* progress */}
         <div className="h-1 bg-white/10">
           <div className="h-1 bg-[var(--spst-orange,#f7931e)]" style={{ width: `${((i + 1) / total) * 100}%` }} />
         </div>
-      </header>
+      </div>
 
       {/* Viewport */}
       <section className="mx-auto max-w-[1400px] px-4 py-4 md:py-6">
@@ -279,6 +285,8 @@ export default function PresentationPage() {
           <kbd className="px-1 py-[2px] bg-white/10 rounded">G</kbd> per indice, <kbd className="px-1 py-[2px] bg-white/10 rounded">F</kbd> per fullscreen.
         </div>
       </section>
+      
+      <SpstFooter />
     </main>
   );
 }
