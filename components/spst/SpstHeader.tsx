@@ -15,6 +15,9 @@ export function SpstHeader({
 }) {
   const [open, setOpen] = useState(false);
   const { locale, setLocale } = useLocale();
+  
+  // Forza il re-render quando cambiano i navItems
+  const navItemsKey = navItems.map((item) => item.label).join('|');
 
   // Toggle lingua semplice (un click) - usa useCallback per stabilità
   const toggleLocale = React.useCallback(() => {
@@ -34,10 +37,10 @@ export function SpstHeader({
           </a>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-5 text-[0.95rem] font-semibold">
+          <nav key={navItemsKey} className="hidden md:flex items-center gap-5 text-[0.95rem] font-semibold">
             {navItems.map((item) => (
               <a
-                key={`${item.href}-${locale}`}
+                key={`${item.href}-${locale}-${item.label}`}
                 href={item.href}
                 className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors text-white/90 hover:text-white"
               >
@@ -109,10 +112,10 @@ export function SpstHeader({
             </a>
 
             {/* MOBILE NAV LINKS */}
-            <nav className="flex flex-col gap-4 mt-6 text-white/90">
+            <nav key={navItemsKey} className="flex flex-col gap-4 mt-6 text-white/90">
               {navItems.map((item) => (
                 <a
-                  key={`${item.href}-${locale}`}
+                  key={`${item.href}-${locale}-${item.label}`}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className="text-[1.05rem] font-semibold hover:text-white transition"

@@ -31,9 +31,12 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
     [t.nav.home, t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.forBuyers, locale]
   );
 
+  // Crea una key univoca basata su locale e navItems per forzare il re-render
+  const headerKey = `${locale}-${defaultNavItems.map((item) => item.label).join('-')}`;
+
   return (
     <>
-      <SpstHeader key={locale} navItems={defaultNavItems} />
+      <SpstHeader key={headerKey} navItems={defaultNavItems} />
       {children}
       <SpstFooter />
     </>
