@@ -16,8 +16,6 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
 import { useLocale } from "../../components/i18n/LocaleProvider";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
@@ -46,7 +44,6 @@ export default function ServiziContatti() {
       style={{ background: SPST_PUBLIC_BG }}
     >
       {/* ===== HEADER RIUSABILE (identico alla homepage) ===== */}
-      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO (senza logo grande) ===== */}
       <section className="relative overflow-hidden">
@@ -267,7 +264,6 @@ export default function ServiziContatti() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <SpstFooter />
     </main>
   );
 }

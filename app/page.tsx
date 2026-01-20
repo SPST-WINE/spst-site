@@ -20,8 +20,6 @@ import {
   Gauge,
 } from "lucide-react";
 
-import { SpstHeader } from "../components/spst/SpstHeader";
-import { SpstFooter } from "../components/spst/SpstFooter";
 import { SpstLeadForm } from "../components/spst/SpstLeadForm";
 import { PartnersCarousel } from "../components/spst/PartnersCarousel";
 import { LocaleProvider, useLocale } from "../components/i18n/LocaleProvider";

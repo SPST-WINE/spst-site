@@ -3,8 +3,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Mail, Phone, Building2, Globe2, Landmark } from 'lucide-react';
-import { SpstHeader } from '../../components/spst/SpstHeader';
-import { SpstFooter } from '../../components/spst/SpstFooter';
 import { useLocale } from '../../components/i18n/LocaleProvider';
 import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
 
@@ -66,8 +64,6 @@ export default function RegisterPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40 min-h-screen"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
-
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -246,7 +242,6 @@ export default function RegisterPage() {
         </div>
       </section>
 
-      <SpstFooter />
     </main>
   );
 }

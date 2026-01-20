@@ -21,8 +21,6 @@ import {
 } from 'lucide-react';
 import { useLocale } from '../../components/i18n/LocaleProvider';
 import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
-import { SpstHeader } from '../../components/spst/SpstHeader';
-import { SpstFooter } from '../../components/spst/SpstFooter';
 
 const SPST_BLUE_SOFT = '#1c3e5e';
 const SPST_ORANGE = '#f7931e';
@@ -183,7 +181,6 @@ export default function PresentationPage() {
     >
       {/* Header con controlli presentazione */}
       <div className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-        <SpstHeader navItems={navItems} />
         
         {/* Controlli presentazione */}
         <div className="mx-auto max-w-[1200px] px-4 h-12 flex items-center justify-end gap-1 sm:gap-2">
@@ -286,7 +283,6 @@ export default function PresentationPage() {
         </div>
       </section>
       
-      <SpstFooter />
     </main>
   );
 }

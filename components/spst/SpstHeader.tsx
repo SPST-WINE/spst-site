@@ -24,7 +24,7 @@ export function SpstHeader({
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30">
         <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">

@@ -18,8 +18,6 @@ import {
   Phone,
 } from "lucide-react";
 
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
 import { useLocale } from "../../components/i18n/LocaleProvider";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
@@ -127,9 +125,6 @@ export default function PortaleQuotazioni() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      {/* ===== HEADER RIUSABILE (come home) ===== */}
-      <SpstHeader navItems={navItems} />
-
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -247,8 +242,6 @@ export default function PortaleQuotazioni() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <SpstFooter />
-
       {/* Toast */}
       <Toast toast={toast} />
     </main>

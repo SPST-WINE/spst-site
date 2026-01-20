@@ -13,8 +13,6 @@ import {
   FileCheck2,
   MessageCircle,
 } from "lucide-react";
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 import { useLocale } from "../../components/i18n/LocaleProvider";
 
@@ -102,8 +100,6 @@ export default function SpstPaylinkPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }} // 👈 gradient centralizzato
     >
-      <SpstHeader navItems={navItems} />
-
       {/* ===== HERO PAYLINK ===== */}
       <section className="relative overflow-hidden">
         {/* glow brand morbidi */}
@@ -354,8 +350,6 @@ export default function SpstPaylinkPage() {
           </div>
         </div>
       </section>
-
-      <SpstFooter />
     </main>
   );
 }

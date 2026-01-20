@@ -16,8 +16,6 @@ import {
   Info,
 } from "lucide-react";
 
-import { SpstHeader } from "@/components/spst/SpstHeader";
-import { SpstFooter } from "@/components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "@/lib/spstTheme";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 
@@ -43,7 +41,6 @@ export default function BlogPallettizzazioneVinoB2BPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
 
       {/* HERO */}
       <section className="relative overflow-hidden">
@@ -394,7 +391,6 @@ export default function BlogPallettizzazioneVinoB2BPage() {
         </div>
       </section>
 
-      <SpstFooter />
     </main>
   );
 }

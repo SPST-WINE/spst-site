@@ -1,7 +1,5 @@
 'use client';
 
-import { SpstHeader } from '../../../components/spst/SpstHeader';
-import { SpstFooter } from '../../../components/spst/SpstFooter';
 import { useLocale } from '../../../components/i18n/LocaleProvider';
 import { SPST_PUBLIC_BG } from '../../../lib/spstTheme';
 
@@ -19,7 +17,6 @@ export default function ThankYou() {
       className="font-sans text-slate-100 min-h-screen flex flex-col"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
       
       <section className="flex-1 flex items-center mx-auto max-w-[800px] px-5 w-full">
         <div className="rounded-2xl p-6 md:p-7 border border-white/15 bg-white/5 backdrop-blur-xl text-center w-full">
@@ -44,7 +41,6 @@ export default function ThankYou() {
         </div>
       </section>
       
-      <SpstFooter />
     </main>
   );
 }

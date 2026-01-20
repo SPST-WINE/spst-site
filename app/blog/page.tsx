@@ -13,8 +13,6 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { SpstHeader } from "@/components/spst/SpstHeader";
-import { SpstFooter } from "@/components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "@/lib/spstTheme";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 
@@ -297,8 +295,6 @@ export default function BlogIndexPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
-
       {/* HERO */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -508,7 +504,6 @@ export default function BlogIndexPage() {
         </div>
       </section>
 
-      <SpstFooter />
     </main>
   );
 }
