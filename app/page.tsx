@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   TriangleAlert,
@@ -59,7 +59,7 @@ function HomeContent() {
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{
-        background: `radial-gradient(ellipse 80% 50% at 50% 0%, rgba(247,147,30,0.15) 0%, transparent 50%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(28,62,94,0.2) 0%, transparent 50%), ${SPST_PUBLIC_BG}`,
+        background: SPST_PUBLIC_BG,
         minHeight: "100vh",
       }}
     >
@@ -132,15 +132,8 @@ function HomeContent() {
         </div>
       </header>
 
-      {/* ===== HERO - STILE TECH CENTRATO CON GRADIENTE MIGLIORATO ===== */}
+      {/* ===== HERO - STILE TECH CENTRATO ===== */}
       <section className="relative overflow-hidden pt-20 pb-20 md:pt-28 md:pb-32 min-h-[85vh] flex items-center">
-        {/* Background gradient migliorato */}
-        <div
-          className="absolute inset-0 opacity-90"
-          style={{
-            background: `radial-gradient(ellipse 80% 50% at 50% 0%, rgba(247,147,30,0.15) 0%, transparent 50%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(28,62,94,0.2) 0%, transparent 50%), ${SPST_PUBLIC_BG}`,
-          }}
-        />
 
         {/* Tech grid background */}
         <div className="absolute inset-0 opacity-10">
@@ -255,45 +248,55 @@ function HomeContent() {
               </a>
             </motion.div>
 
-            {/* Stats counters nell'hero con animazione */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 grid grid-cols-3 gap-4 md:gap-8 w-full max-w-2xl mx-auto"
-            >
-              <CounterStat
-                from={49}
-                to={50}
-                suffix="+"
-                label={locale === "it" ? "Cantine" : "Wineries"}
-                delay={0.5}
-              />
-              <CounterStat
-                from={19}
-                to={20}
-                suffix="+"
-                label={locale === "it" ? "Buyer attivi" : "Active buyers"}
-                delay={0.7}
-              />
-              <div className="text-center">
-                <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl whitespace-nowrap">
-                  USA, ASIA, UE
-                </div>
-                <div className="mt-2 text-xs text-white/70 md:text-sm">
-                  {locale === "it" ? "Mercati" : "Markets"}
-                </div>
-              </div>
-            </motion.div>
           </div>
         </motion.div>
       </section>
 
+      {/* ===== STATS SECTION (card con counters animati) ===== */}
+      <section className="relative -mt-8 pb-12 md:-mt-12 md:pb-16">
+        <div className="mx-auto max-w-[1200px] px-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-3 gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm md:gap-8 md:p-8"
+          >
+            <CounterStat
+              from={49}
+              to={50}
+              suffix="+"
+              label={locale === "it" ? "Cantine" : "Wineries"}
+              delay={0.2}
+            />
+            <CounterStat
+              from={19}
+              to={20}
+              suffix="+"
+              label={locale === "it" ? "Buyer attivi" : "Active buyers"}
+              delay={0.4}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="text-center"
+            >
+              <div className="text-3xl font-black text-white md:text-4xl lg:text-5xl">
+                USA, ASIA, UE
+              </div>
+              <div className="mt-2 text-sm text-white/70 md:text-base">
+                {locale === "it" ? "Mercati" : "Markets"}
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
 
       {/* ===== FOR WINERIES SECTION ===== */}
-      <section id="for-wineries" className="relative -mt-8 pt-4 pb-16 md:-mt-12 md:pt-8 md:py-24">
-        {/* Fade transition dal hero */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent via-transparent to-transparent pointer-events-none" />
+      <section id="for-wineries" className="relative py-16 md:py-24">
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <motion.div
@@ -411,7 +414,6 @@ function HomeContent() {
 
       {/* ===== FOR BUYERS SECTION ===== */}
       <section id="for-buyers" className="relative py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
         <div className="relative mx-auto max-w-[1400px] px-5">
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             <div>
@@ -743,12 +745,6 @@ function HomeContent() {
                 >
                   {t.sections.cta.whatsapp}
                 </a>
-                <a
-                  href="/spst-paylink"
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
-                >
-                  {t.sections.cta.usaShipping}
-                </a>
               </div>
             </div>
           </motion.div>
@@ -839,7 +835,7 @@ function SectionHeader({
   );
 }
 
-/* Counter Stat Component con animazione */
+/* Counter Stat Component con animazione fluida ed elegante */
 function CounterStat({
   from,
   to,
@@ -855,44 +851,78 @@ function CounterStat({
 }) {
   const [count, setCount] = useState(from);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (hasAnimated) return;
 
-    const timer = setTimeout(() => {
-      setHasAnimated(true);
-      const duration = 1500;
-      const steps = 30;
-      const increment = (to - from) / steps;
-      let currentStep = 0;
+    // Usa Intersection Observer per animare quando entra in viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setHasAnimated(true);
+          
+          // Animazione fluida con easing
+          const duration = 2000; // 2 secondi per un'animazione più elegante
+          const startTime = Date.now();
+          const startValue = from;
+          const endValue = to;
+          const diff = endValue - startValue;
 
-      const interval = setInterval(() => {
-        currentStep++;
-        const newValue = Math.round(from + increment * currentStep);
-        setCount(Math.min(newValue, to));
+          const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function (ease-out-cubic per un'animazione elegante)
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+            const currentValue = Math.round(startValue + diff * easeOutCubic);
+            
+            setCount(currentValue);
 
-        if (currentStep >= steps) {
-          setCount(to);
-          clearInterval(interval);
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              setCount(endValue); // Assicura che finisca esattamente al valore target
+            }
+          };
+
+          setTimeout(() => {
+            requestAnimationFrame(animate);
+          }, delay * 1000);
         }
-      }, duration / steps);
-    }, delay * 1000);
+      },
+      { threshold: 0.3 }
+    );
 
-    return () => clearTimeout(timer);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
   }, [from, to, delay, hasAnimated]);
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.5 }}
       className="text-center"
     >
-      <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl">
+      <motion.div
+        className="text-3xl font-black text-white md:text-4xl lg:text-5xl"
+        animate={hasAnimated ? { scale: [1, 1.1, 1] } : {}}
+        transition={{ duration: 0.3, times: [0, 0.5, 1] }}
+      >
         {count}
         {suffix}
-      </div>
-      <div className="mt-2 text-xs text-white/70 md:text-sm">{label}</div>
+      </motion.div>
+      <div className="mt-2 text-sm text-white/70 md:text-base">{label}</div>
     </motion.div>
   );
 }
