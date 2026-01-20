@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   TriangleAlert,
@@ -58,7 +58,10 @@ function HomeContent() {
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{ background: SPST_PUBLIC_BG }}
+      style={{
+        background: `radial-gradient(ellipse 80% 50% at 50% 0%, rgba(247,147,30,0.15) 0%, transparent 50%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(28,62,94,0.2) 0%, transparent 50%), ${SPST_PUBLIC_BG}`,
+        minHeight: "100vh",
+      }}
     >
       {/* HEADER CON LANGUAGE SWITCHER */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur-md supports-[backdrop-filter]:bg-black/30">
@@ -251,39 +254,157 @@ function HomeContent() {
                 {t.hero.ctaSecondary}
               </a>
             </motion.div>
+
+            {/* Stats counters nell'hero con animazione */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-12 grid grid-cols-3 gap-4 md:gap-8 w-full max-w-2xl mx-auto"
+            >
+              <CounterStat
+                from={49}
+                to={50}
+                suffix="+"
+                label={locale === "it" ? "Cantine" : "Wineries"}
+                delay={0.5}
+              />
+              <CounterStat
+                from={19}
+                to={20}
+                suffix="+"
+                label={locale === "it" ? "Buyer attivi" : "Active buyers"}
+                delay={0.7}
+              />
+              <div className="text-center">
+                <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl whitespace-nowrap">
+                  USA, ASIA, UE
+                </div>
+                <div className="mt-2 text-xs text-white/70 md:text-sm">
+                  {locale === "it" ? "Mercati" : "Markets"}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </section>
 
-      {/* ===== STATS SECTION (spostata dopo hero) ===== */}
-      <section className="relative -mt-8 pb-12 md:-mt-12 md:pb-16">
-        <div className="mx-auto max-w-[1200px] px-5">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-3 gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm md:gap-8 md:p-8"
-          >
-            {[
-              { label: "50+", sub: locale === "it" ? "Cantine" : "Wineries" },
-              { label: "20+", sub: locale === "it" ? "Buyer attivi" : "Active buyers" },
-              { label: "USA, ASIA, UE", sub: locale === "it" ? "Mercati" : "Markets" },
-            ].map((stat, i) => (
+
+      {/* ===== FOR WINERIES SECTION ===== */}
+      <section id="for-wineries" className="relative py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
+        <div className="relative mx-auto max-w-[1400px] px-5">
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid gap-4 order-2 md:order-1"
+            >
+              {[
+                {
+                  icon: <Ship className="h-5 w-5" />,
+                  title:
+                    locale === "it"
+                      ? "Spedizioni in tutto il mondo"
+                      : "Worldwide shipping",
+                  desc:
+                    locale === "it"
+                      ? "Logistica express e pallet verso USA, Europa, Asia e altri mercati internazionali."
+                      : "Express and pallet logistics to USA, Europe, Asia and other international markets.",
+                },
+                {
+                  icon: <Shield className="h-5 w-5" />,
+                  title:
+                    locale === "it"
+                      ? "Servizio di rappresentanza fiscale"
+                      : "Tax representation service",
+                  desc:
+                    locale === "it"
+                      ? "Supporto fiscale e doganale per semplificare le operazioni di export."
+                      : "Tax and customs support to simplify export operations.",
+                },
+                {
+                  icon: <FileCheck2 className="h-5 w-5" />,
+                  title:
+                    locale === "it"
+                      ? "Consulenza e controllo documentale"
+                      : "Consulting and document control",
+                  desc:
+                    locale === "it"
+                      ? "Gestione completa della documentazione necessaria per ogni spedizione."
+                      : "Complete management of documentation required for each shipment.",
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 + i * 0.1 }}
+                  className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="rounded-lg bg-[#f7931e]/20 p-2 text-[#f7931e]">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white">{item.title}</h3>
+                      <p className="mt-1 text-sm text-white/70">{item.desc}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+            <div className="order-1 md:order-2 md:text-right">
               <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="text-center"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 md:ml-auto"
               >
-                <div className="text-3xl font-black text-white md:text-4xl lg:text-5xl">
-                  {stat.label}
-                </div>
-                <div className="mt-2 text-sm text-white/70 md:text-base">{stat.sub}</div>
+                <Building2 className="h-3 w-3" />
+                {locale === "it" ? "For Wineries" : "For Wineries"}
               </motion.div>
-            ))}
-          </motion.div>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="mt-4 text-3xl font-black sm:text-4xl md:text-5xl"
+              >
+                {locale === "it"
+                  ? "Servizi per cantine"
+                  : "Services for wineries"}
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="mt-4 text-lg leading-relaxed text-white/80"
+              >
+                {locale === "it"
+                  ? "SPST supporta le cantine italiane nell'export del vino con servizi completi di logistica, documentazione e rappresentanza fiscale."
+                  : "SPST supports Italian wineries in wine export with complete logistics, documentation and tax representation services."}
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="mt-6 md:flex md:justify-end"
+              >
+                <a
+                  href="/servizi-e-contatti"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
+                >
+                  {locale === "it" ? "Scopri i servizi" : "Discover services"}
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -491,8 +612,8 @@ function HomeContent() {
                   title: locale === "it" ? "Export che cresce" : "Growing export",
                   desc:
                     locale === "it"
-                      ? "Flussi ricorrenti, KPI e supporto operativo per far diventare l'estero una parte stabile del tuo fatturato."
-                      : "Recurring flows, KPIs and operational support to make export a stable part of your revenue.",
+                      ? "Flussi ricorrenti e supporto operativo per abilitare la tua cantina al mercato estero."
+                      : "Recurring flows and operational support to enable your winery to enter foreign markets.",
                   step: "03",
                 },
               },
@@ -587,7 +708,7 @@ function HomeContent() {
             </div>
 
             <div className="relative flex flex-col items-center justify-between gap-6 md:flex-row">
-              <h3 className="text-2xl font-bold text-white md:text-3xl text-center md:text-left">
+              <h3 className="text-xl font-bold text-white md:text-2xl lg:text-3xl text-center md:text-left whitespace-nowrap">
                 {t.sections.cta.title}
               </h3>
               <div className="flex flex-wrap justify-center gap-3 md:justify-end">
@@ -702,6 +823,64 @@ function SectionHeader({
         className="mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent"
       />
     </div>
+  );
+}
+
+/* Counter Stat Component con animazione */
+function CounterStat({
+  from,
+  to,
+  suffix = "",
+  label,
+  delay = 0,
+}: {
+  from: number;
+  to: number;
+  suffix?: string;
+  label: string;
+  delay?: number;
+}) {
+  const [count, setCount] = useState(from);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (hasAnimated) return;
+
+    const timer = setTimeout(() => {
+      setHasAnimated(true);
+      const duration = 1500;
+      const steps = 30;
+      const increment = (to - from) / steps;
+      let currentStep = 0;
+
+      const interval = setInterval(() => {
+        currentStep++;
+        const newValue = Math.round(from + increment * currentStep);
+        setCount(Math.min(newValue, to));
+
+        if (currentStep >= steps) {
+          setCount(to);
+          clearInterval(interval);
+        }
+      }, duration / steps);
+    }, delay * 1000);
+
+    return () => clearTimeout(timer);
+  }, [from, to, delay, hasAnimated]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay }}
+      className="text-center"
+    >
+      <div className="text-2xl font-black text-white md:text-3xl lg:text-4xl">
+        {count}
+        {suffix}
+      </div>
+      <div className="mt-2 text-xs text-white/70 md:text-sm">{label}</div>
+    </motion.div>
   );
 }
 
