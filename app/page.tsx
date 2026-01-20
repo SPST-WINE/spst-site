@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   TriangleAlert,
   Ship,
@@ -16,6 +16,10 @@ import {
   Building2,
   ArrowRight,
   CheckCircle2,
+  Package,
+  Truck,
+  MapPin,
+  Gauge,
 } from "lucide-react";
 
 import { SpstHeader } from "../components/spst/SpstHeader";
@@ -33,11 +37,19 @@ const LOGO_URL =
 
 function HomeContent() {
   const { locale, setLocale, t } = useLocale();
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
+  // Toggle lingua semplice (un click)
+  const toggleLocale = () => {
+    setLocale(locale === "it" ? "en" : "it");
+  };
+
+  // Riordinato header: Home, Servizi, Richiedi una quotazione, Spedizioni USA, For Buyers, multilingua, Area Riservata
   const navItems = [
     { href: "/", label: t.nav.home },
     { href: "/servizi-e-contatti", label: t.nav.services },
-    { href: "#vantaggi", label: t.nav.whySpst },
     { href: "/portale-quotazioni", label: t.nav.quote },
     { href: "/spst-paylink", label: t.nav.usaShipping },
     { href: "#for-buyers", label: t.nav.forBuyers },
@@ -58,7 +70,7 @@ function HomeContent() {
           </a>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-6 text-[0.95rem] font-semibold">
+          <nav className="hidden lg:flex items-center gap-5 text-[0.95rem] font-semibold">
             {navItems.map((item) => (
               <a
                 key={item.href}
@@ -69,31 +81,25 @@ function HomeContent() {
               </a>
             ))}
 
-            {/* LANGUAGE SWITCHER */}
-            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1">
-              <button
-                onClick={() => setLocale("it")}
-                className={`px-2 py-1 rounded text-xs font-semibold transition-all ${
-                  locale === "it"
-                    ? "bg-[#f7931e] text-black"
-                    : "text-white/70 hover:text-white"
-                }`}
+            {/* LANGUAGE TOGGLE - Un click per cambiare */}
+            <button
+              onClick={toggleLocale}
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition-all"
+              aria-label="Toggle language"
+            >
+              <span className="text-xs font-semibold text-white/70">
+                {locale === "it" ? "IT" : "EN"}
+              </span>
+              <motion.div
+                animate={{ rotate: locale === "en" ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-white/60"
               >
-                IT
-              </button>
-              <button
-                onClick={() => setLocale("en")}
-                className={`px-2 py-1 rounded text-xs font-semibold transition-all ${
-                  locale === "en"
-                    ? "bg-[#f7931e] text-black"
-                    : "text-white/70 hover:text-white"
-                }`}
-              >
-                EN
-              </button>
-            </div>
+                <Globe2 className="h-3.5 w-3.5" />
+              </motion.div>
+            </button>
 
-            {/* AREA RISERVATA (desktop) */}
+            {/* AREA RISERVATA */}
             <a
               href="https://dashboard.spst.it"
               className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
@@ -102,26 +108,17 @@ function HomeContent() {
             </a>
           </nav>
 
-          {/* MOBILE MENU BUTTON */}
-          <div className="md:hidden flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1">
-              <button
-                onClick={() => setLocale("it")}
-                className={`px-2 py-1 rounded text-xs font-semibold ${
-                  locale === "it" ? "bg-[#f7931e] text-black" : "text-white/70"
-                }`}
-              >
-                IT
-              </button>
-              <button
-                onClick={() => setLocale("en")}
-                className={`px-2 py-1 rounded text-xs font-semibold ${
-                  locale === "en" ? "bg-[#f7931e] text-black" : "text-white/70"
-                }`}
-              >
-                EN
-              </button>
-            </div>
+          {/* MOBILE MENU */}
+          <div className="lg:hidden flex items-center gap-2">
+            <button
+              onClick={toggleLocale}
+              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5"
+            >
+              <span className="text-xs font-semibold text-white">
+                {locale === "it" ? "IT" : "EN"}
+              </span>
+              <Globe2 className="h-3 w-3 text-white/70" />
+            </button>
             <a
               href="https://dashboard.spst.it"
               className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-3 py-1.5 text-sm font-bold"
@@ -132,8 +129,16 @@ function HomeContent() {
         </div>
       </header>
 
-      {/* ===== HERO - STILE TECH CENTRATO ===== */}
-      <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24">
+      {/* ===== HERO - STILE TECH CENTRATO CON GRADIENTE MIGLIORATO ===== */}
+      <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-24 min-h-[85vh] flex items-center">
+        {/* Background gradient migliorato */}
+        <div
+          className="absolute inset-0 opacity-90"
+          style={{
+            background: `radial-gradient(ellipse 80% 50% at 50% 0%, rgba(247,147,30,0.15) 0%, transparent 50%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(28,62,94,0.2) 0%, transparent 50%), ${SPST_PUBLIC_BG}`,
+          }}
+        />
+
         {/* Tech grid background */}
         <div className="absolute inset-0 opacity-10">
           <div
@@ -149,35 +154,38 @@ function HomeContent() {
         <motion.div
           aria-hidden
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
+          animate={{ opacity: 0.5 }}
           transition={{ duration: 1 }}
           className="pointer-events-none absolute -top-40 left-1/4 h-[600px] w-[600px] -translate-x-1/2 rounded-full blur-3xl"
           style={{
-            background: `radial-gradient(60% 60% at 30% 30%, ${SPST_ORANGE}55, transparent 60%)`,
+            background: `radial-gradient(60% 60% at 30% 30%, ${SPST_ORANGE}66, transparent 60%)`,
           }}
         />
         <motion.div
           aria-hidden
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
+          animate={{ opacity: 0.4 }}
           transition={{ duration: 1, delay: 0.2 }}
           className="pointer-events-none absolute -bottom-40 right-1/4 h-[600px] w-[600px] translate-x-1/2 rounded-full blur-3xl"
           style={{
-            background: `radial-gradient(60% 60% at 70% 70%, ${SPST_BLUE_SOFT}66, transparent 60%)`,
+            background: `radial-gradient(60% 60% at 70% 70%, ${SPST_BLUE_SOFT}77, transparent 60%)`,
           }}
         />
 
-        {/* Animated side elements - Left */}
-        <div className="pointer-events-none absolute left-0 top-1/2 hidden -translate-y-1/2 lg:block">
-          <HeroSideAnimation side="left" />
+        {/* Animated side elements - Left (più vicini e tematici vino/logistica) */}
+        <div className="pointer-events-none absolute left-4 top-1/2 hidden -translate-y-1/2 xl:block lg:left-8">
+          <WineLogisticsAnimation side="left" />
         </div>
 
         {/* Animated side elements - Right */}
-        <div className="pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 lg:block">
-          <HeroSideAnimation side="right" />
+        <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 xl:block lg:right-8">
+          <WineLogisticsAnimation side="right" />
         </div>
 
-        <div className="relative mx-auto max-w-[1200px] px-5">
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
+          className="relative mx-auto max-w-[1200px] px-5 w-full"
+        >
           <div className="flex flex-col items-center text-center">
             {/* Kicker badge */}
             <motion.div
@@ -195,14 +203,16 @@ function HomeContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 text-[36px] font-black leading-[1.05] sm:text-[48px] md:text-[64px] lg:text-[72px]"
+              className="mt-6 text-[36px] font-black leading-[1.05] sm:text-[48px] md:text-[64px] lg:text-[72px] xl:text-[80px]"
             >
               {t.hero.title}
               <br />
               <span
                 className="bg-clip-text text-transparent"
                 style={{
-                  backgroundImage: `linear-gradient(135deg, ${SPST_ORANGE} 0%, ${SPST_BLUE_SOFT} 100%)`,
+                  backgroundImage: `linear-gradient(135deg, ${SPST_ORANGE} 0%, #ffaa44 50%, ${SPST_BLUE_SOFT} 100%)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
                 }}
               >
                 {t.hero.titleHighlight}
@@ -214,7 +224,7 @@ function HomeContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mx-auto mt-6 max-w-[65ch] text-lg leading-relaxed text-white/85"
+              className="mx-auto mt-6 max-w-[65ch] text-base leading-relaxed text-white/90 sm:text-lg md:text-xl"
             >
               {t.hero.description}
             </motion.p>
@@ -242,7 +252,7 @@ function HomeContent() {
               </a>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ===== STATS SECTION (spostata dopo hero) ===== */}
@@ -251,7 +261,7 @@ function HomeContent() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="grid grid-cols-3 gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm md:gap-8 md:p-8"
           >
             {[
@@ -382,109 +392,160 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* ===== PROBLEMS ===== */}
-      <section id="scopri" className="relative py-16 md:py-24">
+      {/* ===== PROBLEMS + HOW IT WORKS UNIFICATI CON ANIMAZIONI ===== */}
+      <section id="scopri-funziona" className="relative py-16 md:py-24">
         <div className="mx-auto max-w-[1400px] px-5">
-          <SectionHeader
-            kicker={t.sections.problems.kicker}
-            title={t.sections.problems.title}
-            tone="problem"
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: <TriangleAlert className="h-6 w-6" />,
-                title:
-                  locale === "it"
-                    ? "Documenti doganali complessi"
-                    : "Complex customs documents",
-                desc:
-                  locale === "it"
-                    ? "e-DAS, proforma, accise, HS code: facciamo tutto noi."
-                    : "e-DAS, proforma, excise duties, HS code: we handle everything.",
-              },
-              {
-                icon: <Ship className="h-6 w-6" />,
-                title:
-                  locale === "it"
-                    ? "Costi di spedizione variabili"
-                    : "Variable shipping costs",
-                desc:
-                  locale === "it"
-                    ? "Tariffe chiare e competitive con corrieri espressi e pallet."
-                    : "Clear and competitive rates with express carriers and pallets.",
-              },
-              {
-                icon: <Globe2 className="h-6 w-6" />,
-                title:
-                  locale === "it"
-                    ? "Buyer difficili da raggiungere"
-                    : "Hard-to-reach buyers",
-                desc:
-                  locale === "it"
-                    ? "Rete, contatti e processi per rendere l'export davvero scalabile."
-                    : "Network, contacts and processes to make export truly scalable.",
-              },
-            ].map((x, i) => (
-              <TechCard key={i} icon={x.icon} title={x.title} desc={x.desc} delay={i * 0.1} />
-            ))}
+          {/* Header */}
+          <div className="text-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80"
+            >
+              {t.sections.problems.kicker} • {t.sections.howItWorks.kicker}
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="mt-4 text-3xl font-black sm:text-4xl md:text-5xl lg:text-6xl"
+            >
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${SPST_ORANGE} 0%, #fff 100%)`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {t.sections.problems.title}
+              </span>
+              <br />
+              <span className="text-white/90">{t.sections.howItWorks.title}</span>
+            </motion.h2>
           </div>
-        </div>
-      </section>
 
-      {/* ===== HOW IT WORKS ===== */}
-      <section id="funziona" className="relative py-16 md:py-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent" />
-        <div className="relative mx-auto max-w-[1400px] px-5">
-          <SectionHeader
-            kicker={t.sections.howItWorks.kicker}
-            title={t.sections.howItWorks.title}
-            tone="solution"
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {/* Grid Problems + Solutions */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                step: "01",
-                title: locale === "it" ? "Documenti a norma" : "Compliant documents",
-                text:
-                  locale === "it"
-                    ? "Accise, COLA, Prior Notice, e-DAS e tutta la parte burocratica per partire in regola."
-                    : "Excise duties, COLA, Prior Notice, e-DAS and all bureaucracy to start compliant.",
-                icon: <FileCheck2 className="h-6 w-6" />,
+                problem: {
+                  icon: <TriangleAlert className="h-6 w-6" />,
+                  title:
+                    locale === "it"
+                      ? "Documenti doganali complessi"
+                      : "Complex customs documents",
+                  desc:
+                    locale === "it"
+                      ? "e-DAS, proforma, accise, HS code"
+                      : "e-DAS, proforma, excise duties, HS code",
+                },
+                solution: {
+                  icon: <FileCheck2 className="h-6 w-6" />,
+                  title: locale === "it" ? "Documenti a norma" : "Compliant documents",
+                  desc:
+                    locale === "it"
+                      ? "Accise, COLA, Prior Notice, e-DAS e tutta la parte burocratica per partire in regola."
+                      : "Excise duties, COLA, Prior Notice, e-DAS and all bureaucracy to start compliant.",
+                  step: "01",
+                },
               },
               {
-                step: "02",
-                title: locale === "it" ? "Spedizione ottimizzata" : "Optimized shipping",
-                text:
-                  locale === "it"
-                    ? "Selezioniamo i corrieri e le tratte migliori (express o pallet), con tracking e assistenza dedicata."
-                    : "We select the best carriers and routes (express or pallet), with tracking and dedicated support.",
-                icon: <Route className="h-6 w-6" />,
+                problem: {
+                  icon: <Ship className="h-6 w-6" />,
+                  title:
+                    locale === "it"
+                      ? "Costi di spedizione variabili"
+                      : "Variable shipping costs",
+                  desc:
+                    locale === "it"
+                      ? "Tariffe poco chiare e costi nascosti"
+                      : "Unclear rates and hidden costs",
+                },
+                solution: {
+                  icon: <Route className="h-6 w-6" />,
+                  title: locale === "it" ? "Spedizione ottimizzata" : "Optimized shipping",
+                  desc:
+                    locale === "it"
+                      ? "Selezioniamo i corrieri e le tratte migliori (express o pallet), con tracking e assistenza dedicata."
+                      : "We select the best carriers and routes (express or pallet), with tracking and dedicated support.",
+                  step: "02",
+                },
               },
               {
-                step: "03",
-                title: locale === "it" ? "Export che cresce" : "Growing export",
-                text:
-                  locale === "it"
-                    ? "Flussi ricorrenti, KPI e supporto operativo per far diventare l'estero una parte stabile del tuo fatturato."
-                    : "Recurring flows, KPIs and operational support to make export a stable part of your revenue.",
-                icon: <TrendingUp className="h-6 w-6" />,
+                problem: {
+                  icon: <Globe2 className="h-6 w-6" />,
+                  title:
+                    locale === "it"
+                      ? "Buyer difficili da raggiungere"
+                      : "Hard-to-reach buyers",
+                  desc:
+                    locale === "it"
+                      ? "Mercati complessi e relazioni fragili"
+                      : "Complex markets and fragile relationships",
+                },
+                solution: {
+                  icon: <TrendingUp className="h-6 w-6" />,
+                  title: locale === "it" ? "Export che cresce" : "Growing export",
+                  desc:
+                    locale === "it"
+                      ? "Flussi ricorrenti, KPI e supporto operativo per far diventare l'estero una parte stabile del tuo fatturato."
+                      : "Recurring flows, KPIs and operational support to make export a stable part of your revenue.",
+                  step: "03",
+                },
               },
-            ].map(({ step, title, text, icon }, i) => (
+            ].map((item, i) => (
               <motion.div
-                key={step}
+                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: i * 0.15 }}
-                className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
+                className="group"
               >
-                <div className="mb-4 flex items-center gap-4">
-                  <div className="rounded-lg bg-[#f7931e]/20 p-3 text-[#f7931e]">{icon}</div>
-                  <span className="text-4xl font-black text-white/20">{step}</span>
+                <div className="h-full rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10">
+                  {/* Problem */}
+                  <div className="mb-6 flex items-start gap-4 pb-6 border-b border-white/10">
+                    <div className="rounded-lg bg-red-500/20 p-3 text-red-400 shrink-0">
+                      {item.problem.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-xs font-semibold text-red-400/80 mb-1">
+                        {locale === "it" ? "Problema" : "Problem"}
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-1">{item.problem.title}</h3>
+                      <p className="text-sm text-white/70">{item.problem.desc}</p>
+                    </div>
+                  </div>
+
+                  {/* Solution */}
+                  <div className="flex items-start gap-4">
+                    <div className="rounded-lg bg-[#f7931e]/20 p-3 text-[#f7931e] shrink-0">
+                      {item.solution.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-mono text-[#f7931e]/60">{item.solution.step}</span>
+                        <span className="text-xs font-semibold text-[#f7931e]/80">
+                          {locale === "it" ? "Soluzione" : "Solution"}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">{item.solution.title}</h3>
+                      <p className="text-sm leading-relaxed text-white/70">{item.solution.desc}</p>
+                    </div>
+                  </div>
+
+                  {/* Connecting line animation */}
+                  <motion.div
+                    className="absolute left-1/2 -translate-x-1/2 h-0.5 w-0 bg-gradient-to-r from-red-500/50 via-[#f7931e]/50 to-transparent mt-2"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "80%" }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.15 + 0.3, duration: 0.6 }}
+                  />
                 </div>
-                <h3 className="mb-3 text-xl font-bold text-white">{title}</h3>
-                <p className="text-white/80">{text}</p>
               </motion.div>
             ))}
           </div>
@@ -505,7 +566,7 @@ function HomeContent() {
         </div>
       </section>
 
-      {/* ===== CTA SECTION ===== */}
+      {/* ===== CTA SECTION - BOTTONI MIGLIORATI ===== */}
       <section id="preventivo" className="relative py-16 md:py-24">
         <div className="mx-auto max-w-[1400px] px-5">
           <motion.div
@@ -526,26 +587,31 @@ function HomeContent() {
             </div>
 
             <div className="relative flex flex-col items-center justify-between gap-6 md:flex-row">
-              <h3 className="text-2xl font-bold text-white md:text-3xl">
+              <h3 className="text-2xl font-bold text-white md:text-3xl text-center md:text-left">
                 {t.sections.cta.title}
               </h3>
               <div className="flex flex-wrap justify-center gap-3 md:justify-end">
                 <a
                   href="/portale-quotazioni"
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
+                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40"
                 >
-                  {t.sections.cta.quote}
-                  <ArrowRight className="h-4 w-4" />
+                  <span className="relative z-10">{t.sections.cta.quote}</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                  />
                 </a>
                 <a
                   href="https://wa.me/393201441789"
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 >
                   {t.sections.cta.whatsapp}
                 </a>
                 <a
                   href="/spst-paylink"
-                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 >
                   {t.sections.cta.usaShipping}
                 </a>
@@ -639,65 +705,43 @@ function SectionHeader({
   );
 }
 
-function TechCard({
-  icon,
-  title,
-  desc,
-  delay = 0,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-  delay?: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay }}
-      className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
-    >
-      <div className="mb-4 rounded-lg bg-[#f7931e]/20 p-3 text-[#f7931e] w-fit">{icon}</div>
-      <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-      <p className="text-sm leading-relaxed text-white/70">{desc}</p>
-      {/* Tech accent line */}
-      <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#f7931e] to-transparent transition-all group-hover:w-full" />
-    </motion.div>
-  );
-}
-
-/* Hero Side Animation - Tech style inspired by nais.ai */
-function HeroSideAnimation({ side }: { side: "left" | "right" }) {
+/* Wine & Logistics Animation - Tematiche del mondo vino/logistica */
+function WineLogisticsAnimation({ side }: { side: "left" | "right" }) {
   const isLeft = side === "left";
 
   return (
-    <div className={`relative ${isLeft ? "left-8" : "right-8"} w-64`}>
-      {/* Floating geometric shapes */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-          y: [0, -30, 0],
-          rotate: [0, 180, 360],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className={`absolute ${isLeft ? "left-0 top-0" : "right-0 top-0"} h-32 w-32 rounded-lg border border-white/10 bg-gradient-to-br from-[#f7931e]/20 to-transparent backdrop-blur-sm`}
-        style={{
-          transform: isLeft ? "rotate(-45deg)" : "rotate(45deg)",
-        }}
-      />
+    <div className={`relative w-48 ${isLeft ? "" : ""}`}>
+      {/* Bottiglie di vino fluttuanti */}
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={`bottle-${i}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+            y: [0, -40 - i * 20, 0],
+            rotate: [0, 10 - i * 5, 0],
+          }}
+          transition={{
+            duration: 4 + i * 0.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.8,
+          }}
+          className={`absolute ${isLeft ? "left-0" : "right-0"} top-${i * 40}`}
+          style={{
+            top: `${i * 40}px`,
+          }}
+        >
+          <Package className="h-8 w-8 text-[#f7931e]/40" />
+        </motion.div>
+      ))}
 
-      {/* Animated lines */}
+      {/* Camion/Truck animato */}
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
         animate={{
-          opacity: [0.2, 0.5, 0.2],
-          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.7, 0.4],
+          x: isLeft ? [0, 30, 0] : [0, -30, 0],
         }}
         transition={{
           duration: 6,
@@ -705,69 +749,95 @@ function HeroSideAnimation({ side }: { side: "left" | "right" }) {
           ease: "easeInOut",
           delay: 1,
         }}
-        className={`absolute ${isLeft ? "left-16 top-32" : "right-16 top-32"} h-24 w-1 bg-gradient-to-b from-[#f7931e]/40 to-transparent`}
-      />
+        className={`absolute ${isLeft ? "left-8" : "right-8"} top-24`}
+      >
+        <Truck className="h-10 w-10 text-[#f7931e]/50" />
+      </motion.div>
 
-      {/* Orbiting circles */}
-      {[0, 1, 2].map((i) => (
+      {/* Mappa/Globe con rotte */}
+      <motion.div
+        animate={{
+          rotate: isLeft ? [0, 360] : [360, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        className={`absolute ${isLeft ? "left-4" : "right-4"} top-40`}
+      >
+        <Globe2 className="h-12 w-12 text-[#1c3e5e]/60" />
+      </motion.div>
+
+      {/* Linee di percorso (route lines) */}
+      {[0, 1].map((i) => (
         <motion.div
-          key={i}
-          initial={{ opacity: 0 }}
+          key={`route-${i}`}
+          initial={{ pathLength: 0 }}
           animate={{
-            opacity: [0.2, 0.4, 0.2],
-            rotate: isLeft ? [0, 360] : [360, 0],
+            pathLength: [0, 1, 0],
+            opacity: [0, 0.6, 0],
           }}
           transition={{
-            duration: 10 + i * 2,
+            duration: 3,
             repeat: Infinity,
-            ease: "linear",
-            delay: i * 0.5,
+            ease: "easeInOut",
+            delay: i * 1.5,
           }}
-          className={`absolute ${isLeft ? "left-8" : "right-8"} top-40 h-16 w-16 rounded-full border border-white/10`}
+          className={`absolute ${isLeft ? "left-12" : "right-12"} top-${20 + i * 60}`}
           style={{
-            transform: `translate(${isLeft ? "-" : ""}${(i + 1) * 40}px, ${i * 20}px)`,
+            top: `${20 + i * 60}px`,
           }}
         >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#f7931e]/10 to-transparent" />
+          <Route className="h-16 w-16 text-[#f7931e]/30" />
         </motion.div>
       ))}
 
-      {/* Tech grid pattern */}
+      {/* Pallettizzazione (stack) */}
       <motion.div
         animate={{
-          opacity: [0.1, 0.2, 0.1],
+          y: [0, -10, 0],
+          opacity: [0.5, 0.8, 0.5],
         }}
         transition={{
-          duration: 4,
+          duration: 5,
           repeat: Infinity,
           ease: "easeInOut",
+          delay: 2,
         }}
-        className={`absolute ${isLeft ? "left-0 top-64" : "right-0 top-64"} h-32 w-32`}
-        style={{
-          backgroundImage: `linear-gradient(rgba(247,147,30,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(247,147,30,0.2) 1px, transparent 1px)`,
-          backgroundSize: "20px 20px",
-          transform: isLeft ? "rotate(-15deg)" : "rotate(15deg)",
-        }}
-      />
+        className={`absolute ${isLeft ? "left-0" : "right-0"} top-56`}
+      >
+        <div className="flex flex-col gap-1">
+          <div className="h-3 w-12 bg-[#f7931e]/30 rounded" />
+          <div className="h-3 w-12 bg-[#f7931e]/40 rounded ml-2" />
+          <div className="h-3 w-12 bg-[#f7931e]/50 rounded" />
+        </div>
+      </motion.div>
 
-      {/* Floating particles */}
+      {/* Particelle fluttuanti (vino) */}
       {[0, 1, 2, 3].map((i) => (
         <motion.div
-          key={i}
+          key={`particle-${i}`}
           initial={{ opacity: 0 }}
           animate={{
-            opacity: [0, 0.6, 0],
-            y: [0, -100, -200],
-            x: isLeft ? [0, 20, 40] : [0, -20, -40],
+            opacity: [0, 0.8, 0],
+            y: [0, -120 - i * 30],
+            x: isLeft ? [0, 30, 60] : [0, -30, -60],
           }}
           transition={{
-            duration: 5 + i,
+            duration: 6 + i,
             repeat: Infinity,
             ease: "easeOut",
-            delay: i * 1.2,
+            delay: i * 1.5,
           }}
-          className={`absolute ${isLeft ? "left-12" : "right-12"} top-${20 + i * 40} h-2 w-2 rounded-full bg-[#f7931e]/60`}
-        />
+          className={`absolute ${isLeft ? "left-16" : "right-16"} top-${30 + i * 40}`}
+          style={{
+            top: `${30 + i * 40}px`,
+          }}
+        >
+          <div className="h-2 w-2 rounded-full bg-[#f7931e]/60" />
+        </motion.div>
       ))}
     </div>
   );
