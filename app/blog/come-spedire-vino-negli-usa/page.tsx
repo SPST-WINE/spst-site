@@ -28,7 +28,7 @@ const SPST_ORANGE = "#f7931e";
 const LAST_UPDATED = "10/01/2026"; // dd/mm/yyyy
 
 export default function BlogComeSpedireVinoNegliUsaPage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   
   const navItems = [
     { href: "/", label: t.nav.home },
@@ -157,7 +157,7 @@ export default function BlogComeSpedireVinoNegliUsaPage() {
             <aside className="md:sticky md:top-24 h-fit">
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                 <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
-                  {t.locale === 'it' ? 'Indice' : 'Index'}
+                  {locale === 'it' ? 'Indice' : 'Index'}
                 </div>
 
                 <div className="mt-3 grid gap-2 text-sm">
@@ -372,7 +372,7 @@ export default function BlogComeSpedireVinoNegliUsaPage() {
                 <FinalCta />
               </ArticleCard>
 
-              <ArticleCard id="faq" icon={<LinkIcon className="h-5 w-5" />} title={t.locale === 'it' ? 'FAQ' : 'FAQ'}>
+              <ArticleCard id="faq" icon={<LinkIcon className="h-5 w-5" />} title="FAQ">
                 <FaqItem q="Quindi non posso mai spedire vino negli USA?">
                   Il punto è “al cliente finale dall’Europa come un pacco”: non è un modello scalabile e difendibile.
                   Il modello corretto è importazione + vendita domestica USA tramite soggetti autorizzati.

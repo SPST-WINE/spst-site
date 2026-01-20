@@ -115,7 +115,7 @@ function getSlides(t: any): Slide[] {
 }
 
 export default function PresentationPage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const slides = getSlides(t);
   const [i, setI] = React.useState(0);
   const [grid, setGrid] = React.useState(false);
@@ -247,7 +247,7 @@ export default function PresentationPage() {
               className="absolute inset-0 md:p-0 overflow-auto md:overflow-hidden"
               onClick={() => go(1)}
             >
-              <SlideRenderer slide={slides[i]} t={t} />
+              <SlideRenderer slide={slides[i]} t={t} locale={locale} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -265,7 +265,7 @@ export default function PresentationPage() {
                   }}
                   className="text-left rounded-xl border border-white/10 bg-white/[0.04] p-3 sm:p-4 hover:bg-white/[0.07] transition"
                 >
-                  <div className="text-[11px] text-white/60 mb-1">{t.locale === 'it' ? 'Slide' : 'Slide'} {idx + 1}</div>
+                  <div className="text-[11px] text-white/60 mb-1">{locale === 'it' ? 'Slide' : 'Slide'} {idx + 1}</div>
                   <Preview slide={s} />
                 </button>
               ))}
@@ -284,7 +284,7 @@ export default function PresentationPage() {
 }
 
 /* ---------------- RENDERERS ---------------- */
-function SlideRenderer({ slide, t }: { slide: Slide; t: any }) {
+function SlideRenderer({ slide, t, locale }: { slide: Slide; t: any; locale: 'it' | 'en' }) {
   if (slide.kind === 'title') {
     return (
       <div className="w-full h-full grid place-items-center p-4 sm:p-6 text-center">
@@ -351,7 +351,7 @@ function SlideRenderer({ slide, t }: { slide: Slide; t: any }) {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
               >
                 <MessageSquareMore className="h-4 w-4" />
-                {t.locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
+                {locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
               </a>
             </div>
           )}
