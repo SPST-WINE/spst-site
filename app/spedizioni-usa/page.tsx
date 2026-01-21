@@ -53,9 +53,25 @@ export default function SpedizioniUsaPage() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="mt-6 text-[34px] font-black leading-[1.03] sm:text-[40px] md:text-[58px]"
             >
-              {locale === "it"
-                ? "Due servizi per spedire vino negli Stati Uniti"
-                : "Two services to ship wine to the United States"}
+              {locale === "it" ? (
+                <>
+                  Due servizi per spedire{" "}
+                  <span className="block bg-clip-text text-transparent" style={{
+                    backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
+                  }}>
+                    vino negli Stati Uniti
+                  </span>
+                </>
+              ) : (
+                <>
+                  Two services to ship{" "}
+                  <span className="block bg-clip-text text-transparent" style={{
+                    backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
+                  }}>
+                    wine to the United States
+                  </span>
+                </>
+              )}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -72,7 +88,7 @@ export default function SpedizioniUsaPage() {
       </section>
 
       {/* ===== COMPARAZIONE 50-50 ===== */}
-      <section className="relative py-12 md:py-16">
+      <section className="relative py-8 md:py-12">
         <div className="mx-auto max-w-[1400px] px-5">
           <div className="grid gap-8 md:grid-cols-2">
             {/* SERVIZIO 1: Spedizioni B2B */}
@@ -118,8 +134,8 @@ export default function SpedizioniUsaPage() {
                   <span className="mt-1 text-[#f7931e]">•</span>
                   <span>
                     {locale === "it"
-                      ? "Volumi: pallet e spedizioni consolidate"
-                      : "Volumes: pallets and consolidated shipments"}
+                      ? "Volumi: pallet, spedizioni consolidate, colli singoli e multicollo"
+                      : "Volumes: pallets, consolidated shipments, single and multi-piece shipments"}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -210,7 +226,7 @@ export default function SpedizioniUsaPage() {
 
       {/* ===== CTA ===== */}
       <section className="relative py-12 md:py-16">
-        <div className="mx-auto max-w-[1200px] px-5">
+        <div className="mx-auto max-w-[1400px] px-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
