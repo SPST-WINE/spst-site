@@ -11,7 +11,7 @@ export function SpstFooter() {
   const { t } = useLocale();
 
   return (
-    <footer className="relative border-t border-white/10 py-12" style={{ backgroundColor: '#0a1722' }}>
+    <footer className="relative py-12 backdrop-blur-sm" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
       <div className="mx-auto max-w-[1400px] px-5">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <a className="flex items-center gap-2 font-extrabold text-white" href="/">
