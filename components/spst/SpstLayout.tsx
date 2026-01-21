@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { SpstHeader } from "./SpstHeader";
 import { SpstFooter } from "./SpstFooter";
 import { useLocale } from "../i18n/LocaleProvider";
-import { SPST_PUBLIC_BG } from "../lib/spstTheme";
+import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 // Pagine che non devono avere header/footer
 const EXCLUDED_PATHS = ["/back-office"];
