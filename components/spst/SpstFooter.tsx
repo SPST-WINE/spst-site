@@ -11,29 +11,23 @@ export function SpstFooter() {
   const { t } = useLocale();
 
   return (
-    <footer className="relative py-12 backdrop-blur-2xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
-      <div className="mx-auto max-w-[1400px] px-5">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-          <a className="flex items-center gap-2 font-extrabold text-white" href="/">
-            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-          <div className="flex flex-col items-center gap-3 text-center md:items-end md:text-right">
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm md:justify-end">
-              <a
-                href="https://www.spst.it/legal"
-                className="text-white/70 hover:text-white transition-colors"
-              >
-                {t.footer.termsAndConditions}
-              </a>
-            </div>
-            <small className="text-white/80 leading-relaxed">
-              © SPST SRL · P.IVA IT03218840647
-            </small>
-            <small className="text-white/60 text-sm leading-relaxed">
-              Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
-            </small>
+    <footer className="relative py-8">
+      <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-5 sm:flex-row">
+        <a className="flex items-center gap-2 font-extrabold text-white" href="/">
+          <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
+        </a>
+        <div className="flex flex-col items-center gap-2 text-center sm:items-end sm:text-right">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm sm:justify-end">
+            <a
+              href="https://www.spst.it/legal"
+              className="text-white/70 hover:text-white transition-colors"
+            >
+              {t.footer.termsAndConditions}
+            </a>
           </div>
+          <small className="text-white/80 leading-tight">
+            © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
+          </small>
         </div>
       </div>
     </footer>
