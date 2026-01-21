@@ -28,7 +28,7 @@ export function SpstHeader({
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
+      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md" style={{ backgroundColor: 'rgba(28, 62, 94, 0.4)' }}>
         <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
           <a href="/" className="flex items-center gap-2 text-white font-extrabold">
@@ -70,7 +70,7 @@ export function SpstHeader({
             {/* AREA RISERVATA (desktop) */}
             <a
               href="https://dashboard.spst.it"
-              className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
+              className="inline-flex items-center rounded-lg bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
               Area Riservata
             </a>
@@ -145,7 +145,7 @@ export function SpstHeader({
             <a
               href="https://dashboard.spst.it"
               onClick={() => setOpen(false)}
-              className="mt-auto inline-flex items-center justify-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold text-[1rem] transition-all hover:-translate-y-[1px] hover:ring-2 ring-orange-300/50"
+              className="mt-auto inline-flex items-center justify-center rounded-lg bg-[#f7931e] text-black px-4 py-2 font-bold text-[1rem] transition-all hover:-translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
               Area Riservata
             </a>
