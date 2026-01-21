@@ -77,7 +77,7 @@ export default function SpedizioniUsaPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mx-auto mt-4 max-w-[70ch] text-[15px] text-white/85 sm:text-base"
+              className="mx-auto mt-4 mb-2 max-w-[70ch] text-[15px] text-white/85 sm:text-base"
             >
               {locale === "it"
                 ? "SPST offre due soluzioni dedicate per le spedizioni verso gli USA: una per importatori e soggetti registrati, l'altra per clienti privati tramite enoturismo."
@@ -92,11 +92,13 @@ export default function SpedizioniUsaPage() {
         <div className="mx-auto max-w-[1400px] px-5">
           <div className="grid gap-8 md:grid-cols-2">
             {/* SERVIZIO 1: Spedizioni B2B */}
-            <motion.div
+            <motion.a
+              href="/portale-quotazioni"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm"
+              whileHover={{ scale: 1.03 }}
+              className="block rounded-2xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] cursor-pointer"
             >
               <div className="mb-6 flex items-center gap-3">
                 <div className="rounded-lg bg-[#f7931e]/20 p-3 text-[#f7931e]">
@@ -147,21 +149,20 @@ export default function SpedizioniUsaPage() {
                   </span>
                 </li>
               </ul>
-              <a
-                href="/portale-quotazioni"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
-              >
+              <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black">
                 {locale === "it" ? "Richiedi una quotazione" : "Request a quote"}
                 <ArrowRight className="h-4 w-4" />
-              </a>
-            </motion.div>
+              </div>
+            </motion.a>
 
             {/* SERVIZIO 2: SPST Paylink */}
-            <motion.div
+            <motion.a
+              href="/spst-paylink"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm"
+              whileHover={{ scale: 1.03 }}
+              className="block rounded-2xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.05] cursor-pointer"
             >
               <div className="mb-6 flex items-center gap-3">
                 <div className="rounded-lg bg-[#f7931e]/20 p-3 text-[#f7931e]">
@@ -212,14 +213,11 @@ export default function SpedizioniUsaPage() {
                   </span>
                 </li>
               </ul>
-              <a
-                href="/spst-paylink"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
-              >
+              <div className="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black">
                 {locale === "it" ? "Scopri SPST Paylink" : "Discover SPST Paylink"}
                 <ArrowRight className="h-4 w-4" />
-              </a>
-            </motion.div>
+              </div>
+            </motion.a>
           </div>
         </div>
       </section>
