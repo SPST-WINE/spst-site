@@ -128,28 +128,22 @@ export default function SpstPaylinkPage() {
           <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              SPST Paylink · Spedire in USA è diventato facile
+              {t.paylink.kicker}
             </span>
             <h1 className="mt-3 text-[30px] font-black leading-[1.08] sm:text-[36px] md:text-[50px]">
-              Dalla tua cantina
-              <span className="block">alla porta di casa</span>
+              {t.paylink.title}
+              <span className="block">{t.paylink.titleLine2}</span>
               <span
                 className="block bg-clip-text text-transparent"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                dei tuoi clienti USA.
+                {t.paylink.titleHighlight}
               </span>
             </h1>
             <p className="mx-auto mt-3 max-w-[60ch] text-[15px] text-white/85 sm:text-base md:mx-0">
-              SPST Paylink è il servizio B2C pensato per{" "}
-              <strong>turisti americani in visita in Italia</strong>: il cliente
-              paga dal proprio smartphone, inserisce l’indirizzo negli Stati
-              Uniti e SPST gestisce{" "}
-              <span className="font-semibold">documenti export, MRN</span>, ritiro
-              in cantina e spedizione door-to-door. Un flusso dedicato ai clienti
-              con indirizzo USA, integrato nell’operatività internazionale SPST.
+              {t.paylink.description}
             </p>
 
             {/* HERO CTAs: CHANGE REQUEST ✅ */}
@@ -159,7 +153,7 @@ export default function SpstPaylinkPage() {
                 className="rounded-full px-4 py-2 text-sm font-semibold shadow ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
                 style={{ background: SPST_ORANGE, color: "#0f1720" }}
               >
-                Attiva SPST Paylink
+                {t.paylink.ctaActivate}
               </a>
 
               {/* WhatsApp moved here (replaces "checkout" CTA) */}
@@ -169,7 +163,7 @@ export default function SpstPaylinkPage() {
                 className="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30 active:translate-y-[1px]"
                 style={{ borderColor: `${SPST_ORANGE}55` }}
               >
-                Parla su WhatsApp con SPST
+                {t.paylink.ctaWhatsapp}
               </a>
             </div>
           </div>
