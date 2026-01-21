@@ -11,7 +11,7 @@ export function SpstFooter() {
   const { t } = useLocale();
 
   return (
-    <footer className="relative py-8">
+    <footer className="py-8">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-5 sm:flex-row">
         <a className="flex items-center gap-2 font-extrabold text-white" href="/">
           <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
@@ -25,7 +25,7 @@ export function SpstFooter() {
               {t.footer.termsAndConditions}
             </a>
           </div>
-          <small className="text-white/80 leading-tight">
+          <small className="text-center text-white/80 leading-tight sm:text-right">
             © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
           </small>
         </div>
