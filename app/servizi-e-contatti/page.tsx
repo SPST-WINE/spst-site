@@ -91,14 +91,14 @@ export default function ServiziContatti() {
             <div className="mt-5 flex flex-wrap gap-3 justify-center md:justify-start">
               <a
                 href="https://www.spst.it/portale-quotazioni"
-                className="px-4 py-2 rounded-full font-semibold text-sm shadow transition-all duration-200 hover:shadow-orange-500/20 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
+                className="px-6 py-3 rounded-lg font-bold text-sm transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
                 style={{ background: SPST_ORANGE, color: "#0f1720" }}
               >
                 {t.services.ctaQuote}
               </a>
               <a
                 href="#contatti"
-                className="px-4 py-2 rounded-full border font-semibold text-sm transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30"
+                className="px-6 py-3 rounded-lg border-2 border-white/30 bg-white/10 font-semibold text-sm backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 style={{ borderColor: `${SPST_ORANGE}55` }}
               >
                 {t.services.ctaContact}
@@ -176,7 +176,7 @@ export default function ServiziContatti() {
 
         <div className="mx-auto max-w-[1200px] px-5 grid gap-5 md:grid-cols-2 items-stretch">
           {/* colonna sinistra: card a piena altezza */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full">
             <div className="flex flex-col justify-between h-full">
               <ContactCard
                 title={t.services.email}
@@ -210,7 +210,7 @@ export default function ServiziContatti() {
           </div>
 
           {/* colonna destra: form a piena altezza */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full flex flex-col">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full flex flex-col">
             <QuickForm />
             <div className="mt-3 text-center text-[12px] text-white/60">
               Compili in 30 secondi. Ti rispondiamo in giornata.
@@ -240,21 +240,15 @@ export default function ServiziContatti() {
             </h3>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <a
-                className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+                className="px-6 py-3 rounded-lg font-bold text-[#0f1720] transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
                 style={{ background: SPST_ORANGE }}
                 href="https://www.spst.it/portale-quotazioni"
               >
                 {t.services.ctaQuote}
               </a>
               <a
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+                className="px-6 py-3 rounded-lg font-semibold border-2 border-white/30 bg-white/10 backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 href="https://wa.me/393201441789"
-              >
-                {t.services.ctaContact}
-              </a>
-              <a
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
-                href="#contatti"
               >
                 {t.services.ctaContact}
               </a>
@@ -342,7 +336,7 @@ function Card({
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true, amount: 0.6 }}
       transition={{ duration: 0.4 }}
-      className="rounded-2xl p-5 border border-white/10 bg-white/[0.03]"
+      className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm"
     >
       {icon && (
         <div className="w-10 h-10 rounded-xl grid place-items-center text-white/90 bg-white/5 border border-white/10 mb-2">
@@ -367,7 +361,7 @@ function ContactCard({
   icon?: React.ReactNode;
 }) {
   const content = (
-    <div className="rounded-2xl p-4 border border-white/10 bg-white/[0.03] flex items-center gap-3">
+    <div className="rounded-2xl p-4 border border-white/10 bg-white/[0.03] backdrop-blur-sm flex items-center gap-3">
       <div className="w-10 h-10 rounded-xl grid place-items-center text-white/90 bg-white/5 border border-white/10">
         {icon}
       </div>
@@ -472,7 +466,7 @@ function QuickForm() {
       </label>
       <motion.button
         whileTap={{ scale: 0.98 }}
-        className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+        className="mt-1 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
         style={{ background: SPST_ORANGE }}
       >
         {t.services.formSubmit}
@@ -495,7 +489,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   return (
-    <details className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <details className="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-4">
       <summary className="cursor-pointer list-none flex items-center justify-between gap-3">
         <span className="font-semibold">{q}</span>
         <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
