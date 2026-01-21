@@ -3,9 +3,12 @@ import type { Metadata } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Spedizioni Vino USA",
+  title: "SPST Paylink - Spedizioni Vino USA B2C",
   description:
     "SPST Paylink: spedizioni vino B2C verso gli Stati Uniti per turisti americani in visita in Italia. Pagamento via link, MRN, ritiro in cantina e consegna door-to-door.",
+  alternates: {
+    canonical: "/spst-paylink",
+  },
 };
 
 const META_PIXEL_ID = "1938569710028909";

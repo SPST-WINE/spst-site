@@ -14,7 +14,7 @@ export default function SpedizioniUsaPage() {
   return (
     <main className="font-sans text-slate-100 selection:bg-orange-300/40">
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden py-16 md:py-24">
+      <section className="relative overflow-hidden py-16 md:py-20">
         <motion.div
           aria-hidden
           initial={{ opacity: 0, y: -10 }}
@@ -51,7 +51,7 @@ export default function SpedizioniUsaPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 text-[34px] font-black leading-[1.03] sm:text-[40px] md:text-[58px]"
+              className="mt-6 text-[34px] font-black leading-[1.1] sm:text-[40px] md:text-[58px]"
             >
               {locale === "it" ? (
                 <>
@@ -88,7 +88,7 @@ export default function SpedizioniUsaPage() {
       </section>
 
       {/* ===== COMPARAZIONE 50-50 ===== */}
-      <section className="relative py-8 md:py-12">
+      <section className="relative -mt-4 pt-4 md:pt-8">
         <div className="mx-auto max-w-[1400px] px-5">
           <div className="grid gap-8 md:grid-cols-2">
             {/* SERVIZIO 1: Spedizioni B2B */}
