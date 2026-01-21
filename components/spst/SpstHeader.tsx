@@ -28,10 +28,10 @@ export function SpstHeader({
   return (
     <>
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-gray-200" style={{ backgroundColor: '#ffffff' }}>
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
         <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
           {/* LOGO */}
-          <a href="/" className="flex items-center gap-2 font-extrabold" style={{ color: '#0a1722' }}>
+          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
             <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
             <span className="hidden sm:inline">SPST</span>
           </a>
@@ -42,8 +42,7 @@ export function SpstHeader({
               <a
                 key={`${item.href}-${locale}-${item.label}`}
                 href={item.href}
-                className="px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors"
-                style={{ color: '#0a1722' }}
+                className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors text-white/90 hover:text-white"
               >
                 {item.label}
               </a>
@@ -53,16 +52,16 @@ export function SpstHeader({
             <button
               type="button"
               onClick={toggleLocale}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-1.5 hover:bg-gray-100 transition-all"
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:bg-white/10 transition-all"
               aria-label="Toggle language"
             >
-              <span className="text-xs font-semibold" style={{ color: '#0a1722' }}>
+              <span className="text-xs font-semibold text-white/70">
                 {locale === "it" ? "IT" : "EN"}
               </span>
               <motion.div
                 animate={{ rotate: locale === "en" ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
-                style={{ color: '#0a1722' }}
+                className="text-white/60"
               >
                 <Globe2 className="h-3.5 w-3.5" />
               </motion.div>
@@ -71,7 +70,7 @@ export function SpstHeader({
             {/* AREA RISERVATA (desktop) */}
             <a
               href="https://dashboard.spst.it"
-              className="inline-flex items-center rounded-lg bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
+              className="inline-flex items-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
               Area Riservata
             </a>
@@ -92,7 +91,7 @@ export function SpstHeader({
       {/* MOBILE MENU OVERLAY */}
       {open && (
         <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm">
-          <div className="absolute top-0 right-0 h-full w-[78%] max-w-[300px] bg-white border-l border-gray-200 p-6 flex flex-col gap-6 shadow-xl">
+          <div className="absolute top-0 right-0 h-full w-[78%] max-w-[300px] bg-[#0a1722] border-l border-white/10 p-6 flex flex-col gap-6 shadow-xl">
 
             {/* CLOSE BUTTON */}
             <button
@@ -105,23 +104,21 @@ export function SpstHeader({
             {/* LOGO MOBILE */}
             <a
               href="/"
-              className="flex items-center gap-2 font-extrabold mt-2"
+              className="flex items-center gap-2 text-white font-extrabold mt-2"
               onClick={() => setOpen(false)}
-              style={{ color: '#0a1722' }}
             >
               <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
               SPST
             </a>
 
             {/* MOBILE NAV LINKS */}
-            <nav key={navItemsKey} className="flex flex-col gap-4 mt-6" style={{ color: '#0a1722' }}>
+            <nav key={navItemsKey} className="flex flex-col gap-4 mt-6 text-white/90">
               {navItems.map((item) => (
                 <a
                   key={`${item.href}-${locale}-${item.label}`}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="text-[1.05rem] font-semibold hover:opacity-80 transition"
-                  style={{ color: '#0a1722' }}
+                  className="text-[1.05rem] font-semibold hover:text-white transition"
                 >
                   {item.label}
                 </a>
@@ -135,9 +132,8 @@ export function SpstHeader({
                 toggleLocale();
                 setOpen(false);
               }}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 hover:bg-gray-100 transition-all"
+              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition-all text-white/90"
               aria-label="Toggle language"
-              style={{ color: '#0a1722' }}
             >
               <span className="text-sm font-semibold">
                 {locale === "it" ? "IT" : "EN"}
@@ -149,7 +145,7 @@ export function SpstHeader({
             <a
               href="https://dashboard.spst.it"
               onClick={() => setOpen(false)}
-              className="mt-auto inline-flex items-center justify-center rounded-lg bg-[#f7931e] text-black px-4 py-2 font-bold text-[1rem] transition-all hover:-translate-y-[1px] hover:ring-2 ring-orange-300/50"
+              className="mt-auto inline-flex items-center justify-center rounded-full bg-[#f7931e] text-black px-4 py-2 font-bold text-[1rem] transition-all hover:-translate-y-[1px] hover:ring-2 ring-orange-300/50"
             >
               Area Riservata
             </a>
