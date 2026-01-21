@@ -13,13 +13,7 @@ import { ContactSection } from "../components/spst/home/ContactSection";
 
 function HomeContent() {
   return (
-    <main
-      className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background: SPST_PUBLIC_BG,
-        minHeight: "100vh",
-      }}
-    >
+    <main className="font-sans text-slate-100 selection:bg-orange-300/40">
       <HeroSection />
       <ForWineriesSection />
       <ForBuyersSection />

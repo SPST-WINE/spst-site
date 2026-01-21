@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SpstHeader } from "./SpstHeader";
 import { SpstFooter } from "./SpstFooter";
 import { useLocale } from "../i18n/LocaleProvider";
+import { SPST_PUBLIC_BG } from "../lib/spstTheme";
 
 // Pagine che non devono avere header/footer
 const EXCLUDED_PATHS = ["/back-office"];
@@ -35,10 +36,20 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
   const headerKey = `${locale}-${defaultNavItems.map((item) => item.label).join('-')}`;
 
   return (
-    <>
+    <div style={{ background: SPST_PUBLIC_BG, minHeight: "100vh" }}>
+      {/* Estensione dello sfondo dietro l'header */}
+      <div 
+        className="fixed top-0 left-0 right-0 h-20 -z-10"
+        style={{ background: SPST_PUBLIC_BG }}
+      />
       <SpstHeader key={headerKey} navItems={defaultNavItems} />
       {children}
+      {/* Estensione dello sfondo dietro il footer */}
+      <div 
+        className="relative -mt-40 h-40 -z-10"
+        style={{ background: SPST_PUBLIC_BG }}
+      />
       <SpstFooter />
-    </>
+    </div>
   );
 }
