@@ -29,8 +29,18 @@ const PARTNER_LOGOS = [
 ];
 
 export function PartnersCarousel() {
-  // Duplica i loghi per effetto loop infinito
-  const duplicatedLogos = [...PARTNER_LOGOS, ...PARTNER_LOGOS];
+  // Duplica i loghi più volte per effetto loop infinito fluido
+  // Duplichiamo abbastanza volte per avere sempre 4-5 loghi visibili
+  const duplicatedLogos = [
+    ...PARTNER_LOGOS,
+    ...PARTNER_LOGOS,
+    ...PARTNER_LOGOS,
+    ...PARTNER_LOGOS,
+  ];
+
+  // Calcolo della larghezza: 96px (w-24) + 32px (gap-8) = 128px per logo
+  const logoWidth = 128; // 96px + 32px gap
+  const totalWidth = PARTNER_LOGOS.length * logoWidth;
 
   return (
     <div className="relative overflow-hidden py-8">
@@ -41,13 +51,13 @@ export function PartnersCarousel() {
       <motion.div
         className="flex gap-8"
         animate={{
-          x: [0, -50 * PARTNER_LOGOS.length * 112],
+          x: [0, -totalWidth],
         }}
         transition={{
           x: {
             repeat: Infinity,
             repeatType: "loop",
-            duration: 30,
+            duration: 20,
             ease: "linear",
           },
         }}
@@ -55,7 +65,7 @@ export function PartnersCarousel() {
         {duplicatedLogos.map((partner, index) => (
           <div
             key={`${partner.name}-${index}`}
-            className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
+            className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white p-3 transition-all hover:border-white/40 hover:shadow-lg"
           >
             <img
               src={partner.logo}
