@@ -55,7 +55,7 @@ export function HeroSection() {
         style={{ y: heroY, opacity: heroOpacity }}
         className="relative mx-auto max-w-[1400px] px-5 w-full"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Colonna sinistra: Testo e CTA */}
           <div className="flex flex-col text-center lg:text-left">
           {/* Kicker badge */}
@@ -63,7 +63,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm mt-4 lg:mx-0 mx-auto"
+            className="inline-block rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm mt-4 lg:mx-0 mx-auto"
           >
             <Zap className="h-3 w-3" />
             {t.hero.kicker}
@@ -129,14 +129,14 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl shadow-black/20"
+            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 md:p-6 shadow-xl shadow-black/20 self-stretch flex flex-col"
           >
             {/* Subtle glow effect */}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
             
-            <div className="relative">
+            <div className="relative flex flex-col flex-1">
               {/* Stats counters */}
-              <div className="grid grid-cols-2 gap-6 md:gap-8 mb-8">
+              <div className="grid grid-cols-2 gap-4 md:gap-6 mb-5">
                 <CounterStat
                   from={49}
                   to={50}
@@ -156,17 +156,19 @@ export function HeroSection() {
               </div>
 
               {/* Separator */}
-              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
+              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4" />
 
               {/* Partners carousel */}
-              <div>
-                <div className="text-center mb-6">
-                  <h2 className="text-lg font-black sm:text-xl md:text-2xl text-white">
+              <div className="flex-1 flex flex-col justify-end">
+                <div className="text-center mb-4">
+                  <h2 className="text-base font-black sm:text-lg md:text-xl text-white">
                     {t.sections.partners.title}
                   </h2>
-                  <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto" />
+                  <div className="mt-1.5 h-1 w-14 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto" />
                 </div>
-                <PartnersCarousel />
+                <div className="py-2">
+                  <PartnersCarousel />
+                </div>
               </div>
             </div>
           </motion.div>

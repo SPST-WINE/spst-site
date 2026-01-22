@@ -37,7 +37,7 @@ export function PartnersCarousel() {
   const totalWidth = PARTNER_LOGOS.length * logoWidth;
 
   return (
-    <div className="relative overflow-hidden py-8">
+    <div className="relative overflow-hidden py-4">
 
       <motion.div
         className="flex gap-8"

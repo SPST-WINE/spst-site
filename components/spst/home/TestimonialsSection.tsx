@@ -33,42 +33,42 @@ const TESTIMONIALS: Testimonial[] = [
     country: "Italia",
     flag: "🇮🇹",
     rating: 5,
-    text: "Spedizioni multicollo verso UE sempre puntuali. La correttezza documentale è perfetta, mai un problema con le accise. Consigliatissimo!",
+    text: "Spedizioni multicollo verso UE sempre puntuali. La correttezza documentale è perfetta, mai un problema con le accise. Consigliatissimo per chi spedisce regolarmente.",
   },
   {
     name: "Emma Thompson",
     country: "UK",
     flag: "🇬🇧",
     rating: 5,
-    text: "Ho usato SPST per spedizioni B2B verso diversi paesi europei. La web app è intuitiva e il supporto WhatsApp risponde sempre in tempi rapidissimi.",
+    text: "Ho usato SPST per spedizioni B2B verso diversi paesi europei. La web app è intuitiva e il supporto WhatsApp risponde sempre in tempi rapidissimi. Ottimo servizio.",
   },
   {
     name: "Giovanni Verdi",
     country: "Italia",
     flag: "🇮🇹",
     rating: 5,
-    text: "Prezzi super competitivi per spedizioni express. Ho spedito pacchi verso America e Asia, sempre tutto perfetto. Il servizio documentale è impeccabile.",
+    text: "Prezzi super competitivi per spedizioni express. Ho spedito pacchi verso America e Asia, sempre tutto perfetto. Il servizio documentale è impeccabile e preciso.",
   },
   {
     name: "Sophie Martin",
     country: "Francia",
     flag: "🇫🇷",
     rating: 5,
-    text: "Ottimo supporto per spedizioni pallet verso USA. La documentazione è sempre corretta e il tracking è chiaro. Web app molto ben fatta.",
+    text: "Ottimo supporto per spedizioni pallet verso USA. La documentazione è sempre corretta e il tracking è chiaro. Web app molto ben fatta e facile da utilizzare.",
   },
   {
     name: "Andrea Conti",
     country: "Italia",
     flag: "🇮🇹",
     rating: 5,
-    text: "Spedizioni per fiere in Europa sempre perfette. Multicollo gestito benissimo e supporto WhatsApp sempre disponibile. Servizio top!",
+    text: "Spedizioni per fiere in Europa sempre perfette. Multicollo gestito benissimo e supporto WhatsApp sempre disponibile. Servizio top per chi lavora nel settore.",
   },
   {
     name: "Michael Brown",
     country: "USA",
     flag: "🇺🇸",
     rating: 5,
-    text: "Ho spedito vino verso Asia e il servizio è stato eccellente. Documentazione precisa, prezzi competitivi e supporto sempre presente. Consigliato!",
+    text: "Ho spedito vino verso Asia e il servizio è stato eccellente. Documentazione precisa, prezzi competitivi e supporto sempre presente. Consigliato senza riserve.",
   },
 ];
 
@@ -130,7 +130,7 @@ export function TestimonialsSection() {
                 </div>
 
                 {/* Testimonial text */}
-                <p className="text-white/90 text-sm leading-relaxed mb-4 relative z-10">
+                <p className="text-white/90 text-sm leading-relaxed mb-4 relative z-10 line-clamp-3">
                   {testimonial.text}
                 </p>
 
