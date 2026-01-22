@@ -20,9 +20,14 @@ export function SpstHeader({
   const navItemsKey = navItems.map((item) => item.label).join('|');
 
   // Toggle lingua semplice (un click) - usa useCallback per stabilità
+  // Forza un refresh per assicurarsi che tutto funzioni correttamente
   const toggleLocale = React.useCallback(() => {
     const newLocale = locale === "it" ? "en" : "it";
     setLocale(newLocale);
+    // Forza un refresh della pagina per assicurarsi che tutto si aggiorni
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   }, [locale, setLocale]);
 
   return (
@@ -76,8 +81,20 @@ export function SpstHeader({
             </a>
           </nav>
 
-          {/* MOBILE CTA + MENU BUTTON */}
+          {/* MOBILE: LANGUAGE TOGGLE + MENU BUTTON */}
           <div className="md:hidden flex items-center gap-3">
+            {/* LANGUAGE TOGGLE (mobile) - nell'header, non nel menu */}
+            <button
+              type="button"
+              onClick={toggleLocale}
+              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 hover:bg-white/10 transition-all"
+              aria-label="Toggle language"
+            >
+              <span className="text-xs font-semibold text-white/70">
+                {locale === "it" ? "IT" : "EN"}
+              </span>
+              <Globe2 className="h-3.5 w-3.5 text-white/60" />
+            </button>
             <button
               onClick={() => setOpen(true)}
               className="p-2 rounded-lg hover:bg-white/10 transition"
@@ -124,22 +141,6 @@ export function SpstHeader({
                 </a>
               ))}
             </nav>
-
-            {/* LANGUAGE TOGGLE (mobile) */}
-            <button
-              type="button"
-              onClick={() => {
-                toggleLocale();
-                setOpen(false);
-              }}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition-all text-white/90"
-              aria-label="Toggle language"
-            >
-              <span className="text-sm font-semibold">
-                {locale === "it" ? "IT" : "EN"}
-              </span>
-              <Globe2 className="h-4 w-4" />
-            </button>
 
             {/* AREA RISERVATA (mobile) */}
             <a
