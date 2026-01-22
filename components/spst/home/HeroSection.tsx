@@ -129,7 +129,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 md:p-5 shadow-xl shadow-black/20 self-start flex flex-col lg:mt-0 mt-8"
+            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 md:p-5 shadow-xl shadow-black/20 self-end flex flex-col lg:mt-0 mt-8"
           >
             {/* Subtle glow effect */}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
