@@ -55,7 +55,7 @@ export function HeroSection() {
         style={{ y: heroY }}
         className="relative mx-auto max-w-[1400px] px-5 w-full"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 lg:items-start items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 lg:items-end items-center">
           {/* Colonna sinistra: Testo e CTA */}
           <div className="flex flex-col text-center lg:text-left">
           {/* Kicker badge */}
