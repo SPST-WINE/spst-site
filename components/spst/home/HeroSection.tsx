@@ -13,8 +13,8 @@ const SPST_ORANGE = "#f7931e";
 export function HeroSection() {
   const { locale, t } = useLocale();
   const { scrollY } = useScroll();
+  // Rimuoviamo la dissolvenza per evitare che il componente scompaia su mobile
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
     <section className="relative overflow-hidden pt-2.5 pb-8 md:pt-5 md:pb-12 min-h-[70vh] flex items-center">
@@ -52,10 +52,10 @@ export function HeroSection() {
       />
 
       <motion.div
-        style={{ y: heroY, opacity: heroOpacity }}
+        style={{ y: heroY }}
         className="relative mx-auto max-w-[1400px] px-5 w-full"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 lg:items-start items-center">
           {/* Colonna sinistra: Testo e CTA */}
           <div className="flex flex-col text-center lg:text-left">
           {/* Kicker badge */}
@@ -63,10 +63,10 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-block rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm mt-4 lg:mx-0 mx-auto"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm mt-4 lg:mx-0 mx-auto w-fit"
           >
-            <Zap className="h-3 w-3" />
-            {t.hero.kicker}
+            <Zap className="h-3 w-3 shrink-0" />
+            <span>{t.hero.kicker}</span>
           </motion.div>
 
           {/* Main title */}
@@ -129,14 +129,14 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 md:p-6 shadow-xl shadow-black/20 self-stretch flex flex-col"
+            className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 md:p-5 shadow-xl shadow-black/20 self-start flex flex-col lg:mt-0 mt-8"
           >
             {/* Subtle glow effect */}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
             
-            <div className="relative flex flex-col flex-1">
+            <div className="relative flex flex-col">
               {/* Stats counters */}
-              <div className="grid grid-cols-2 gap-4 md:gap-6 mb-5">
+              <div className="grid grid-cols-2 gap-3 md:gap-4 mb-4">
                 <CounterStat
                   from={49}
                   to={50}
@@ -156,17 +156,17 @@ export function HeroSection() {
               </div>
 
               {/* Separator */}
-              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-4" />
+              <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-3" />
 
               {/* Partners carousel */}
-              <div className="flex-1 flex flex-col justify-end">
-                <div className="text-center mb-4">
-                  <h2 className="text-base font-black sm:text-lg md:text-xl text-white">
+              <div className="flex flex-col">
+                <div className="text-center mb-3">
+                  <h2 className="text-sm font-black sm:text-base md:text-lg text-white">
                     {t.sections.partners.title}
                   </h2>
-                  <div className="mt-1.5 h-1 w-14 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto" />
+                  <div className="mt-1 h-1 w-12 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto" />
                 </div>
-                <div className="py-2">
+                <div className="py-1">
                   <PartnersCarousel />
                 </div>
               </div>
