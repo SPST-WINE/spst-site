@@ -15,7 +15,7 @@ export function HeroSection() {
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className="relative overflow-hidden pt-12 pb-12 md:pt-20 md:pb-16 min-h-[75vh] flex items-center">
+    <section className="relative overflow-hidden pt-6 pb-8 md:pt-12 md:pb-12 min-h-[70vh] flex items-center">
       {/* Tech grid background */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -59,7 +59,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm mt-4"
           >
             <Zap className="h-3 w-3" />
             {t.hero.kicker}
@@ -91,7 +91,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-6 max-w-[65ch] text-base leading-relaxed text-white/90 sm:text-lg md:text-xl"
+            className="mx-auto mt-4 max-w-[65ch] text-base leading-relaxed text-white/90 sm:text-lg md:text-xl"
           >
             {t.hero.description}
           </motion.p>
@@ -101,7 +101,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 flex flex-wrap justify-center gap-4"
+            className="mt-6 flex flex-wrap justify-center gap-4"
           >
             <a
               href="/portale-quotazioni"
