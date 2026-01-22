@@ -15,7 +15,7 @@ export function HeroSection() {
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32 min-h-[85vh] flex items-center">
+    <section className="relative overflow-hidden pt-12 pb-12 md:pt-20 md:pb-16 min-h-[75vh] flex items-center">
       {/* Tech grid background */}
       <div className="absolute inset-0 opacity-10">
         <div

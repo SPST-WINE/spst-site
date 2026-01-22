@@ -10,14 +10,13 @@ export function StatsPartnersSection() {
   const { locale, t } = useLocale();
 
   return (
-    <section className="relative py-12 md:py-16">
+    <section className="relative -mt-8 pt-4 pb-8 md:-mt-12 md:pt-6 md:pb-12">
       <div className="mx-auto max-w-[1400px] px-5">
         {/* Stats counters - Card elegante */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
           className="mb-12 w-full max-w-2xl mx-auto"
         >
           <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl shadow-black/20">
@@ -48,9 +47,8 @@ export function StatsPartnersSection() {
         {/* Partners carousel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
         >
           <div className="text-center mb-8">
             <h2 className="text-2xl font-black sm:text-3xl md:text-4xl text-white">
