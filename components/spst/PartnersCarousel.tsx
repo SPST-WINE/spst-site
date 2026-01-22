@@ -14,9 +14,9 @@ import { motion } from "framer-motion";
  *    - name: Nome della cantina (usato come alt text)
  *    - logo: Percorso relativo dalla cartella public (es. "/partners/cantina-1.png")
  * 
- * 3. Formato immagini consigliato:
- *    - PNG o SVG con sfondo trasparente
- *    - Dimensione consigliata: 200x80px (o proporzioni simili)
+ * 3. Formato immagini richiesto:
+ *    - PNG con sfondo trasparente
+ *    - Dimensione: 800x800px (formato quadrato 1:1)
  *    - Ottimizzate per il web
  */
 const PARTNER_LOGOS = [
@@ -43,7 +43,7 @@ export function PartnersCarousel() {
       <motion.div
         className="flex gap-8"
         animate={{
-          x: [0, -50 * PARTNER_LOGOS.length * 120],
+          x: [0, -50 * PARTNER_LOGOS.length * 112],
         }}
         transition={{
           x: {
@@ -57,7 +57,7 @@ export function PartnersCarousel() {
         {duplicatedLogos.map((partner, index) => (
           <div
             key={`${partner.name}-${index}`}
-            className="flex h-20 w-32 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
+            className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 p-3 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
           >
             <img
               src={partner.logo}

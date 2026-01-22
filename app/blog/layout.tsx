@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",
-    url: URL,
+    url: "https://www.spst.it/blog",
     title: "Blog SPST | Logistica vino & compliance",
     description:
       "Articoli pratici su accise, documenti e flussi reali per spedire vino in UE e USA.",
