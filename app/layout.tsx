@@ -2,9 +2,19 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { LocaleProvider } from "../components/i18n/LocaleProvider";
+import { SpstLayout } from "../components/spst/SpstLayout";
+
+const CANONICAL_DOMAIN = "https://www.spst.it";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(CANONICAL_DOMAIN),
   title: "SPST - Export & Wine Logistics",
+  description:
+    "Spedizioni vino internazionali: accise, compliance, pallet e logistica B2B/B2C. Servizi export per cantine verso USA, Europa e mercati globali. Supporto operativo e documentale.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: "/bo-assets/img/spst-logo.png", type: "image/png", sizes: "32x32" },
@@ -76,7 +86,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* End Meta Pixel (noscript) */}
 
-        {children}
+        <LocaleProvider>
+          <SpstLayout>
+            {children}
+          </SpstLayout>
+        </LocaleProvider>
       </body>
     </html>
   );

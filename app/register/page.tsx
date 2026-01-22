@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { Mail, Phone, Building2, Globe2, Landmark } from 'lucide-react';
+import { useLocale } from '../../components/i18n/LocaleProvider';
+import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
 
 const SPST_BLUE = '#0a1722';
 const SPST_BLUE_SOFT = '#1c3e5e';
@@ -11,6 +13,13 @@ const LOGO_URL =
   'https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png';
 
 export default function RegisterPage() {
+  const { t } = useLocale();
+  
+  const navItems = [
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+  ];
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -53,38 +62,8 @@ export default function RegisterPage() {
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40 min-h-screen"
-      style={{
-        background:
-          'radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)',
-      }}
+      style={{ background: SPST_PUBLIC_BG }}
     >
-      {/* ===== HEADER ===== */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20">
-        <div className="mx-auto max-w-[1200px] px-5 h-16 flex items-center justify-between gap-4">
-          <a href="/" className="flex items-center gap-2 text-white font-extrabold">
-            <img src={LOGO_URL} alt="SPST" className="h-8 w-auto" />
-            <span className="hidden sm:inline">SPST</span>
-          </a>
-          <nav className="hidden md:flex items-center gap-3 text-[0.95rem] font-semibold">
-            <a href="/" className="px-2 py-1 rounded-lg hover:bg-white/5 transition-colors">
-              Home
-            </a>
-            <a
-              href="https://dashboard.spst.it"
-              className="inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-4 py-2 font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-            >
-              Area Riservata
-            </a>
-          </nav>
-          <a
-            href="https://wa.me/393201441789"
-            className="md:hidden inline-flex items-center rounded-full bg-[var(--spst-orange,#f7931e)] text-black px-3 py-2 text-sm font-bold transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
-          >
-            Supporto
-          </a>
-        </div>
-      </header>
-
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -111,22 +90,21 @@ export default function RegisterPage() {
         <div className="mx-auto max-w-[1200px] px-5 grid md:grid-cols-[1.05fr_.95fr] gap-8 items-center pt-10 md:pt-16 pb-6">
           <div className="text-center md:text-left">
             <span className="inline-block text-xs tracking-wider uppercase text-white/70">
-              Onboarding SPST
+              {t.register.kicker}
             </span>
             <h1 className="mt-2 text-[34px] sm:text-[40px] md:text-[48px] font-black leading-[1.05]">
-              Richiedi l’accesso al portale
+              {t.register.title}
               <span
                 className="block text-transparent bg-clip-text"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                e imposta i dati del mittente
+                {t.register.titleHighlight}
               </span>
             </h1>
             <p className="mt-3 text-white/85 text-[15px] sm:text-base max-w-[60ch] mx-auto md:mx-0">
-              Compila il form con gli stessi campi della sezione “Impostazioni”.
-              Riceverai conferma via email: al termine della registrazione abiliteremo il tuo profilo.
+              {t.register.description}
             </p>
           </div>
 
@@ -160,7 +138,7 @@ export default function RegisterPage() {
             noValidate
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Email" icon={<Mail className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.email} icon={<Mail className="h-4 w-4 text-white/60" />}>
                 <input
                   name="email"
                   required
@@ -170,7 +148,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="Paese" icon={<Globe2 className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.country} icon={<Globe2 className="h-4 w-4 text-white/60" />}>
                 <input
                   name="country"
                   required
@@ -180,7 +158,7 @@ export default function RegisterPage() {
               </Field>
 
               <Field
-                label="Mittente / Ragione sociale"
+                label={t.register.sender}
                 icon={<Building2 className="h-4 w-4 text-white/60" />}
               >
                 <input
@@ -191,7 +169,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="Città" icon={<Building2 className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.city} icon={<Building2 className="h-4 w-4 text-white/60" />}>
                 <input
                   name="city"
                   required
@@ -200,7 +178,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="CAP" icon={<Landmark className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.cap} icon={<Landmark className="h-4 w-4 text-white/60" />}>
                 <input
                   name="cap"
                   required
@@ -210,7 +188,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="Indirizzo" icon={<Building2 className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.address} icon={<Building2 className="h-4 w-4 text-white/60" />}>
                 <input
                   name="address"
                   required
@@ -219,7 +197,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="Telefono" icon={<Phone className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.phone} icon={<Phone className="h-4 w-4 text-white/60" />}>
                 <input
                   name="phone"
                   required
@@ -229,7 +207,7 @@ export default function RegisterPage() {
                 />
               </Field>
 
-              <Field label="Partita IVA" icon={<Landmark className="h-4 w-4 text-white/60" />}>
+              <Field label={t.register.vat} icon={<Landmark className="h-4 w-4 text-white/60" />}>
                 <input
                   name="vat"
                   required
@@ -254,27 +232,16 @@ export default function RegisterPage() {
               className="mt-1 h-12 rounded-xl font-bold text-base text-[#0f1720] w-full md:w-auto px-6 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50 disabled:opacity-60"
               style={{ background: SPST_ORANGE }}
             >
-              {loading ? 'Invio…' : 'Richiedi accesso'}
+              {loading ? t.register.submitting : t.register.submit}
             </motion.button>
 
             <div className="text-[11px] text-white/60">
-              Inviando il modulo acconsenti al trattamento dei dati secondo la Privacy Policy.
+              {t.register.privacy}
             </div>
           </form>
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="py-10">
-        <div className="mx-auto max-w-[1200px] px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <a className="flex items-center gap-2 text-white font-extrabold" href="/">
-            <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-          </a>
-          <small className="text-white/80 leading-tight text-center sm:text-right">
-            © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
-          </small>
-        </div>
-      </footer>
     </main>
   );
 }

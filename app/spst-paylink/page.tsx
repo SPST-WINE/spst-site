@@ -13,9 +13,8 @@ import {
   FileCheck2,
   MessageCircle,
 } from "lucide-react";
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
+import { useLocale } from "../../components/i18n/LocaleProvider";
 
 declare global {
   interface Window {
@@ -26,13 +25,6 @@ declare global {
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
 
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/servizi-e-contatti", label: "Servizi" },
-  { href: "/#vantaggi", label: "Perché SPST" },
-  { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-  { href: "/spst-paylink", label: "Paylink USA" },
-];
 
 const CHECKOUT_URL = "https://dashboard.spst.it/usa-shipping-pay";
 
@@ -43,6 +35,15 @@ const WA_PREFILL = encodeURIComponent(
 const WHATSAPP_URL = `https://wa.me/393201441789?text=${WA_PREFILL}`;
 
 export default function SpstPaylinkPage() {
+  const { t } = useLocale();
+  
+  const navItems = [
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
+  ];
   // ---- Meta Pixel custom events (engaged view + WA intent) ----
   useEffect(() => {
     let engagedFired = false;
@@ -99,8 +100,6 @@ export default function SpstPaylinkPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }} // 👈 gradient centralizzato
     >
-      <SpstHeader navItems={navItems} />
-
       {/* ===== HERO PAYLINK ===== */}
       <section className="relative overflow-hidden">
         {/* glow brand morbidi */}
@@ -129,28 +128,22 @@ export default function SpstPaylinkPage() {
           <div className="text-center md:text-left">
             <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              SPST Paylink · Spedire in USA è diventato facile
+              {t.paylink.kicker}
             </span>
             <h1 className="mt-3 text-[30px] font-black leading-[1.08] sm:text-[36px] md:text-[50px]">
-              Dalla tua cantina
-              <span className="block">alla porta di casa</span>
+              {t.paylink.title}
+              <span className="block">{t.paylink.titleLine2}</span>
               <span
                 className="block bg-clip-text text-transparent"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                dei tuoi clienti USA.
+                {t.paylink.titleHighlight}
               </span>
             </h1>
             <p className="mx-auto mt-3 max-w-[60ch] text-[15px] text-white/85 sm:text-base md:mx-0">
-              SPST Paylink è il servizio B2C pensato per{" "}
-              <strong>turisti americani in visita in Italia</strong>: il cliente
-              paga dal proprio smartphone, inserisce l’indirizzo negli Stati
-              Uniti e SPST gestisce{" "}
-              <span className="font-semibold">documenti export, MRN</span>, ritiro
-              in cantina e spedizione door-to-door. Un flusso dedicato ai clienti
-              con indirizzo USA, integrato nell’operatività internazionale SPST.
+              {t.paylink.description}
             </p>
 
             {/* HERO CTAs: CHANGE REQUEST ✅ */}
@@ -160,7 +153,7 @@ export default function SpstPaylinkPage() {
                 className="rounded-full px-4 py-2 text-sm font-semibold shadow ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
                 style={{ background: SPST_ORANGE, color: "#0f1720" }}
               >
-                Attiva SPST Paylink
+                {t.paylink.ctaActivate}
               </a>
 
               {/* WhatsApp moved here (replaces "checkout" CTA) */}
@@ -170,7 +163,7 @@ export default function SpstPaylinkPage() {
                 className="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30 active:translate-y-[1px]"
                 style={{ borderColor: `${SPST_ORANGE}55` }}
               >
-                Parla su WhatsApp con SPST
+                {t.paylink.ctaWhatsapp}
               </a>
             </div>
           </div>
@@ -183,24 +176,24 @@ export default function SpstPaylinkPage() {
       {/* ===== COS'È ===== */}
       <section id="cos-e" className="py-10">
         <SectionHeader
-          kicker="Cos'è SPST Paylink"
-          title="Un link di pagamento che sblocca le spedizioni USA dalla cantina"
+          kicker={t.paylink.whatKicker}
+          title={t.paylink.whatTitle}
           tone="accent"
         />
         <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
           <Card
-            title="Per la cantina"
-            text="Dopo il tasting non devi più improvvisare spedizioni: hai un Paylink SPST collegato alla tua cantina, con regole chiare di spedizione verso gli USA."
+            title={t.paylink.what1}
+            text={t.paylink.what1Desc}
             icon={<MapPin className="h-5 w-5" />}
           />
           <Card
-            title="Per il turista americano"
-            text="Scansiona un QR o apre il link, inserisce indirizzo USA e paga con carta. Tutto dal proprio telefono, in pochi minuti, senza moduli cartacei."
+            title={t.paylink.what2}
+            text={t.paylink.what2Desc}
             icon={<Smartphone className="h-5 w-5" />}
           />
           <Card
-            title="Per l’operatività"
-            text="SPST riceve i dati completi, genera MRN e documenti, organizza il ritiro in cantina e spedisce door-to-door negli Stati Uniti, con tracking e supporto."
+            title={t.paylink.what3}
+            text={t.paylink.what3Desc}
             icon={<FileCheck2 className="h-5 w-5" />}
           />
         </div>
@@ -209,24 +202,24 @@ export default function SpstPaylinkPage() {
       {/* ===== COME FUNZIONA ===== */}
       <section id="funziona" className="py-12">
         <SectionHeader
-          kicker="Come funziona"
-          title="Dal tasting al tracking USA, in 3 step"
+          kicker={t.paylink.howKicker}
+          title={t.paylink.howTitle}
           tone="solution"
         />
         <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
           <Card
-            title="1) In cantina: QR o link"
-            text="Al momento della vendita mostri al turista americano un QR code o gli invii il Paylink via email/WhatsApp. Ogni link è collegato alla tua cantina."
+            title={t.paylink.how1}
+            text={t.paylink.how1Desc}
             icon={<Plane className="h-5 w-5" />}
           />
           <Card
-            title="2) Checkout USA dal telefono"
-            text="Il cliente compila l'indirizzo di consegna negli Stati Uniti, inserisce telefono ed email, accetta le condizioni e paga con carta in ambiente sicuro."
+            title={t.paylink.how2}
+            text={t.paylink.how2Desc}
             icon={<CreditCard className="h-5 w-5" />}
           />
           <Card
-            title="3) MRN, ritiro e spedizione"
-            text="SPST genera MRN e documenti export, programma il ritiro direttamente in cantina e gestisce la spedizione door-to-door verso gli USA."
+            title={t.paylink.how3}
+            text={t.paylink.how3Desc}
             icon={<Ship className="h-5 w-5" />}
           />
         </div>
@@ -235,8 +228,8 @@ export default function SpstPaylinkPage() {
       {/* ===== SOLO USA (modulo dedicato) ===== */}
       <section id="usa-only" className="py-12">
         <SectionHeader
-          kicker="Focus operativo"
-          title="SPST Paylink è il modulo dedicato ai clienti con indirizzo negli Stati Uniti"
+          kicker={t.paylink.usaKicker}
+          title={t.paylink.usaTitle}
           tone="problem"
         />
         <div className="mx-auto max-w-[1200px] px-5">
@@ -249,29 +242,18 @@ export default function SpstPaylinkPage() {
               className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
             >
               <h3 className="text-lg font-extrabold">
-                Perché un flusso separato per gli USA?
+                {t.paylink.usaWhy}
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                SPST lavora su più mercati, ma il turismo americano ha dinamiche
-                specifiche: clienti in vacanza, ordini misti, necessità di
-                spedizione rapida e chiara verso casa negli Stati Uniti.
+                {t.paylink.usaWhyDesc}
               </p>
               <ul className="mt-4 space-y-2 text-sm text-white/80">
-                <li>• Normative e processi export dedicati agli USA.</li>
-                <li>
-                  • Listini e tratte ottimizzate per spedizioni B2C vino verso
-                  America.
-                </li>
-                <li>
-                  • Un flusso separato che ti permette di gestire i clienti USA
-                  senza complicare il resto dell’export.
-                </li>
+                <li>• {t.paylink.usaBenefits1}</li>
+                <li>• {t.paylink.usaBenefits2}</li>
+                <li>• {t.paylink.usaBenefits3}</li>
               </ul>
               <p className="mt-4 text-sm text-orange-200/90">
-                Il modulo Paylink si attiva solo quando il cliente indica un{" "}
-                <strong>indirizzo di consegna negli Stati Uniti</strong>. Per
-                Europa e altri mercati SPST utilizza canali, listini e processi
-                dedicati.
+                {t.paylink.usaNote}
               </p>
             </motion.div>
 
@@ -283,21 +265,12 @@ export default function SpstPaylinkPage() {
               className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.015] p-5"
             >
               <h4 className="text-sm font-semibold text-white/90">
-                Cosa significa per la tua cantina
+                {t.paylink.usaWhat}
               </h4>
               <ul className="mt-3 space-y-2 text-sm text-white/80">
-                <li>
-                  • Continui a gestire Europa e altri Paesi con le soluzioni SPST
-                  più adatte a quei mercati.
-                </li>
-                <li>
-                  • Quando il cliente è americano e vuole recapitare il vino a
-                  casa negli USA, usi Paylink e hai un flusso già pronto.
-                </li>
-                <li>
-                  • Meno confusione per il team: sai sempre quali spedizioni sono
-                  turismo USA e quali rientrano nell’export “classico”.
-                </li>
+                <li>• {t.paylink.usaWhat1}</li>
+                <li>• {t.paylink.usaWhat2}</li>
+                <li>• {t.paylink.usaWhat3}</li>
               </ul>
             </motion.div>
           </div>
@@ -307,24 +280,24 @@ export default function SpstPaylinkPage() {
       {/* ===== PER CHI HA SENSO ===== */}
       <section id="quando" className="py-12">
         <SectionHeader
-          kicker="Per chi ha senso"
-          title="Quando SPST Paylink è davvero utile"
+          kicker={t.paylink.whenKicker}
+          title={t.paylink.whenTitle}
           tone="plain"
         />
         <div className="mx-auto grid max-w-[1200px] gap-4 px-5 md:grid-cols-3">
           <Card
-            title="Cantine con tanti turisti USA"
-            text="Se una parte importante dei tuoi visitatori arriva dagli Stati Uniti e compra vino in quantità, Paylink ti permette di non perdere queste vendite."
+            title={t.paylink.when1}
+            text={t.paylink.when1Desc}
             icon={<Globe2 className="h-5 w-5" />}
           />
           <Card
-            title="Agriturismi e wine resort"
-            text="Strutture che fanno degustazioni con americani e vogliono offrire un servizio premium: ‘Non ti preoccupare della valigia, ti spediamo tutto a casa’."
+            title={t.paylink.when2}
+            text={t.paylink.when2Desc}
             icon={<Plane className="h-5 w-5" />}
           />
           <Card
-            title="Eventi e fiere con pubblico americano"
-            text="Spedizioni dirette USA a partire dallo stand, senza allestire un sistema complesso: QR code + Paylink e SPST gestisce il resto."
+            title={t.paylink.when3}
+            text={t.paylink.when3Desc}
             icon={<MessageCircle className="h-5 w-5" />}
           />
         </div>
@@ -336,13 +309,10 @@ export default function SpstPaylinkPage() {
           <div className="flex flex-col gap-5 rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,.25)] md:flex-row md:items-center md:justify-between md:p-7">
             <div>
               <h3 className="m-0 text-xl font-bold text-white">
-                Vuoi attivare SPST Paylink per i tuoi clienti USA?
+                {t.paylink.ctaTitle}
               </h3>
               <p className="mt-2 max-w-xl text-sm text-white/80">
-                Raccontaci quanti turisti americani passano in cantina, quanti
-                cartoni vendi mediamente e da quali regioni arrivano. Ti aiutiamo
-                a capire se ha senso attivare il servizio e come strutturare
-                prezzi e processi.
+                {t.paylink.ctaDesc}
               </p>
             </div>
 
@@ -353,7 +323,7 @@ export default function SpstPaylinkPage() {
                 style={{ background: SPST_ORANGE }}
                 href="mailto:info@spst.it?subject=Attivazione%20SPST%20Paylink%20turisti%20USA"
               >
-                Scrivi a info@spst.it
+                {t.paylink.ctaEmail}
               </a>
 
               {/* Checkout preview moved here (replaces WhatsApp in bottom CTA) */}
@@ -364,19 +334,16 @@ export default function SpstPaylinkPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Guarda la schermata di checkout
+                {t.paylink.ctaPreview}
               </a>
             </div>
           </div>
 
           <div className="mt-3 text-center text-[12px] text-white/60">
-            Nessun vincolo minimo iniziale: partiamo dai primi casi reali e
-            cresciamo insieme.
+            {t.paylink.ctaNote}
           </div>
         </div>
       </section>
-
-      <SpstFooter />
     </main>
   );
 }

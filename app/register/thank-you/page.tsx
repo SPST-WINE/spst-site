@@ -1,17 +1,32 @@
+'use client';
+
+import { useLocale } from '../../../components/i18n/LocaleProvider';
+import { SPST_PUBLIC_BG } from '../../../lib/spstTheme';
+
 export default function ThankYou() {
+  const { t, locale } = useLocale();
+  
+  const navItems = [
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+  ];
+
   return (
     <main
-      className="font-sans text-slate-100 min-h-screen flex items-center"
-      style={{
-        background:
-          'radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)',
-      }}
+      className="font-sans text-slate-100 min-h-screen flex flex-col"
+      style={{ background: SPST_PUBLIC_BG }}
     >
-      <section className="mx-auto max-w-[800px] px-5 w-full">
-        <div className="rounded-2xl p-6 md:p-7 border border-white/15 bg-white/5 backdrop-blur-xl text-center">
-          <h1 className="text-2xl md:text-3xl font-black">Grazie! Richiesta inviata!</h1>
+      
+      <section className="flex-1 flex items-center mx-auto max-w-[800px] px-5 w-full">
+        <div className="rounded-2xl p-6 md:p-7 border border-white/15 bg-white/5 backdrop-blur-xl text-center w-full">
+          <h1 className="text-2xl md:text-3xl font-black">
+            {locale === 'it' ? 'Grazie! Richiesta inviata!' : 'Thank you! Request sent!'}
+          </h1>
           <p className="text-white/80 mt-2">
-            Imposteremo il tuo profilo e abiliteremo l’accesso. Benvenuto in SPST!
+            {locale === 'it' 
+              ? "Imposteremo il tuo profilo e abiliteremo l'accesso. Benvenuto in SPST!"
+              : "We'll set up your profile and enable access. Welcome to SPST!"}
           </p>
           <div className="mt-5 flex items-center justify-center">
             <a
@@ -20,11 +35,12 @@ export default function ThankYou() {
               href="https://wa.me/393201441789"
               target="_blank"
             >
-              Supporto WhatsApp
+              {locale === 'it' ? 'Supporto WhatsApp' : 'WhatsApp Support'}
             </a>
           </div>
         </div>
       </section>
+      
     </main>
   );
 }

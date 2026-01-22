@@ -18,7 +18,8 @@ import {
   Phone,
 } from "lucide-react";
 
-import { SpstHeader } from "../../components/spst/SpstHeader";
+import { useLocale } from "../../components/i18n/LocaleProvider";
+import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 // Brand palette coerente
 const SPST_BLUE = "#0a1722";
@@ -81,14 +82,15 @@ function Toast({
 
 export default function PortaleQuotazioni() {
   const { toast, show } = useToast();
+  const { t } = useLocale();
 
   // nav uguale alla home (senza Wine Connect)
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/servizi-e-contatti", label: "Servizi" },
-    { href: "/#vantaggi", label: "Perché SPST" },
-    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-    { href: "/spst-paylink", label: "Paylink USA" },
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
   ];
 
   // collego il bridge dei toast (evento custom -> hook)
@@ -121,14 +123,8 @@ export default function PortaleQuotazioni() {
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background:
-          "radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)",
-      }}
+      style={{ background: SPST_PUBLIC_BG }}
     >
-      {/* ===== HEADER RIUSABILE (come home) ===== */}
-      <SpstHeader navItems={navItems} />
-
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -155,22 +151,21 @@ export default function PortaleQuotazioni() {
         <div className="mx-auto max-w-[1200px] px-5 pt-10 md:pt-16 pb-8">
           <div className="text-center md:text-left">
             <span className="inline-block text-xs tracking-wider uppercase text-white/70">
-              Preventivi veloci
+              {t.quote.kicker}
             </span>
             <h1 className="mt-2 text-[34px] sm:text-[40px] md:text-[54px] font-black leading-[1.15] pb-2">
-              Portale quotazioni
+              {t.quote.title}
               <span
                 className="block text-transparent bg-clip-text"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                calcola la tua spedizione in pochi passaggi
+                {t.quote.titleHighlight}
               </span>
             </h1>
             <p className="mt-3 text-white/85 text-[15px] sm:text-base max-w-[60ch] mx-auto md:mx-0">
-              Non sei ancora cliente? Inserisci origine e destino, dati del collo e i
-              servizi che ti servono. Ti ricontattiamo con la migliore soluzione.
+              {t.quote.description}
             </p>
           </div>
         </div>
@@ -180,30 +175,27 @@ export default function PortaleQuotazioni() {
       <section id="quote" className="py-10">
         <div className="mx-auto max-w-[1200px] px-5 grid gap-5 md:grid-cols-2 items-stretch">
           {/* Colonna sinistra: contatto + info */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full">
             <div className="grid gap-4 h-full">
               <ContactFields />
               <hr className="border-white/10" />
-              <InfoRow icon={<Globe2 className="h-5 w-5" />} title="Copertura EU/UK/USA">
-                Spedizioni express e pallet, con soluzioni anche a temperatura
-                controllata.
+              <InfoRow icon={<Globe2 className="h-5 w-5" />} title={t.quote.coverage}>
+                {t.quote.coverageDesc}
               </InfoRow>
-              <InfoRow icon={<FileCheck2 className="h-5 w-5" />} title="Documenti & accise">
-                Possiamo gestire pratiche accise, COLA, Prior Notice e assistenza
-                doganale.
+              <InfoRow icon={<FileCheck2 className="h-5 w-5" />} title={t.quote.docs}>
+                {t.quote.docsDesc}
               </InfoRow>
-              <InfoRow icon={<Rocket className="h-5 w-5" />} title="Express opzionale">
-                Spunta &quot;Spedizione express&quot; per priorità e transit time più
-                rapidi.
+              <InfoRow icon={<Rocket className="h-5 w-5" />} title={t.quote.express}>
+                {t.quote.expressDesc}
               </InfoRow>
-              <InfoRow icon={<ShieldCheck className="h-5 w-5" />} title="Assicurazione">
-                Facoltativa, consigliata per spedizioni di valore o campionature urgenti.
+              <InfoRow icon={<ShieldCheck className="h-5 w-5" />} title={t.quote.insurance}>
+                {t.quote.insuranceDesc}
               </InfoRow>
             </div>
           </div>
 
           {/* Colonna destra: dettagli spedizione */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full">
             <QuoteDetailsForm
               onLead={() => {
                 // ✅ GA4 lead event (no thank-you page needed)
@@ -222,18 +214,18 @@ export default function PortaleQuotazioni() {
         <div className="mx-auto max-w-[1200px] px-5">
           <div className="rounded-2xl p-6 md:p-7 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,.25)]">
             <h3 className="text-xl font-bold text-white m-0">
-              Serve assistenza per il preventivo?
+              {t.quote.helpTitle}
             </h3>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <a
-                className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+                className="px-6 py-3 rounded-lg font-bold text-[#0f1720] transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
                 style={{ background: SPST_ORANGE }}
                 href="/servizi-e-contatti"
               >
-                Servizi e contatti
+                {t.quote.helpContact}
               </a>
               <a
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+                className="px-6 py-3 rounded-lg font-semibold border-2 border-white/30 bg-white/10 backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 href="https://wa.me/393201441789"
                 onClick={() =>
                   track("contact", {
@@ -242,7 +234,7 @@ export default function PortaleQuotazioni() {
                   })
                 }
               >
-                Supporto WhatsApp
+                {t.quote.helpWhatsapp}
               </a>
             </div>
           </div>
@@ -250,18 +242,6 @@ export default function PortaleQuotazioni() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="py-8">
-        <div className="mx-auto max-w-[1200px] px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <a className="flex items-center gap-2 text-white font-extrabold" href="/">
-            <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-          </a>
-          <small className="text-white/80 leading-tight text-center sm:text-right">
-            © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23, Avellino
-            (AV) 83100
-          </small>
-        </div>
-      </footer>
-
       {/* Toast */}
       <Toast toast={toast} />
     </main>
@@ -279,7 +259,7 @@ function InfoRow({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-xl p-4 border border-white/10 bg-white/[0.03] flex gap-3 items-start">
+    <div className="rounded-xl p-4 border border-white/10 bg-white/[0.03] backdrop-blur-sm flex gap-3 items-start">
       <div className="w-10 h-10 rounded-xl grid place-items-center text-white/90 bg-white/5 border border-white/10 shrink-0">
         {icon}
       </div>
@@ -292,9 +272,10 @@ function InfoRow({
 }
 
 function ContactFields() {
+  const { t } = useLocale();
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <Field label="Azienda (opzionale)">
+      <Field label={t.quote.company}>
         <Building2 className="h-4 w-4 text-white/60" />
         <input
           form="quoteForm"
@@ -303,7 +284,7 @@ function ContactFields() {
           className="bg-transparent outline-none w-full placeholder:text-white/40"
         />
       </Field>
-      <Field label="Email">
+      <Field label={t.quote.email}>
         <Mail className="h-4 w-4 text-white/60" />
         <input
           form="quoteForm"
@@ -314,7 +295,7 @@ function ContactFields() {
           className="bg-transparent outline-none w-full placeholder:text-white/40"
         />
       </Field>
-      <Field label="Telefono (opzionale)">
+      <Field label={t.quote.phone}>
         <Phone className="h-4 w-4 text-white/60" />
         <input
           form="quoteForm"
@@ -324,7 +305,7 @@ function ContactFields() {
           className="bg-transparent outline-none w-full placeholder:text-white/40"
         />
       </Field>
-      <Field label="Indirizzo (opzionale)">
+      <Field label={t.quote.address}>
         <MapPin className="h-4 w-4 text-white/60" />
         <input
           form="quoteForm"
@@ -338,6 +319,7 @@ function ContactFields() {
 }
 
 function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
+  const { t } = useLocale();
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -451,7 +433,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
 
       {/* Origine/Destinazione */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Field label="Paese partenza">
+        <Field label={t.quote.countryFrom}>
           <Globe2 className="h-4 w-4 text-white/60" />
           <input
             required
@@ -460,7 +442,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="CAP partenza">
+        <Field label={t.quote.capFrom}>
           <MapPin className="h-4 w-4 text-white/60" />
           <input
             required
@@ -469,7 +451,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Paese destinazione">
+        <Field label={t.quote.countryTo}>
           <Globe2 className="h-4 w-4 text-white/60" />
           <input
             required
@@ -478,7 +460,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="CAP destinazione">
+        <Field label={t.quote.capTo}>
           <MapPin className="h-4 w-4 text-white/60" />
           <input
             required
@@ -490,7 +472,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
       </div>
 
       {/* Merce */}
-      <Field label="Contenuto della merce">
+      <Field label={t.quote.content}>
         <PackageSearch className="h-4 w-4 text-white/60" />
         <input
           required
@@ -502,7 +484,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
 
       {/* Dimensioni e peso */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Field label="Lunghezza (cm)">
+        <Field label={t.quote.length}>
           <Ruler className="h-4 w-4 text-white/60" />
           <input
             required
@@ -514,7 +496,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Larghezza (cm)">
+        <Field label={t.quote.width}>
           <Ruler className="h-4 w-4 text-white/60" />
           <input
             required
@@ -526,7 +508,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Altezza (cm)">
+        <Field label={t.quote.height}>
           <Ruler className="h-4 w-4 text-white/60" />
           <input
             required
@@ -538,7 +520,7 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Peso (kg)">
+        <Field label={t.quote.weight}>
           <Scale className="h-4 w-4 text-white/60" />
           <input
             required
@@ -556,14 +538,14 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
 
       {/* Preferenze di servizio */}
       <fieldset className="rounded-2xl p-4 border border-white/10 bg-white/[0.03]">
-        <legend className="text-[12px] px-2 text-white/60">Preferenze</legend>
+        <legend className="text-[12px] px-2 text-white/60">{t.quote.preferences}</legend>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <Check name="express" label="Spedizione express" icon={<Rocket className="h-4 w-4" />} />
-          <Check name="accise" label="Pratica accise" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="dogana" label="Assistenza doganale" icon={<ShieldCheck className="h-4 w-4" />} />
-          <Check name="cola" label="COLA / Prior Notice (USA)" icon={<FileCheck2 className="h-4 w-4" />} />
-          <Check name="temp" label="Temperatura controllata" icon={<Thermometer className="h-4 w-4" />} />
-          <Check name="assicurazione" label="Assicurazione" icon={<ShieldCheck className="h-4 w-4" />} />
+          <Check name="express" label={t.quote.expressCheck} icon={<Rocket className="h-4 w-4" />} />
+          <Check name="accise" label={t.quote.acciseCheck} icon={<FileCheck2 className="h-4 w-4" />} />
+          <Check name="dogana" label={t.quote.customsCheck} icon={<ShieldCheck className="h-4 w-4" />} />
+          <Check name="cola" label={t.quote.colaCheck} icon={<FileCheck2 className="h-4 w-4" />} />
+          <Check name="temp" label={t.quote.tempCheck} icon={<Thermometer className="h-4 w-4" />} />
+          <Check name="assicurazione" label={t.quote.insuranceCheck} icon={<ShieldCheck className="h-4 w-4" />} />
         </div>
       </fieldset>
 
@@ -571,20 +553,21 @@ function QuoteDetailsForm({ onLead }: { onLead?: () => void }) {
         type="submit"
         whileTap={{ scale: 0.98 }}
         disabled={submitting}
-        className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50 disabled:opacity-60 disabled:hover:translate-y-0"
+        className="mt-1 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 disabled:opacity-60 disabled:hover:scale-100"
         style={{ background: SPST_ORANGE }}
       >
-        {submitting ? "Invio in corso..." : "Richiedi preventivo"}
+        {submitting ? t.quote.submitting : t.quote.submit}
       </motion.button>
 
       <div className="text-[11px] text-white/50 text-center">
-        Invio protetto. Nessuno spam.
+        {t.quote.protected}
       </div>
     </form>
   );
 }
 
 function VolumetricHelper() {
+  const { t } = useLocale();
   const [vol, setVol] = useState(0);
 
   useEffect(() => {
@@ -606,7 +589,7 @@ function VolumetricHelper() {
 
   return (
     <div className="rounded-xl p-3 border border-white/10 bg-white/[0.03] text-xs text-white/70">
-      Peso volumetrico stimato (cm/4000):{" "}
+      {t.quote.volumetric}{" "}
       <span className="font-semibold text-white">{vol} kg</span>
     </div>
   );

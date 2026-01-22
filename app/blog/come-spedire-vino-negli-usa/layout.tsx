@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
-const URL = "https://www.spst.it/blog/come-spedire-vino-negli-usa";
+const PATH = "/blog/come-spedire-vino-negli-usa";
 
 export const metadata: Metadata = {
   title: "Come spedire vino negli USA al cliente finale (guida pratica) | SPST",
   description:
-    "Guida pratica per cantine ed e-commerce: perché la spedizione diretta dall’Europa al cliente USA è fuorviante. Requisiti chiave: importatore USA, compliance label (spesso COLA) e vendita domestica. Scopri Paylink USA.",
-  alternates: { canonical: URL },
+    "Guida pratica per cantine ed e-commerce: perché la spedizione diretta dall'Europa al cliente USA è fuorviante. Requisiti chiave: importatore USA, compliance label (spesso COLA) e vendita domestica. Scopri Paylink USA.",
+  alternates: { canonical: PATH },
   openGraph: {
     type: "article",
-    url: URL,
+    url: `https://www.spst.it${PATH}`,
     title: "Come spedire vino al cliente finale negli USA (senza blocchi e false promesse)",
     description:
       "Il problema non è il corriere: è il modello. Importatore USA, compliance label e vendita domestica. Paylink USA rende tutto semplice per la cantina.",
@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: "Come spedire vino al cliente finale negli Stati Uniti",
-    mainEntityOfPage: URL,
+    mainEntityOfPage: `https://www.spst.it${PATH}`,
     publisher: {
       "@type": "Organization",
       name: "SPST",

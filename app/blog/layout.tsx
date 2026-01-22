@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 
-const URL = "https://www.spst.it/blog";
-
 export const metadata: Metadata = {
   title: "Blog SPST | Logistica vino, accise, documenti e spedizioni internazionali",
   description:
     "Guide pratiche su spedizioni vino in Europa e USA: accise, B2B/B2C, campionature, rappresentanza fiscale e Paylink USA. Articoli operativi, senza terrorismo normativo.",
-  alternates: { canonical: URL },
+  alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",
-    url: URL,
+    url: "https://www.spst.it/blog",
     title: "Blog SPST | Logistica vino & compliance",
     description:
       "Articoli pratici su accise, documenti e flussi reali per spedire vino in UE e USA.",

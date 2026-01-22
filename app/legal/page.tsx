@@ -14,21 +14,22 @@ import {
   Ship,
 } from "lucide-react";
 
-import { SpstHeader } from "../../components/spst/SpstHeader";
-import { SpstFooter } from "../../components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
+import { useLocale } from "../../components/i18n/LocaleProvider";
 
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
 
 export default function LegalPage() {
+  const { t } = useLocale();
+  
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/servizi-e-contatti", label: "Servizi" },
-    { href: "/#vantaggi", label: "Perché SPST" },
-    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-    { href: "/spst-paylink", label: "Paylink USA" },
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
   ];
 
   const lastUpdated = "07/01/2026";
@@ -38,8 +39,6 @@ export default function LegalPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
-
       {/* HERO */}
       <section className="relative overflow-hidden">
         {/* glow brand */}
@@ -67,25 +66,23 @@ export default function LegalPage() {
         <div className="mx-auto max-w-[1200px] px-5 pb-8 pt-10 md:pt-14">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Documentazione legale
+            {t.legal.kicker}
           </span>
 
           <h1 className="mt-3 text-center text-[30px] font-black leading-[1.08] sm:text-[36px] md:text-left md:text-[48px]">
-            Termini, condizioni e{" "}
+            {t.legal.title}{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{
                 backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
               }}
             >
-              privacy
+              {t.legal.titleHighlight}
             </span>
           </h1>
 
           <p className="mx-auto mt-3 max-w-[80ch] text-center text-[14px] text-white/80 sm:text-base md:mx-0 md:text-left">
-            Qui trovi i Termini di utilizzo e l’informativa Privacy relativi al
-            sito e ai servizi SPST (inclusi portale, richieste di quotazione e
-            Paylink USA). Ultimo aggiornamento:{" "}
+            {t.legal.description}{" "}
             <span className="font-semibold text-white/90">{lastUpdated}</span>.
           </p>
 
@@ -95,14 +92,14 @@ export default function LegalPage() {
               className="rounded-full px-4 py-2 text-sm font-semibold shadow ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
               style={{ background: SPST_ORANGE, color: "#0f1720" }}
             >
-              Vai ai Termini
+              {t.legal.termsBtn}
             </a>
             <a
               href="#privacy"
               className="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200 hover:-translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30 active:translate-y-[1px]"
               style={{ borderColor: `${SPST_ORANGE}55` }}
             >
-              Vai alla Privacy
+              {t.legal.privacyBtn}
             </a>
           </div>
 
@@ -110,18 +107,18 @@ export default function LegalPage() {
           <div className="mt-7 grid gap-4 md:grid-cols-3">
             <MiniCard
               icon={<FileText className="h-5 w-5" />}
-              title="Termini d’uso"
-              text="Regole di utilizzo del sito, del portale e dei flussi di richiesta/checkout."
+              title={t.legal.termsTitle}
+              text={t.legal.termsDesc}
             />
             <MiniCard
               icon={<ShieldCheck className="h-5 w-5" />}
-              title="Privacy"
-              text="Come trattiamo i dati: finalità, basi giuridiche, conservazione e diritti."
+              title={t.legal.privacyTitle}
+              text={t.legal.privacyDesc}
             />
             <MiniCard
               icon={<Cookie className="h-5 w-5" />}
-              title="Cookie"
-              text="Informazioni essenziali su cookie tecnici e, se presenti, strumenti di analytics."
+              title={t.legal.cookieTitle}
+              text={t.legal.cookieDesc}
             />
           </div>
         </div>
@@ -135,7 +132,7 @@ export default function LegalPage() {
             <aside className="md:sticky md:top-24 h-fit">
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                 <div className="text-xs font-semibold uppercase tracking-wider text-white/60">
-                  Indice
+                  {t.legal.tocTitle}
                 </div>
                 <div className="mt-3 grid gap-2 text-sm">
                   <TocLink href="#termini" label="1. Termini e condizioni" />
@@ -148,10 +145,7 @@ export default function LegalPage() {
                 </div>
 
                 <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">
-                  Nota: questo testo è un template “pronto-pubblicazione” ma non
-                  sostituisce una consulenza legale. Se vuoi lo rendiamo 100%
-                  aderente alla tua ragione sociale/partita IVA e ai tuoi flussi
-                  (Stripe, vettori, importatori).
+                  {t.legal.note}
                 </div>
               </div>
             </aside>
@@ -387,8 +381,6 @@ export default function LegalPage() {
           </div>
         </div>
       </section>
-
-      <SpstFooter />
     </main>
   );
 }

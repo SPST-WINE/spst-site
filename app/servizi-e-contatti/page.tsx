@@ -16,7 +16,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-import { SpstHeader } from "../../components/spst/SpstHeader";
+import { useLocale } from "../../components/i18n/LocaleProvider";
+import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 // Brand palette
 const SPST_BLUE = "#0a1722"; // base blu scuro (sfondo)
@@ -26,43 +27,23 @@ const LOGO_URL =
   "https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png";
 
 export default function ServiziContatti() {
-  // Dev sanity-checks (mini "tests" in-page)
-  if (typeof window !== "undefined") {
-    try {
-      console.assert(Array.isArray(FAQS), "FAQS deve essere un array");
-      FAQS.forEach((f, i) => {
-        console.assert(typeof f.q === "string" && f.q.length > 0, `FAQ[${i}].q mancante`);
-        console.assert(typeof f.a === "string" && f.a.length > 0, `FAQ[${i}].a mancante`);
-      });
-      const acciseFaq = FAQS.find((f) => /accise|e-DAS/i.test(f.q + f.a));
-      console.assert(
-        acciseFaq && /e-DAS/.test(acciseFaq.a),
-        "La FAQ su accise/e-DAS deve contenere 'e-DAS' ed essere una stringa chiusa"
-      );
-    } catch (e) {
-      console.error("Dev checks FAQS falliti:", e);
-    }
-  }
+  const { t } = useLocale();
 
   // Nav coerente con la homepage (senza Wine Connect)
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/servizi-e-contatti", label: "Servizi" },
-    { href: "/#vantaggi", label: "Perché SPST" },
-    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-    { href: "/spst-paylink", label: "Paylink USA" },
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
   ];
 
   return (
     <main
       className="font-sans text-slate-100 selection:bg-orange-300/40"
-      style={{
-        background:
-          "radial-gradient(140% 140% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)",
-      }}
+      style={{ background: SPST_PUBLIC_BG }}
     >
       {/* ===== HEADER RIUSABILE (identico alla homepage) ===== */}
-      <SpstHeader navItems={navItems} />
 
       {/* ===== HERO (senza logo grande) ===== */}
       <section className="relative overflow-hidden">
@@ -91,38 +72,36 @@ export default function ServiziContatti() {
         <div className="mx-auto max-w-[1200px] px-5 pt-10 md:pt-16 pb-12">
           <div className="text-center md:text-left">
             <span className="inline-block text-xs tracking-wider uppercase text-white/70">
-              Export vino all-in-one
+              {t.services.kicker}
             </span>
             <h1 className="mt-2 text-[34px] sm:text-[40px] md:text-[54px] font-black leading-[1.03]">
-              Servizi e contatti
+              {t.services.title}
               <span
                 className="block text-transparent bg-clip-text"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
                 }}
               >
-                tutto quello che ti serve per spedire in sicurezza
+                {t.services.titleHighlight}
               </span>
             </h1>
             <p className="mt-3 text-white/85 text-[15px] sm:text-base max-w-[60ch] mx-auto md:mx-0">
-              Documenti doganali e fiscali, spedizioni express o pallet, deposito e
-              rappresentanza, più supporto operativo per strutturare i tuoi flussi export.
-              Un unico partner logistico dall&apos;Italia ai tuoi clienti nel mondo.
+              {t.services.description}
             </p>
             <div className="mt-5 flex flex-wrap gap-3 justify-center md:justify-start">
               <a
                 href="https://www.spst.it/portale-quotazioni"
-                className="px-4 py-2 rounded-full font-semibold text-sm shadow transition-all duration-200 hover:shadow-orange-500/20 hover:-translate-y-[1px] active:translate-y-[1px] hover:ring-2 ring-orange-300/50"
+                className="px-6 py-3 rounded-lg font-bold text-sm transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
                 style={{ background: SPST_ORANGE, color: "#0f1720" }}
               >
-                Richiedi una quotazione
+                {t.services.ctaQuote}
               </a>
               <a
                 href="#contatti"
-                className="px-4 py-2 rounded-full border font-semibold text-sm transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/5 hover:ring-2 ring-orange-300/30"
+                className="px-6 py-3 rounded-lg border-2 border-white/30 bg-white/10 font-semibold text-sm backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 style={{ borderColor: `${SPST_ORANGE}55` }}
               >
-                Scrivici
+                {t.services.ctaContact}
               </a>
             </div>
           </div>
@@ -132,30 +111,30 @@ export default function ServiziContatti() {
       {/* ===== SERVIZI ===== */}
       <section id="servizi" className="py-12">
         <SectionHeader
-          kicker="Cosa facciamo"
-          title="Operatività completa, dall’export alla consegna"
+          kicker={t.services.servicesKicker}
+          title={t.services.servicesTitle}
           tone="accent"
         />
 
         <div className="mx-auto max-w-[1200px] px-5 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           <Card
-            title="Logistica & Spedizioni"
-            text="Express, campionature e pallet in Europa, UK, USA e altri mercati. Trasporto via corriere, camion, nave e aereo."
+            title={t.services.logistics}
+            text={t.services.logisticsDesc}
             icon={<Ship className="h-5 w-5" />}
           />
           <Card
-            title="Dogana & Fisco"
-            text="Accisa assolta/sospesa, COLA, Prior Notice, e-DAS. Documenti generati, verificati e archiviati in modo strutturato."
+            title={t.services.customs}
+            text={t.services.customsDesc}
             icon={<FileCheck2 className="h-5 w-5" />}
           />
           <Card
-            title="Deposito & Rappresentanza"
-            text="Vendi ai tuoi buyer anche se non hanno un codice accisa tramite la rappresentanza fiscale SPST."
+            title={t.services.warehouse}
+            text={t.services.warehouseDesc}
             icon={<Warehouse className="h-5 w-5" />}
           />
           <Card
-            title="Sviluppo mercati esteri"
-            text="Supporto operativo su listini, Incoterm, strategie di spedizione e organizzazione dei flussi export verso nuovi mercati."
+            title={t.services.markets}
+            text={t.services.marketsDesc}
             icon={<Globe2 className="h-5 w-5" />}
           />
         </div>
@@ -164,24 +143,24 @@ export default function ServiziContatti() {
       {/* ===== COME LAVORIAMO ===== */}
       <section id="processo" className="py-12">
         <SectionHeader
-          kicker="Come funziona"
-          title="Dalla carta al tracking, in 3 step"
+          kicker={t.services.processKicker}
+          title={t.services.processTitle}
           tone="solution"
         />
         <div className="mx-auto max-w-[1200px] px-5 grid gap-4 md:grid-cols-3">
           <Card
-            title="1) Documenti a norma"
-            text="Accise, COLA, Prior Notice, e-DAS e tutta la parte burocratica per partire in regola nei diversi Paesi."
+            title={t.services.step1}
+            text={t.services.step1Desc}
             icon={<FileCheck2 className="h-5 w-5" />}
           />
           <Card
-            title="2) Spedizione ottimizzata"
-            text="Selezioniamo corrieri, vettori e tratte migliori (express, camion, aereo o nave) con tracking e assistenza dedicata."
+            title={t.services.step2}
+            text={t.services.step2Desc}
             icon={<Route className="h-5 w-5" />}
           />
           <Card
-            title="3) Flussi export stabili"
-            text="Analizziamo volumi, frequenze e mercati per strutturare spedizioni ricorrenti e ridurre costi e complessità nel tempo."
+            title={t.services.step3}
+            text={t.services.step3Desc}
             icon={<ShieldCheck className="h-5 w-5" />}
           />
         </div>
@@ -190,48 +169,48 @@ export default function ServiziContatti() {
       {/* ===== CONTATTI RAPIDI ===== */}
       <section id="contatti" className="py-12">
         <SectionHeader
-          kicker="Parliamo della tua cantina"
-          title="Servizi e contatti"
+          kicker={t.services.contactKicker}
+          title={t.services.contactTitle}
           tone="plain"
         />
 
         <div className="mx-auto max-w-[1200px] px-5 grid gap-5 md:grid-cols-2 items-stretch">
           {/* colonna sinistra: card a piena altezza */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full">
             <div className="flex flex-col justify-between h-full">
               <ContactCard
-                title="Email"
+                title={t.services.email}
                 text="info@spst.it"
                 href="mailto:info@spst.it"
                 icon={<Mail className="h-5 w-5" />}
               />
               <ContactCard
-                title="WhatsApp"
+                title={t.services.whatsapp}
                 text="+39 320 144 1789"
                 href="https://wa.me/393201441789"
                 icon={<MessageSquare className="h-5 w-5" />}
               />
               <ContactCard
-                title="Telefono"
+                title={t.services.phone}
                 text="+39 320 144 1789"
                 href="tel:+393201441789"
                 icon={<Phone className="h-5 w-5" />}
               />
               <ContactCard
-                title="Sede legale"
+                title={t.services.legalAddress}
                 text="Piazzale Gambale 23, Avellino (AV) 83100 – Italia"
                 icon={<MapPin className="h-5 w-5" />}
               />
               <ContactCard
-                title="Orari"
-                text="Lun–Ven · 9:00–13:00 / 15:00–18:00 (CET)"
+                title={t.services.hours}
+                text={t.services.hoursValue}
                 icon={<Timer className="h-5 w-5" />}
               />
             </div>
           </div>
 
           {/* colonna destra: form a piena altezza */}
-          <div className="rounded-2xl p-5 border border-white/10 bg-white/[0.04] h-full flex flex-col">
+          <div className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm h-full flex flex-col">
             <QuickForm />
             <div className="mt-3 text-center text-[12px] text-white/60">
               Compili in 30 secondi. Ti rispondiamo in giornata.
@@ -242,11 +221,13 @@ export default function ServiziContatti() {
 
       {/* ===== FAQ ===== */}
       <section id="faq" className="py-12">
-        <SectionHeader kicker="Domande frequenti" title="FAQ" tone="plain" />
+        <SectionHeader kicker={t.services.faqKicker} title={t.services.faqTitle} tone="plain" />
         <div className="mx-auto max-w-[1200px] px-5 grid gap-3">
-          {FAQS.map((f, i) => (
-            <FaqItem key={i} q={f.q} a={f.a} />
-          ))}
+          <FaqItem q={t.services.faq1q} a={t.services.faq1a} />
+          <FaqItem q={t.services.faq2q} a={t.services.faq2a} />
+          <FaqItem q={t.services.faq3q} a={t.services.faq3a} />
+          <FaqItem q={t.services.faq4q} a={t.services.faq4a} />
+          <FaqItem q={t.services.faq5q} a={t.services.faq5a} />
         </div>
       </section>
 
@@ -255,27 +236,21 @@ export default function ServiziContatti() {
         <div className="mx-auto max-w-[1200px] px-5">
           <div className="rounded-2xl p-6 md:p-7 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,.25)]">
             <h3 className="text-xl font-bold text-white m-0">
-              Pronto a spedire il tuo vino nel mondo?
+              {t.services.ctaTitle}
             </h3>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <a
-                className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+                className="px-6 py-3 rounded-lg font-bold text-[#0f1720] transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
                 style={{ background: SPST_ORANGE }}
                 href="https://www.spst.it/portale-quotazioni"
               >
-                Richiedi una quotazione
+                {t.services.ctaQuote}
               </a>
               <a
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+                className="px-6 py-3 rounded-lg font-semibold border-2 border-white/30 bg-white/10 backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 href="https://wa.me/393201441789"
               >
-                Supporto WhatsApp
-              </a>
-              <a
-                className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
-                href="#contatti"
-              >
-                Contatti
+                {t.services.ctaContact}
               </a>
             </div>
           </div>
@@ -283,44 +258,10 @@ export default function ServiziContatti() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="py-8">
-        <div className="mx-auto max-w-[1200px] px-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <a className="flex items-center gap-2 text-white font-extrabold" href="/">
-            <img src={LOGO_URL} alt="SPST" className="h-7 w-auto" />
-          </a>
-          <small className="text-white/80 leading-tight text-center sm:text-right">
-            © SPST SRL · P.IVA IT03218840647 · Sede Legale: Piazzale Gambale 23,
-            Avellino (AV) 83100
-          </small>
-        </div>
-      </footer>
     </main>
   );
 }
 
-/* ------------------------ DATA ------------------------ */
-const FAQS = [
-  {
-    q: "Spedite solo vino?",
-    a: "Sì, siamo specializzati nel vino (B2B e campionature). Possiamo gestire anche prodotti correlati come olio o altri alcolici, previo controllo di conformità e requisiti doganali.",
-  },
-  {
-    q: "Come gestite accise ed e-DAS?",
-    a: "Produciamo e archiviamo la documentazione necessaria (accisa assolta/sospesa, e-DAS, COLA, Prior Notice) e verifichiamo HS code e requisiti del Paese di destinazione, coordinandoci con cantina e destinatario.",
-  },
-  {
-    q: "Posso inviare campionature?",
-    a: "Sì. Utilizziamo corrieri espressi con tempi rapidi e tracciamento, e quando necessario possiamo prevedere soluzioni a temperatura controllata o imballaggi rinforzati.",
-  },
-  {
-    q: "Offrite supporto sul piano export?",
-    a: "Possiamo affiancarvi nella scelta degli Incoterm, nella definizione delle modalità di spedizione (express, groupage pallet, aereo, mare) e nell’organizzazione dei flussi ricorrenti verso i mercati esteri che vi interessano.",
-  },
-  {
-    q: "Che Paesi e modalità di trasporto coprite?",
-    a: "Gestiamo spedizioni di vino in tutta l’Unione Europea, UK (solo vino, no cibo/medicine), USA e diversi mercati extra-UE. Possiamo operare tramite corrieri espressi, camion (groupage o pallet interi), spedizioni via nave e via aereo, valutando caso per caso la soluzione più adatta.",
-  },
-];
 
 /* ------------------------ COMPONENTS ------------------------ */
 function SectionHeader({
@@ -395,7 +336,7 @@ function Card({
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true, amount: 0.6 }}
       transition={{ duration: 0.4 }}
-      className="rounded-2xl p-5 border border-white/10 bg-white/[0.03]"
+      className="rounded-2xl p-8 border border-white/10 bg-white/[0.03] backdrop-blur-sm"
     >
       {icon && (
         <div className="w-10 h-10 rounded-xl grid place-items-center text-white/90 bg-white/5 border border-white/10 mb-2">
@@ -420,7 +361,7 @@ function ContactCard({
   icon?: React.ReactNode;
 }) {
   const content = (
-    <div className="rounded-2xl p-4 border border-white/10 bg-white/[0.03] flex items-center gap-3">
+    <div className="rounded-2xl p-4 border border-white/10 bg-white/[0.03] backdrop-blur-sm flex items-center gap-3">
       <div className="w-10 h-10 rounded-xl grid place-items-center text-white/90 bg-white/5 border border-white/10">
         {icon}
       </div>
@@ -440,6 +381,7 @@ function ContactCard({
 }
 
 function QuickForm() {
+  const { t } = useLocale();
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: collega EmailJS / Make / Airtable
@@ -448,7 +390,7 @@ function QuickForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Field label="Azienda">
+        <Field label={t.services.formCompany}>
           <Building2 className="h-4 w-4 text-white/60" />
           <input
             required
@@ -457,7 +399,7 @@ function QuickForm() {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Nome referente">
+        <Field label={t.services.formName}>
           <Building2 className="h-4 w-4 text-white/60" />
           <input
             required
@@ -466,7 +408,7 @@ function QuickForm() {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Email">
+        <Field label={t.services.formEmail}>
           <Mail className="h-4 w-4 text-white/60" />
           <input
             required
@@ -476,7 +418,7 @@ function QuickForm() {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Telefono">
+        <Field label={t.services.formPhone}>
           <Phone className="h-4 w-4 text-white/60" />
           <input
             inputMode="tel"
@@ -485,7 +427,7 @@ function QuickForm() {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Paesi di interesse">
+        <Field label={t.services.formCountries}>
           <Globe2 className="h-4 w-4 text-white/60" />
           <input
             name="paesi"
@@ -493,7 +435,7 @@ function QuickForm() {
             className="bg-transparent outline-none w-full placeholder:text-white/40"
           />
         </Field>
-        <Field label="Tipologia spedizioni">
+        <Field label={t.services.formType}>
           <Ship className="h-4 w-4 text-white/60" />
           <select name="tipologia" className="bg-transparent outline-none w-full text-white">
             <option className="text-black" value="">
@@ -512,7 +454,7 @@ function QuickForm() {
         </Field>
       </div>
       <label className="group grid gap-1">
-        <div className="text-[11px] text-white/60">Note</div>
+        <div className="text-[11px] text-white/60">{t.services.formNotes}</div>
         <div className="rounded-xl px-3 py-3 bg-black/30 border border-white/10 ring-0 focus-within:ring-1 focus-within:ring-white/30">
           <textarea
             name="note"
@@ -524,12 +466,12 @@ function QuickForm() {
       </label>
       <motion.button
         whileTap={{ scale: 0.98 }}
-        className="mt-1 h-12 rounded-xl font-semibold text-base text-[#0f1720] w-full transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+        className="mt-1 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
         style={{ background: SPST_ORANGE }}
       >
-        Invia richiesta
+        {t.services.formSubmit}
       </motion.button>
-      <div className="text-[11px] text-white/50 text-center">Invio protetto. Nessuno spam.</div>
+      <div className="text-[11px] text-white/50 text-center">{t.services.formProtected}</div>
     </form>
   );
 }
@@ -547,7 +489,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   return (
-    <details className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <details className="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-4">
       <summary className="cursor-pointer list-none flex items-center justify-between gap-3">
         <span className="font-semibold">{q}</span>
         <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />

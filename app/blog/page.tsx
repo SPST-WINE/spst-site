@@ -13,9 +13,8 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { SpstHeader } from "@/components/spst/SpstHeader";
-import { SpstFooter } from "@/components/spst/SpstFooter";
 import { SPST_PUBLIC_BG } from "@/lib/spstTheme";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
@@ -242,12 +241,14 @@ const TAG_ORDER = [
 ];
 
 export default function BlogIndexPage() {
+  const { t } = useLocale();
+  
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/servizi-e-contatti", label: "Servizi" },
-    { href: "/#vantaggi", label: "Perché SPST" },
-    { href: "/portale-quotazioni", label: "Richiedi una quotazione" },
-    { href: "/spst-paylink", label: "Paylink USA" },
+    { href: "/", label: t.nav.home },
+    { href: "/servizi-e-contatti", label: t.nav.services },
+    { href: "/#vantaggi", label: t.nav.whySpst },
+    { href: "/portale-quotazioni", label: t.nav.quote },
+    { href: "/spst-paylink", label: t.nav.usaShipping },
     { href: "/blog", label: "Blog" },
   ];
 
@@ -294,8 +295,6 @@ export default function BlogIndexPage() {
       className="font-sans text-slate-100 selection:bg-orange-300/40"
       style={{ background: SPST_PUBLIC_BG }}
     >
-      <SpstHeader navItems={navItems} />
-
       {/* HERO */}
       <section className="relative overflow-hidden">
         <motion.div
@@ -322,25 +321,23 @@ export default function BlogIndexPage() {
         <div className="mx-auto max-w-[1200px] px-5 pb-8 pt-10 md:pt-14">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Blog SPST • Logistica & compliance vino
+            {t.blog.kicker}
           </span>
 
           <h1 className="mt-3 text-center text-[28px] font-black leading-[1.08] sm:text-[34px] md:text-left md:text-[46px]">
-            Guide operative per spedire vino{" "}
+            {t.blog.title}{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{
                 backgroundImage: `linear-gradient(90deg, ${SPST_ORANGE}, ${SPST_BLUE_SOFT})`,
               }}
             >
-              senza errori
+              {t.blog.titleHighlight}
             </span>
           </h1>
 
           <p className="mx-auto mt-3 max-w-[100ch] text-center text-[14px] text-white/80 sm:text-base md:mx-0 md:text-left">
-            Articoli pratici (non ideologici) su accise, documenti e flussi reali:
-            Europa B2B/B2C, campionature, Extra-UE/Asia, USA e Paylink. Se vuoi un
-            supporto rapido, scrivici su WhatsApp.
+            {t.blog.description}
           </p>
 
           {/* Search + quick CTA */}
@@ -353,7 +350,7 @@ export default function BlogIndexPage() {
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Cerca: USA, dogane, accise, buyer senza codice, pallet…"
+                  placeholder={t.blog.searchPlaceholder}
                   className="w-full bg-transparent text-sm text-white/90 placeholder:text-white/45 outline-none"
                 />
               </div>
@@ -365,21 +362,21 @@ export default function BlogIndexPage() {
               style={{ borderColor: `${SPST_ORANGE}55` }}
             >
               <MessageCircle className="h-4 w-4" />
-              Supporto WhatsApp
+              {t.blog.whatsappSupport}
             </a>
           </div>
 
           {/* Tags */}
           <div className="mt-4 flex flex-wrap gap-2">
             <TagChip active={activeTag === "All"} onClick={() => setActiveTag("All")}>
-              Tutti
+              {t.blog.allTags}
             </TagChip>
 
             <TagChip
               active={activeTag === "Featured"}
               onClick={() => setActiveTag("Featured")}
             >
-              <Sparkles className="h-3.5 w-3.5" /> In evidenza
+              <Sparkles className="h-3.5 w-3.5" /> {t.blog.featured}
             </TagChip>
 
             {allTags.map((t) => (
@@ -435,7 +432,7 @@ export default function BlogIndexPage() {
                   className="inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow ring-orange-300/50 transition-all duration-200 hover:-translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 active:translate-y-[1px]"
                   style={{ background: SPST_ORANGE, color: "#0f1720" }}
                 >
-                  Leggi ora <ArrowRight className="h-4 w-4" />
+                  {t.blog.readNow} <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
             </div>
@@ -448,7 +445,7 @@ export default function BlogIndexPage() {
         <div className="mx-auto max-w-[1200px] px-5">
           <div className="flex items-center justify-between gap-3">
             <div className="text-sm text-white/70">
-              Risultati:{" "}
+              {t.blog.results}{" "}
               <span className="font-semibold text-white/90">{filtered.length}</span>
             </div>
 
@@ -457,7 +454,7 @@ export default function BlogIndexPage() {
               className="hidden items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold text-white/85 transition-all hover:bg-white/5 md:inline-flex"
               style={{ borderColor: `${SPST_ORANGE}55` }}
             >
-              Richiedi una quotazione <ExternalLink className="h-4 w-4" />
+              {t.blog.requestQuote} <ExternalLink className="h-4 w-4" />
             </a>
           </div>
 
@@ -472,10 +469,10 @@ export default function BlogIndexPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-sm font-semibold text-white/90">
-                  Hai un caso specifico (Paese, volumi, buyer, accise)?
+                  {t.blog.ctaTitle}
                 </div>
                 <div className="mt-1 text-[13px] text-white/75">
-                  Ti diciamo subito il modello corretto e cosa serve davvero.
+                  {t.blog.ctaDesc}
                 </div>
               </div>
 
@@ -493,7 +490,7 @@ export default function BlogIndexPage() {
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
                   style={{ background: SPST_ORANGE, color: "#0f1720" }}
                 >
-                  Richiedi quotazione <ArrowRight className="h-4 w-4" />
+                  {t.blog.requestQuote} <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
             </div>
@@ -501,13 +498,12 @@ export default function BlogIndexPage() {
 
           {filtered.length === 0 && (
             <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center text-white/75">
-              Nessun risultato. Prova a cercare “USA”, “dogane”, “accise”, “pallet”.
+              {t.blog.noResults}
             </div>
           )}
         </div>
       </section>
 
-      <SpstFooter />
     </main>
   );
 }
@@ -539,6 +535,7 @@ function TagChip({
 }
 
 function PostCard({ post }: { post: BlogPost }) {
+  const { t } = useLocale();
   return (
     <motion.a
       href={post.slug}
@@ -551,7 +548,7 @@ function PostCard({ post }: { post: BlogPost }) {
       <div className="flex items-start justify-between gap-3">
         <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
           <FileText className="h-3.5 w-3.5" />
-          Articolo
+          {t.blog.article}
         </div>
 
         <div className="flex items-center gap-2 text-xs text-white/60">
@@ -580,7 +577,7 @@ function PostCard({ post }: { post: BlogPost }) {
       </div>
 
       <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/85">
-        Leggi <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        {t.blog.read} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </div>
     </motion.a>
   );
