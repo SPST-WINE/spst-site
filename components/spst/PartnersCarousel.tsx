@@ -2,31 +2,25 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { PARTNER_LOGOS } from "../../lib/partnerLogos";
 
 /**
  * LOGHI DELLE CANTINE PARTNER
  * 
- * Per aggiungere i loghi delle cantine:
- * 1. Posiziona i file immagine nella cartella: public/partners/
- *    Esempio: public/partners/cantina-1.png, public/partners/cantina-2.png, ecc.
+ * I loghi vengono caricati automaticamente da lib/partnerLogos.ts
  * 
- * 2. Aggiorna l'array PARTNER_LOGOS qui sotto con i nomi e i percorsi reali:
- *    - name: Nome della cantina (usato come alt text)
- *    - logo: Percorso relativo dalla cartella public (es. "/partners/cantina-1.png")
+ * Per aggiungere nuovi loghi:
+ * 1. Posiziona il file PNG nella cartella: public/partners/
+ *    Esempio: public/partners/cantina-14.png
+ * 
+ * 2. Aggiungi una nuova entry in lib/partnerLogos.ts:
+ *    { name: "Cantina 14", logo: "/partners/cantina-14.png" }
  * 
  * 3. Formato immagini richiesto:
  *    - PNG con sfondo trasparente
  *    - Dimensione: 800x800px (formato quadrato 1:1)
  *    - Ottimizzate per il web
  */
-const PARTNER_LOGOS = [
-  { name: "Cantina 1", logo: "/partners/cantina-1.png" },
-  { name: "Cantina 2", logo: "/partners/cantina-2.png" },
-  { name: "Cantina 3", logo: "/partners/cantina-3.png" },
-  // Aggiungi altri loghi qui quando disponibili
-  // { name: "Cantina 4", logo: "/partners/cantina-4.png" },
-  // { name: "Cantina 5", logo: "/partners/cantina-5.png" },
-];
 
 export function PartnersCarousel() {
   // Duplica i loghi più volte per effetto loop infinito fluido
