@@ -60,6 +60,59 @@ export const translations = {
         kicker: '',
         title: 'I nostri partner',
       },
+      testimonials: {
+        title: 'Dicono di noi',
+        testimonial1: {
+          name: 'Marco R.',
+          country: 'Italia',
+          text: 'Servizio impeccabile per spedizioni pallet verso USA. Documentazione sempre corretta e supporto WhatsApp sempre disponibile. Prezzi competitivi per un servizio così professionale.',
+        },
+        testimonial2: {
+          name: 'Sarah J.',
+          country: 'USA',
+          text: 'Ottima web app, facile da usare. Ho spedito vino verso gli Stati Uniti e tutto è arrivato perfetto. Il supporto è stato eccezionale durante tutto il processo.',
+        },
+        testimonial3: {
+          name: 'Luca B.',
+          country: 'Italia',
+          text: 'Spedizioni multicollo verso UE sempre puntuali. La correttezza documentale è perfetta, mai un problema con le accise. Consigliatissimo per chi spedisce regolarmente.',
+        },
+        testimonial4: {
+          name: 'Emma T.',
+          country: 'UK',
+          text: 'Ho usato SPST per spedizioni B2B verso diversi paesi europei. La web app è intuitiva e il supporto WhatsApp risponde sempre in tempi rapidissimi. Ottimo servizio.',
+        },
+        testimonial5: {
+          name: 'Giovanni V.',
+          country: 'Italia',
+          text: 'Prezzi super competitivi per spedizioni express verso Asia. Ho spedito pacchi e tutto è arrivato perfetto. Il servizio documentale è impeccabile e preciso.',
+        },
+        testimonial6: {
+          name: 'Sophie M.',
+          country: 'USA',
+          text: 'Ottimo supporto per spedizioni pallet verso USA. La documentazione è sempre corretta e il tracking è chiaro. Web app molto ben fatta e facile da utilizzare.',
+        },
+        testimonial7: {
+          name: 'Andrea C.',
+          country: 'Italia',
+          text: 'Spedizioni per fiere in Europa sempre perfette. Multicollo gestito benissimo e supporto WhatsApp sempre disponibile. Servizio top per chi lavora nel settore.',
+        },
+        testimonial8: {
+          name: 'Michael B.',
+          country: 'USA',
+          text: 'Ho spedito vino verso gli Stati Uniti e il servizio è stato eccellente. Documentazione precisa, prezzi competitivi e supporto sempre presente. Consigliato senza riserve.',
+        },
+        testimonial9: {
+          name: 'Chen L.',
+          country: 'Cina',
+          text: 'Spedizioni verso Asia sempre puntuali. La documentazione è perfetta e il supporto risponde sempre rapidamente. Servizio professionale e affidabile.',
+        },
+        testimonial10: {
+          name: 'Paolo F.',
+          country: 'Italia',
+          text: 'Ho spedito vino verso diversi paesi asiatici e tutto è andato benissimo. Documentazione corretta, prezzi competitivi e tracking sempre aggiornato.',
+        },
+      },
       cta: {
         title: 'Pronto a spedire il tuo vino nel mondo?',
         quote: 'Richiedi una quotazione',
@@ -333,6 +386,59 @@ export const translations = {
       partners: {
         kicker: '',
         title: 'Our partners',
+      },
+      testimonials: {
+        title: 'What they say about us',
+        testimonial1: {
+          name: 'Marco R.',
+          country: 'Italy',
+          text: 'Impeccable service for pallet shipments to USA. Documentation always correct and WhatsApp support always available. Competitive prices for such a professional service.',
+        },
+        testimonial2: {
+          name: 'Sarah J.',
+          country: 'USA',
+          text: 'Excellent web app, easy to use. I shipped wine to the United States and everything arrived perfect. The support was exceptional throughout the process.',
+        },
+        testimonial3: {
+          name: 'Luca B.',
+          country: 'Italy',
+          text: 'Multi-piece shipments to EU always on time. Documentary accuracy is perfect, never a problem with excise duties. Highly recommended for regular shippers.',
+        },
+        testimonial4: {
+          name: 'Emma T.',
+          country: 'UK',
+          text: 'I used SPST for B2B shipments to various European countries. The web app is intuitive and WhatsApp support always responds very quickly. Great service.',
+        },
+        testimonial5: {
+          name: 'Giovanni V.',
+          country: 'Italy',
+          text: 'Super competitive prices for express shipments to Asia. I shipped packages and everything arrived perfect. The documentary service is impeccable and precise.',
+        },
+        testimonial6: {
+          name: 'Sophie M.',
+          country: 'USA',
+          text: 'Great support for pallet shipments to USA. Documentation is always correct and tracking is clear. Very well made web app and easy to use.',
+        },
+        testimonial7: {
+          name: 'Andrea C.',
+          country: 'Italy',
+          text: 'Shipments for fairs in Europe always perfect. Multi-piece handled very well and WhatsApp support always available. Top service for those working in the sector.',
+        },
+        testimonial8: {
+          name: 'Michael B.',
+          country: 'USA',
+          text: 'I shipped wine to the United States and the service was excellent. Precise documentation, competitive prices and always present support. Recommended without reservations.',
+        },
+        testimonial9: {
+          name: 'Chen L.',
+          country: 'China',
+          text: 'Shipments to Asia always on time. Documentation is perfect and support always responds quickly. Professional and reliable service.',
+        },
+        testimonial10: {
+          name: 'Paolo F.',
+          country: 'Italy',
+          text: 'I shipped wine to various Asian countries and everything went very well. Correct documentation, competitive prices and always updated tracking.',
+        },
       },
       cta: {
         title: 'Ready to ship your wine worldwide?',
@@ -622,6 +728,59 @@ export type Translations = {
       kicker: string;
       title: string;
       subtitle: string;
+    };
+    testimonials: {
+      title: string;
+      testimonial1: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial2: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial3: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial4: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial5: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial6: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial7: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial8: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial9: {
+        name: string;
+        country: string;
+        text: string;
+      };
+      testimonial10: {
+        name: string;
+        country: string;
+        text: string;
+      };
     };
   };
   legal: {

@@ -13,83 +13,94 @@ type Testimonial = {
   text: string;
 };
 
-const TESTIMONIALS: Testimonial[] = [
-  {
-    name: "Marco R.",
-    country: "Italia",
-    flag: "🇮🇹",
-    rating: 5,
-    text: "Servizio impeccabile per spedizioni pallet verso USA. Documentazione sempre corretta e supporto WhatsApp sempre disponibile. Prezzi competitivi per un servizio così professionale.",
-  },
-  {
-    name: "Sarah J.",
-    country: "USA",
-    flag: "🇺🇸",
-    rating: 5,
-    text: "Ottima web app, facile da usare. Ho spedito vino verso gli Stati Uniti e tutto è arrivato perfetto. Il supporto è stato eccezionale durante tutto il processo.",
-  },
-  {
-    name: "Luca B.",
-    country: "Italia",
-    flag: "🇮🇹",
-    rating: 5,
-    text: "Spedizioni multicollo verso UE sempre puntuali. La correttezza documentale è perfetta, mai un problema con le accise. Consigliatissimo per chi spedisce regolarmente.",
-  },
-  {
-    name: "Emma T.",
-    country: "UK",
-    flag: "🇬🇧",
-    rating: 5,
-    text: "Ho usato SPST per spedizioni B2B verso diversi paesi europei. La web app è intuitiva e il supporto WhatsApp risponde sempre in tempi rapidissimi. Ottimo servizio.",
-  },
-  {
-    name: "Giovanni V.",
-    country: "Italia",
-    flag: "🇮🇹",
-    rating: 5,
-    text: "Prezzi super competitivi per spedizioni express verso Asia. Ho spedito pacchi e tutto è arrivato perfetto. Il servizio documentale è impeccabile e preciso.",
-  },
-  {
-    name: "Sophie M.",
-    country: "USA",
-    flag: "🇺🇸",
-    rating: 5,
-    text: "Ottimo supporto per spedizioni pallet verso USA. La documentazione è sempre corretta e il tracking è chiaro. Web app molto ben fatta e facile da utilizzare.",
-  },
-  {
-    name: "Andrea C.",
-    country: "Italia",
-    flag: "🇮🇹",
-    rating: 5,
-    text: "Spedizioni per fiere in Europa sempre perfette. Multicollo gestito benissimo e supporto WhatsApp sempre disponibile. Servizio top per chi lavora nel settore.",
-  },
-  {
-    name: "Michael B.",
-    country: "USA",
-    flag: "🇺🇸",
-    rating: 5,
-    text: "Ho spedito vino verso gli Stati Uniti e il servizio è stato eccellente. Documentazione precisa, prezzi competitivi e supporto sempre presente. Consigliato senza riserve.",
-  },
-  {
-    name: "Chen L.",
-    country: "Cina",
-    flag: "🇨🇳",
-    rating: 5,
-    text: "Spedizioni verso Asia sempre puntuali. La documentazione è perfetta e il supporto risponde sempre rapidamente. Servizio professionale e affidabile.",
-  },
-  {
-    name: "Paolo F.",
-    country: "Italia",
-    flag: "🇮🇹",
-    rating: 5,
-    text: "Ho spedito vino verso diversi paesi asiatici e tutto è andato benissimo. Documentazione corretta, prezzi competitivi e tracking sempre aggiornato.",
-  },
-];
+// Mappa delle bandiere per paese
+const FLAG_MAP: Record<string, string> = {
+  'Italia': '🇮🇹',
+  'Italy': '🇮🇹',
+  'USA': '🇺🇸',
+  'UK': '🇬🇧',
+  'Cina': '🇨🇳',
+  'China': '🇨🇳',
+};
 
 export function TestimonialsSection() {
   const { locale, t } = useLocale();
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerView = 3;
+
+  // Costruisce le recensioni dalle traduzioni
+  const TESTIMONIALS: Testimonial[] = [
+    {
+      name: t.sections.testimonials.testimonial1.name,
+      country: t.sections.testimonials.testimonial1.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial1.country] || '🇮🇹',
+      rating: 5,
+      text: t.sections.testimonials.testimonial1.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial2.name,
+      country: t.sections.testimonials.testimonial2.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial2.country] || '🇺🇸',
+      rating: 5,
+      text: t.sections.testimonials.testimonial2.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial3.name,
+      country: t.sections.testimonials.testimonial3.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial3.country] || '🇮🇹',
+      rating: 5,
+      text: t.sections.testimonials.testimonial3.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial4.name,
+      country: t.sections.testimonials.testimonial4.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial4.country] || '🇬🇧',
+      rating: 5,
+      text: t.sections.testimonials.testimonial4.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial5.name,
+      country: t.sections.testimonials.testimonial5.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial5.country] || '🇮🇹',
+      rating: 5,
+      text: t.sections.testimonials.testimonial5.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial6.name,
+      country: t.sections.testimonials.testimonial6.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial6.country] || '🇺🇸',
+      rating: 5,
+      text: t.sections.testimonials.testimonial6.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial7.name,
+      country: t.sections.testimonials.testimonial7.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial7.country] || '🇮🇹',
+      rating: 5,
+      text: t.sections.testimonials.testimonial7.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial8.name,
+      country: t.sections.testimonials.testimonial8.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial8.country] || '🇺🇸',
+      rating: 5,
+      text: t.sections.testimonials.testimonial8.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial9.name,
+      country: t.sections.testimonials.testimonial9.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial9.country] || '🇨🇳',
+      rating: 5,
+      text: t.sections.testimonials.testimonial9.text,
+    },
+    {
+      name: t.sections.testimonials.testimonial10.name,
+      country: t.sections.testimonials.testimonial10.country,
+      flag: FLAG_MAP[t.sections.testimonials.testimonial10.country] || '🇮🇹',
+      rating: 5,
+      text: t.sections.testimonials.testimonial10.text,
+    },
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,7 +108,7 @@ export function TestimonialsSection() {
     }, 5000); // Cambia ogni 5 secondi
 
     return () => clearInterval(interval);
-  }, []);
+  }, [TESTIMONIALS.length]);
 
   const visibleTestimonials = Array.from({ length: itemsPerView }, (_, i) => {
     const index = (currentIndex + i) % TESTIMONIALS.length;
@@ -114,7 +125,7 @@ export function TestimonialsSection() {
           className="text-center mb-10"
         >
           <h2 className="text-3xl font-black sm:text-4xl md:text-5xl text-white">
-            {locale === "it" ? "Dicono di noi" : "What they say about us"}
+            {t.sections.testimonials.title}
           </h2>
           <div className="mt-3 h-1 w-24 rounded-full bg-gradient-to-r from-[#f7931e] to-transparent mx-auto" />
         </motion.div>
