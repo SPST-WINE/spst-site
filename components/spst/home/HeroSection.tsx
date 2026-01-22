@@ -4,7 +4,6 @@ import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Zap, ArrowRight } from "lucide-react";
 import { useLocale } from "../../i18n/LocaleProvider";
-import { CounterStat } from "./CounterStat";
 
 const SPST_BLUE_SOFT = "#1c3e5e";
 const SPST_ORANGE = "#f7931e";
@@ -120,37 +119,6 @@ export function HeroSection() {
             </a>
           </motion.div>
 
-          {/* Stats counters nell'hero con animazione fluida al caricamento - Card elegante */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 w-full max-w-xl mx-auto"
-          >
-            <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl shadow-black/20">
-              {/* Subtle glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
-              
-              <div className="relative grid grid-cols-2 gap-6 md:gap-8">
-                <CounterStat
-                  from={49}
-                  to={50}
-                  suffix="+"
-                  label={locale === "it" ? "Cantine" : "Wineries"}
-                  delay={1.2}
-                  autoStart={true}
-                />
-                <CounterStat
-                  from={19}
-                  to={20}
-                  suffix="+"
-                  label={locale === "it" ? "Buyer attivi" : "Active buyers"}
-                  delay={1.4}
-                  autoStart={true}
-                />
-              </div>
-            </div>
-          </motion.div>
         </div>
       </motion.div>
     </section>

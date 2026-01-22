@@ -51,7 +51,7 @@ export function PartnersCarousel() {
           x: {
             repeat: Infinity,
             repeatType: "loop",
-            duration: 20,
+            duration: 26, // Ridotto del 30% (20 * 1.3 = 26)
             ease: "linear",
           },
         }}
