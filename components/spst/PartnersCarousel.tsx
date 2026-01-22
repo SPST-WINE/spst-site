@@ -23,11 +23,9 @@ const PARTNER_LOGOS = [
   { name: "Cantina 1", logo: "/partners/cantina-1.png" },
   { name: "Cantina 2", logo: "/partners/cantina-2.png" },
   { name: "Cantina 3", logo: "/partners/cantina-3.png" },
-  { name: "Cantina 4", logo: "/partners/cantina-4.png" },
-  { name: "Cantina 5", logo: "/partners/cantina-5.png" },
-  { name: "Cantina 6", logo: "/partners/cantina-6.png" },
-  { name: "Cantina 7", logo: "/partners/cantina-7.png" },
-  { name: "Cantina 8", logo: "/partners/cantina-8.png" },
+  // Aggiungi altri loghi qui quando disponibili
+  // { name: "Cantina 4", logo: "/partners/cantina-4.png" },
+  // { name: "Cantina 5", logo: "/partners/cantina-5.png" },
 ];
 
 export function PartnersCarousel() {
