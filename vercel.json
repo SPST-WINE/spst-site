@@ -2,5 +2,12 @@
   "rewrites": [
     { "source": "/assets/esm/base.css", "destination": "/back-office/base.css" },
     { "source": "/assets/esm/quotes-admin.css", "destination": "/back-office/quotes-admin.css" }
+  ],
+  "redirects": [
+    {
+      "source": "/login",
+      "destination": "https://dashboard.spst.it/login",
+      "permanent": true
+    }
   ]
 }
