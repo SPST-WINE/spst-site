@@ -300,7 +300,7 @@ export function B2CCalculator() {
           {calculations.exciseTotal > 0 && exciseData && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                Accise {calculations.countryName} ({calculations.exciseRate.toFixed(2)}€/bottiglia):
+                Accise {calculations.countryName} ({exciseData.excise_75cl.toFixed(2)}€/bottiglia):
               </span>
               <span className="font-semibold text-gray-900">€{calculations.exciseTotal.toFixed(2)}</span>
             </div>
