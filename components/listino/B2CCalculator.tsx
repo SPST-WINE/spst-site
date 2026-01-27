@@ -130,16 +130,11 @@ export function B2CCalculator() {
     }
 
     // Costo imballo (escluso per USA standard che ha imballo incluso)
+    // 1 cartone = 6 bottiglie = 5€ (non bundle, solo nello Store Cartoni)
     let packagingCost = 0;
     if (!isUSA) {
-      // Calcolo imballo: 1 cartone ogni 6 bottiglie
-      const cartonsNeeded = Math.ceil(bottles / 6);
-      const packsNeeded = Math.ceil(cartonsNeeded / 10);
-      const applicableDiscount = pricingData.export_packaging.discounts
-        .slice()
-        .sort((a, b) => b.min_packs - a.min_packs)
-        .find((d) => packsNeeded >= d.min_packs) || pricingData.export_packaging.discounts[0];
-      packagingCost = packsNeeded * applicableDiscount.price_per_unit * 10;
+      const cartonsNeeded = Math.ceil(bottles / 6); // 1 cartone ogni 6 bottiglie
+      packagingCost = cartonsNeeded * 5; // 5€ per cartone
     }
 
     // Accise

@@ -5,6 +5,7 @@ import { StandardRatesTab } from "../../components/listino/StandardRatesTab";
 import { ExportAllInTab } from "../../components/listino/ExportAllInTab";
 import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
 import { B2CCalculator } from "../../components/listino/B2CCalculator";
+import { VeronaSpedHeader } from "../../components/listino/VeronaSpedHeader";
 
 type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator";
 
@@ -13,6 +14,8 @@ export default function ListinoPage() {
 
   return (
     <main className="min-h-screen bg-white text-gray-900 font-sans antialiased">
+      <VeronaSpedHeader />
+      
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-gray-50 to-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -28,7 +31,7 @@ export default function ListinoPage() {
       </section>
 
       {/* Tab Navigation */}
-      <section className="border-b border-gray-200 bg-white sticky top-0 z-40">
+      <section className="border-b border-gray-200 bg-white sticky top-[73px] z-40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-1 overflow-x-auto scrollbar-hide" aria-label="Tabs">
             <button
@@ -84,13 +87,6 @@ export default function ListinoPage() {
           {activeTab === "b2c-calculator" && <B2CCalculator />}
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">© {new Date().getFullYear()} VeronaSped. Tutti i diritti riservati.</p>
-        </div>
-      </footer>
     </main>
   );
 }
