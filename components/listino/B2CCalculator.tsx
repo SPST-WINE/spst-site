@@ -107,7 +107,7 @@ export function B2CCalculator() {
     let shippingCost = shippingRate || 0;
 
     // Surcharge per USA
-    if (isUSA && zoneData.surcharge_rules) {
+    if (isUSA && 'surcharge_rules' in zoneData && zoneData.surcharge_rules) {
       if (usaStateType === "tier_5") {
         // +5€ ogni 6 bottiglie per AR, MO, MT, NE, OK, TX
         const surchargePer6Bottles = 5.0;
@@ -225,7 +225,7 @@ export function B2CCalculator() {
         </div>
 
         {/* Selettore Stato USA */}
-        {calculations.isUSA && zoneData.surcharge_rules && (
+        {calculations.isUSA && 'surcharge_rules' in zoneData && zoneData.surcharge_rules && (
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Tipo di stato USA
