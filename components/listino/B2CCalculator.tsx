@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { pricingData } from "../../lib/pricing-data";
+import { USAShippingRulesCard } from "./USAShippingRulesCard";
 
 // Mappa tutti i paesi alle loro zone e chiavi excise
 const countryToZoneMap: Record<string, { zoneKey: string; countryName: string; exciseKey?: string }> = {
@@ -332,6 +333,13 @@ export function B2CCalculator() {
           </p>
         </div>
       </div>
+
+      {/* Card Regole USA */}
+      {calculations.isUSA && (
+        <div className="mt-8">
+          <USAShippingRulesCard />
+        </div>
+      )}
     </div>
   );
 }

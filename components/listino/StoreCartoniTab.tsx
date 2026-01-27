@@ -120,10 +120,10 @@ export function StoreCartoniTab() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {price.min_packs === 1 ? "1+" : `${price.min_packs}+`} pacchi
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold transition-all duration-200 hover:bg-orange-50 hover:text-orange-600 hover:scale-105 cursor-default">
                       €{cartonPrice.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold transition-all duration-200 hover:bg-orange-50 hover:text-orange-600 hover:scale-105 cursor-default">
                       €{price.price_per_pack.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
@@ -167,11 +167,11 @@ export function StoreCartoniTab() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Per cartone:</span>
-                  <span className="font-semibold text-gray-900">€{cartonPrice.toFixed(2)}</span>
+                  <span className="font-semibold text-gray-900 hover:text-orange-600 transition-colors duration-200">€{cartonPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm mt-1">
                   <span className="text-gray-600">Per pacco ({packaging.pack_unit} cartoni):</span>
-                  <span className="font-semibold text-gray-900">€{price.price_per_pack.toFixed(2)}</span>
+                  <span className="font-semibold text-gray-900 hover:text-orange-600 transition-colors duration-200">€{price.price_per_pack.toFixed(2)}</span>
                 </div>
               </div>
             );

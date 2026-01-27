@@ -58,7 +58,7 @@ export function StandardRatesTab() {
                       {Object.entries(zoneData.rates).map(([bottles, price]) => (
                         <td
                           key={bottles}
-                          className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold"
+                          className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold transition-all duration-200 hover:bg-orange-50 hover:text-orange-600 hover:scale-105 cursor-default"
                         >
                           €{price.toFixed(2)}
                         </td>
@@ -92,12 +92,12 @@ export function StandardRatesTab() {
                 {Object.entries(zoneData.rates).map(([bottles, price]) => (
                   <div
                     key={bottles}
-                    className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
+                    className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0 hover:bg-orange-50 hover:px-2 rounded transition-all duration-200"
                   >
                     <span className="text-sm font-medium text-gray-700">
                       {bottles} bottiglie
                     </span>
-                    <span className="text-sm font-bold text-gray-900">
+                    <span className="text-sm font-bold text-gray-900 hover:text-orange-600 transition-colors duration-200">
                       €{price.toFixed(2)}
                     </span>
                   </div>
