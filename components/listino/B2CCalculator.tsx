@@ -3,48 +3,48 @@
 import React, { useState, useMemo } from "react";
 import { pricingData } from "../../lib/pricing-data";
 
-// Mappa tutti i paesi alle loro zone
-const countryToZoneMap: Record<string, { zoneKey: string; countryName: string }> = {
+// Mappa tutti i paesi alle loro zone e chiavi excise
+const countryToZoneMap: Record<string, { zoneKey: string; countryName: string; exciseKey?: string }> = {
   // Italia
-  "Italia": { zoneKey: "italia", countryName: "Italia" },
-  "Sicilia": { zoneKey: "italia", countryName: "Sicilia" },
-  "Sardegna": { zoneKey: "italia", countryName: "Sardegna" },
+  "Italia": { zoneKey: "italia", countryName: "Italia", exciseKey: "italy" },
+  "Sicilia": { zoneKey: "italia", countryName: "Sicilia", exciseKey: "italy" },
+  "Sardegna": { zoneKey: "italia", countryName: "Sardegna", exciseKey: "italy" },
   
   // UE Zona 1
-  "Germania": { zoneKey: "ue_zona_1", countryName: "Germania" },
-  "Francia": { zoneKey: "ue_zona_1", countryName: "Francia" },
-  "Belgio": { zoneKey: "ue_zona_1", countryName: "Belgio" },
-  "Grecia": { zoneKey: "ue_zona_1", countryName: "Grecia" },
-  "Lussemburgo": { zoneKey: "ue_zona_1", countryName: "Lussemburgo" },
-  "Portogallo": { zoneKey: "ue_zona_1", countryName: "Portogallo" },
-  "Olanda": { zoneKey: "ue_zona_1", countryName: "Olanda" },
-  "Spagna": { zoneKey: "ue_zona_1", countryName: "Spagna" },
+  "Germania": { zoneKey: "ue_zona_1", countryName: "Germania", exciseKey: "germany" },
+  "Francia": { zoneKey: "ue_zona_1", countryName: "Francia", exciseKey: "france" },
+  "Belgio": { zoneKey: "ue_zona_1", countryName: "Belgio", exciseKey: "belgium" },
+  "Grecia": { zoneKey: "ue_zona_1", countryName: "Grecia", exciseKey: "greece" },
+  "Lussemburgo": { zoneKey: "ue_zona_1", countryName: "Lussemburgo", exciseKey: "luxembourg" },
+  "Portogallo": { zoneKey: "ue_zona_1", countryName: "Portogallo", exciseKey: "portugal" },
+  "Olanda": { zoneKey: "ue_zona_1", countryName: "Olanda", exciseKey: "netherlands" },
+  "Spagna": { zoneKey: "ue_zona_1", countryName: "Spagna", exciseKey: "spain" },
   
   // UE Zona 2
-  "Austria": { zoneKey: "ue_zona_2", countryName: "Austria" },
-  "Croazia": { zoneKey: "ue_zona_2", countryName: "Croazia" },
-  "Polonia": { zoneKey: "ue_zona_2", countryName: "Polonia" },
-  "Repubblica Ceca": { zoneKey: "ue_zona_2", countryName: "Repubblica Ceca" },
-  "Slovenia": { zoneKey: "ue_zona_2", countryName: "Slovenia" },
-  "Ungheria": { zoneKey: "ue_zona_2", countryName: "Ungheria" },
+  "Austria": { zoneKey: "ue_zona_2", countryName: "Austria", exciseKey: "austria" },
+  "Croazia": { zoneKey: "ue_zona_2", countryName: "Croazia", exciseKey: "croatia" },
+  "Polonia": { zoneKey: "ue_zona_2", countryName: "Polonia", exciseKey: "poland" },
+  "Repubblica Ceca": { zoneKey: "ue_zona_2", countryName: "Repubblica Ceca", exciseKey: "czech_republic" },
+  "Slovenia": { zoneKey: "ue_zona_2", countryName: "Slovenia", exciseKey: "slovenia" },
+  "Ungheria": { zoneKey: "ue_zona_2", countryName: "Ungheria", exciseKey: "hungary" },
   
   // UE Zona 3
-  "Bulgaria": { zoneKey: "ue_zona_3", countryName: "Bulgaria" },
-  "Estonia": { zoneKey: "ue_zona_3", countryName: "Estonia" },
-  "Lettonia": { zoneKey: "ue_zona_3", countryName: "Lettonia" },
-  "Lituania": { zoneKey: "ue_zona_3", countryName: "Lituania" },
-  "Romania": { zoneKey: "ue_zona_3", countryName: "Romania" },
+  "Bulgaria": { zoneKey: "ue_zona_3", countryName: "Bulgaria", exciseKey: "bulgaria" },
+  "Estonia": { zoneKey: "ue_zona_3", countryName: "Estonia", exciseKey: "estonia" },
+  "Lettonia": { zoneKey: "ue_zona_3", countryName: "Lettonia", exciseKey: "latvia" },
+  "Lituania": { zoneKey: "ue_zona_3", countryName: "Lituania", exciseKey: "lithuania" },
+  "Romania": { zoneKey: "ue_zona_3", countryName: "Romania", exciseKey: "romania" },
   
-  // Extra UE Nord
-  "Svezia": { zoneKey: "extra_ue_nord", countryName: "Svezia" },
-  "Finlandia": { zoneKey: "extra_ue_nord", countryName: "Finlandia" },
+  // Scandinavia
+  "Svezia": { zoneKey: "scandinavia", countryName: "Svezia", exciseKey: "sweden" },
+  "Finlandia": { zoneKey: "scandinavia", countryName: "Finlandia", exciseKey: "finland" },
   
   // UK
-  "Regno Unito": { zoneKey: "uk", countryName: "Regno Unito" },
+  "Regno Unito": { zoneKey: "uk", countryName: "Regno Unito", exciseKey: "uk" },
   
   // Svizzera/Norvegia
   "Svizzera": { zoneKey: "svizzera_norvegia", countryName: "Svizzera" },
-  "Norvegia": { zoneKey: "svizzera_norvegia", countryName: "Norvegia" },
+  "Norvegia": { zoneKey: "svizzera_norvegia", countryName: "Norvegia", exciseKey: "norway" },
   
   // USA
   "USA": { zoneKey: "usa_standard", countryName: "USA" },
@@ -53,10 +53,10 @@ const countryToZoneMap: Record<string, { zoneKey: string; countryName: string }>
   "Canada": { zoneKey: "canada", countryName: "Canada" },
   
   // Asia/Oceania
-  "Giappone": { zoneKey: "asia_oceania_1", countryName: "Giappone" },
-  "Hong Kong": { zoneKey: "asia_oceania_1", countryName: "Hong Kong" },
-  "Singapore": { zoneKey: "asia_oceania_2", countryName: "Singapore" },
-  "Taiwan": { zoneKey: "asia_oceania_2", countryName: "Taiwan" },
+  "Giappone": { zoneKey: "asia_oceania", countryName: "Giappone" },
+  "Hong Kong": { zoneKey: "asia_oceania", countryName: "Hong Kong" },
+  "Singapore": { zoneKey: "asia_oceania", countryName: "Singapore" },
+  "Taiwan": { zoneKey: "asia_oceania", countryName: "Taiwan" },
 };
 
 // Estrai tutti i paesi unici
@@ -66,9 +66,9 @@ export function B2CCalculator() {
   const [selectedCountry, setSelectedCountry] = useState<string>("Francia");
   const [bottles, setBottles] = useState<number>(6);
   const [isLiquor, setIsLiquor] = useState<boolean>(false);
-  const [usaStateType, setUsaStateType] = useState<"standard" | "alaska-hawaii">("standard");
+  const [usaStateType, setUsaStateType] = useState<"standard" | "tier_5" | "tier_65">("standard");
 
-  const exciseRates = pricingData.b2c_excise_rates;
+  const exciseMap = pricingData.european_excise_map;
   const shippingRates = pricingData.shipping_rates;
 
   // Trova la zona e i dati per il paese selezionato
@@ -90,27 +90,11 @@ export function B2CCalculator() {
     }
   }, [selectedCountry, availableBottles, bottles, zoneData]);
 
-  // Trova il tasso accise per il paese (se disponibile)
+  // Trova i dati accise e IVA per il paese
   const exciseData = useMemo(() => {
-    const countryName = countryData?.countryName || "";
-    // Mappa nomi paesi ai tassi accise
-    const exciseMap: Record<string, { rate: number; name: string }> = {
-      "Francia": exciseRates.france,
-      "Austria": exciseRates.austria,
-      "Spagna": exciseRates.spain,
-      "Olanda": exciseRates.netherlands,
-      "Norvegia": exciseRates.norway,
-      "Belgio": exciseRates.belgium,
-      "Finlandia": exciseRates.finland,
-      "Danimarca": exciseRates.denmark,
-      "Svezia": exciseRates.sweden,
-      "Repubblica Ceca": exciseRates.czech_republic,
-      "Slovacchia": exciseRates.slovakia,
-      "Lettonia": exciseRates.latvia,
-      "Lituania": exciseRates.lithuania,
-    };
-    return exciseMap[countryName] || null;
-  }, [selectedCountry, exciseRates, countryData]);
+    if (!countryData?.exciseKey) return null;
+    return exciseMap[countryData.exciseKey as keyof typeof exciseMap] || null;
+  }, [selectedCountry, exciseMap, countryData]);
 
   // Calcola i costi
   const calculations = useMemo(() => {
@@ -122,11 +106,19 @@ export function B2CCalculator() {
     const shippingRate = zoneData.rates[bottles.toString() as keyof typeof zoneData.rates] as number | undefined;
     let shippingCost = shippingRate || 0;
 
-    // Surcharge per Alaska/Hawaii (solo USA)
-    if (isUSA && usaStateType === "alaska-hawaii") {
-      const surchargePer6Bottles = 65.0;
-      const surchargeMultiplier = Math.ceil(bottles / 6);
-      shippingCost += surchargeMultiplier * surchargePer6Bottles;
+    // Surcharge per USA
+    if (isUSA && zoneData.surcharge_rules) {
+      if (usaStateType === "tier_5") {
+        // +5€ ogni 6 bottiglie per AR, MO, MT, NE, OK, TX
+        const surchargePer6Bottles = 5.0;
+        const surchargeMultiplier = Math.ceil(bottles / 6);
+        shippingCost += surchargeMultiplier * surchargePer6Bottles;
+      } else if (usaStateType === "tier_65") {
+        // +65€ ogni 6 bottiglie per AK, HI, PR
+        const surchargePer6Bottles = 65.0;
+        const surchargeMultiplier = Math.ceil(bottles / 6);
+        shippingCost += surchargeMultiplier * surchargePer6Bottles;
+      }
     }
 
     // Costo imballo (escluso per USA standard che ha imballo incluso)
@@ -137,17 +129,18 @@ export function B2CCalculator() {
       packagingCost = cartonsNeeded * 5; // 5€ per cartone
     }
 
-    // Accise
-    const exciseRate = exciseData?.rate || 0;
+    // Accise (per 75cl)
+    const exciseRate = exciseData?.excise_75cl || 0;
     const exciseTotal = exciseRate * bottles;
 
     // Toggle liquori: +15€ ogni 3 bottiglie
     const liquorSurcharge = isLiquor ? Math.ceil(bottles / 3) * 15 : 0;
 
-    // IVA (22% su spedizione + imballo per paesi UE, escluso se già incluso)
-    const isEU = !isUSA && !["uk", "svizzera_norvegia", "canada", "asia_oceania_1", "asia_oceania_2"].includes(countryData.zoneKey);
+    // IVA (specifica per paese, solo per paesi UE)
+    const isEU = exciseData && countryData.zoneKey !== "uk" && countryData.zoneKey !== "svizzera_norvegia";
+    const vatRate = exciseData?.vat || 0;
     const vatBase = shippingCost + packagingCost + liquorSurcharge;
-    const vat = isEU ? vatBase * 0.22 : 0;
+    const vat = isEU ? vatBase * vatRate : 0;
 
     // Totale
     const subtotal = shippingCost + packagingCost + exciseTotal + liquorSurcharge;
@@ -160,6 +153,7 @@ export function B2CCalculator() {
       exciseRate,
       liquorSurcharge,
       vat,
+      vatRate,
       vatBase,
       subtotal,
       total,
@@ -231,19 +225,19 @@ export function B2CCalculator() {
         </div>
 
         {/* Selettore Stato USA */}
-        {calculations.isUSA && (
+        {calculations.isUSA && zoneData.surcharge_rules && (
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Tipo di stato USA
             </label>
-            <div className="flex gap-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="radio"
                   name="usaState"
                   value="standard"
                   checked={usaStateType === "standard"}
-                  onChange={(e) => setUsaStateType(e.target.value as "standard" | "alaska-hawaii")}
+                  onChange={(e) => setUsaStateType(e.target.value as "standard" | "tier_5" | "tier_65")}
                   className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                 />
                 <span className="text-sm text-gray-700">Stati Standard</span>
@@ -252,13 +246,26 @@ export function B2CCalculator() {
                 <input
                   type="radio"
                   name="usaState"
-                  value="alaska-hawaii"
-                  checked={usaStateType === "alaska-hawaii"}
-                  onChange={(e) => setUsaStateType(e.target.value as "standard" | "alaska-hawaii")}
+                  value="tier_5"
+                  checked={usaStateType === "tier_5"}
+                  onChange={(e) => setUsaStateType(e.target.value as "standard" | "tier_5" | "tier_65")}
                   className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
                 />
                 <span className="text-sm text-gray-700">
-                  Alaska / Hawaii / Puerto Rico (+€65 ogni 6 bottiglie)
+                  AR, MO, MT, NE, OK, TX (+€5 ogni 6 bottiglie)
+                </span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="usaState"
+                  value="tier_65"
+                  checked={usaStateType === "tier_65"}
+                  onChange={(e) => setUsaStateType(e.target.value as "standard" | "tier_5" | "tier_65")}
+                  className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
+                />
+                <span className="text-sm text-gray-700">
+                  AK, HI, PR (+€65 ogni 6 bottiglie)
                 </span>
               </label>
             </div>
@@ -293,15 +300,15 @@ export function B2CCalculator() {
           {calculations.exciseTotal > 0 && exciseData && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                Accise {calculations.countryName} ({calculations.exciseRate.toFixed(3)}€/bottiglia):
+                Accise {calculations.countryName} ({calculations.exciseRate.toFixed(2)}€/bottiglia):
               </span>
               <span className="font-semibold text-gray-900">€{calculations.exciseTotal.toFixed(2)}</span>
             </div>
           )}
           
-          {calculations.vat > 0 && (
+          {calculations.vat > 0 && exciseData && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">IVA (22%):</span>
+              <span className="text-gray-600">IVA ({calculations.countryName}, {(calculations.vatRate * 100).toFixed(0)}%):</span>
               <span className="font-semibold text-gray-900">€{calculations.vat.toFixed(2)}</span>
             </div>
           )}
@@ -320,7 +327,7 @@ export function B2CCalculator() {
             {calculations.isUSA
               ? "Imballo incluso nel prezzo spedizione. Dazi esclusi."
               : calculations.isEU
-              ? "IVA inclusa. Imballo calcolato separatamente."
+              ? `IVA (${(calculations.vatRate * 100).toFixed(0)}%) inclusa. Imballo calcolato separatamente.`
               : "Dazi esclusi. Imballo calcolato separatamente."}
           </p>
         </div>

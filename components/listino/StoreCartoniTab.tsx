@@ -4,24 +4,22 @@ import React, { useState, useMemo } from "react";
 import { pricingData } from "../../lib/pricing-data";
 
 export function StoreCartoniTab() {
-  const packaging = pricingData.export_packaging;
+  const packaging = pricingData.packaging_shop;
   const [packs, setPacks] = useState<number>(1);
 
   // Calcola lo sconto applicabile
-  const applicableDiscount = packaging.discounts
+  const applicableDiscount = packaging.prices
     .slice()
     .sort((a, b) => b.min_packs - a.min_packs)
-    .find((d) => packs >= d.min_packs) || packaging.discounts[0];
+    .find((d) => packs >= d.min_packs) || packaging.prices[0];
 
   // Calcola prezzi
-  const pricePerUnit = applicableDiscount.price_per_unit;
-  const totalCartons = packs * 10; // 10 cartoni per pacco
-  const totalPrice = totalCartons * pricePerUnit;
-  const savings = packs >= 10 
-    ? totalCartons * (packaging.discounts[0].price_per_unit - pricePerUnit)
-    : packs >= 5
-    ? totalCartons * (packaging.discounts[0].price_per_unit - pricePerUnit)
-    : 0;
+  const pricePerPack = applicableDiscount.price_per_pack;
+  const totalCartons = packs * packaging.pack_unit; // pack_unit cartoni per pacco
+  const pricePerCarton = pricePerPack / packaging.pack_unit;
+  const totalPrice = packs * pricePerPack;
+  const basePricePerCarton = packaging.prices[0].price_per_pack / packaging.pack_unit;
+  const savings = totalCartons * (basePricePerCarton - pricePerCarton);
 
   return (
     <div className="space-y-8">
@@ -59,8 +57,12 @@ export function StoreCartoniTab() {
             <span className="font-semibold text-gray-900">{totalCartons} cartoni</span>
           </div>
           <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Prezzo per pacco:</span>
+            <span className="font-semibold text-gray-900">€{pricePerPack.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
             <span className="text-gray-600">Prezzo per cartone:</span>
-            <span className="font-semibold text-gray-900">€{pricePerUnit.toFixed(2)}</span>
+            <span className="font-semibold text-gray-900">€{pricePerCarton.toFixed(2)}</span>
           </div>
           {savings > 0 && (
             <div className="flex justify-between text-sm text-green-600">
@@ -82,7 +84,7 @@ export function StoreCartoniTab() {
         <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-bold text-gray-900">Tabella Prezzi</h3>
           <p className="text-sm text-gray-600 mt-1">
-            Prezzo base: €{packaging.discounts[0].price_per_unit.toFixed(2)} per cartone
+            {packaging.product} - Prezzo base: €{(packaging.prices[0].price_per_pack / packaging.pack_unit).toFixed(2)} per cartone
           </p>
         </div>
         
@@ -106,23 +108,23 @@ export function StoreCartoniTab() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {packaging.discounts.map((discount, idx) => {
-                const packPrice = 10 * discount.price_per_unit;
-                const prevPrice = idx > 0 ? packaging.discounts[idx - 1].price_per_unit : discount.price_per_unit;
+              {packaging.prices.map((price, idx) => {
+                const cartonPrice = price.price_per_pack / packaging.pack_unit;
+                const prevPackPrice = idx > 0 ? packaging.prices[idx - 1].price_per_pack : price.price_per_pack;
                 const discountPercent = idx > 0 
-                  ? ((prevPrice - discount.price_per_unit) / prevPrice * 100).toFixed(0)
+                  ? ((prevPackPrice - price.price_per_pack) / prevPackPrice * 100).toFixed(0)
                   : "0";
                 
                 return (
-                  <tr key={idx} className={packs >= discount.min_packs ? "bg-orange-50" : ""}>
+                  <tr key={idx} className={packs >= price.min_packs ? "bg-orange-50" : ""}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {discount.min_packs === 1 ? "1+" : `${discount.min_packs}+`} pacchi
+                      {price.min_packs === 1 ? "1+" : `${price.min_packs}+`} pacchi
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold">
-                      €{discount.price_per_unit.toFixed(2)}
+                      €{cartonPrice.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold">
-                      €{packPrice.toFixed(2)}
+                      €{price.price_per_pack.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900">
                       {discountPercent !== "0" && `-${discountPercent}%`}
@@ -136,13 +138,13 @@ export function StoreCartoniTab() {
 
         {/* Mobile Cards */}
         <div className="lg:hidden p-4 space-y-3">
-          {packaging.discounts.map((discount, idx) => {
-            const packPrice = 10 * discount.price_per_unit;
-            const prevPrice = idx > 0 ? packaging.discounts[idx - 1].price_per_unit : discount.price_per_unit;
+          {packaging.prices.map((price, idx) => {
+            const cartonPrice = price.price_per_pack / packaging.pack_unit;
+            const prevPackPrice = idx > 0 ? packaging.prices[idx - 1].price_per_pack : price.price_per_pack;
             const discountPercent = idx > 0 
-              ? ((prevPrice - discount.price_per_unit) / prevPrice * 100).toFixed(0)
+              ? ((prevPackPrice - price.price_per_pack) / prevPackPrice * 100).toFixed(0)
               : "0";
-            const isActive = packs >= discount.min_packs;
+            const isActive = packs >= price.min_packs;
             
             return (
               <div
@@ -155,7 +157,7 @@ export function StoreCartoniTab() {
               >
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-bold text-gray-900">
-                    {discount.min_packs === 1 ? "1+" : `${discount.min_packs}+`} pacchi
+                    {price.min_packs === 1 ? "1+" : `${price.min_packs}+`} pacchi
                   </span>
                   {discountPercent !== "0" && (
                     <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded">
@@ -165,11 +167,11 @@ export function StoreCartoniTab() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Per cartone:</span>
-                  <span className="font-semibold text-gray-900">€{discount.price_per_unit.toFixed(2)}</span>
+                  <span className="font-semibold text-gray-900">€{cartonPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm mt-1">
-                  <span className="text-gray-600">Per pacco (10 cartoni):</span>
-                  <span className="font-semibold text-gray-900">€{packPrice.toFixed(2)}</span>
+                  <span className="text-gray-600">Per pacco ({packaging.pack_unit} cartoni):</span>
+                  <span className="font-semibold text-gray-900">€{price.price_per_pack.toFixed(2)}</span>
                 </div>
               </div>
             );
