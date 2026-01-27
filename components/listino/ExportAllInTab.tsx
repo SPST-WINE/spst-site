@@ -27,7 +27,7 @@ export function ExportAllInTab() {
   // Trova il prezzo spedizione per la zona selezionata
   const zoneData = rates[selectedZone as keyof typeof rates];
   const shippingRate = zoneData?.rates[bottles.toString() as keyof typeof zoneData.rates] as number | undefined;
-  const shippingCost = shippingRate || 0;
+  const shippingCost = shippingRate ? shippingRate + 5 : 0; // Aggiungi €5 al prezzo base
   
   // Totale
   const total = shippingCost + packagingCost;
@@ -38,13 +38,13 @@ export function ExportAllInTab() {
     <div className="space-y-8">
       <div className="text-center mb-8">
         <p className="text-gray-600">
-          Prezzi all-inclusive: spedizione + imballo export. Il costo include cartoni da 6 bottiglie.
+          Prezzi listino standard con imballo incluso. Aggiunta di €5 rispetto al listino standard.
         </p>
       </div>
 
       {/* Calculator */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Calcolatore Export All-In</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Calcolatore Listino con Imballo</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
@@ -161,7 +161,8 @@ export function ExportAllInTab() {
                             .sort((a, b) => b.min_packs - a.min_packs)
                             .find((d) => packs >= d.min_packs) || packaging.discounts[0];
                           const packCost = packs * discount.price_per_unit * 10;
-                          const shipCost = zoneData.rates[bottles as keyof typeof zoneData.rates] as number;
+                          const baseShipCost = zoneData.rates[bottles as keyof typeof zoneData.rates] as number;
+                          const shipCost = baseShipCost + 5; // Aggiungi €5
                           const total = shipCost + packCost;
                           
                           return (
@@ -206,7 +207,8 @@ export function ExportAllInTab() {
                       .sort((a, b) => b.min_packs - a.min_packs)
                       .find((d) => packs >= d.min_packs) || packaging.discounts[0];
                     const packCost = packs * discount.price_per_unit * 10;
-                    const shipCost = zoneData.rates[bottles as keyof typeof zoneData.rates] as number;
+                    const baseShipCost = zoneData.rates[bottles as keyof typeof zoneData.rates] as number;
+                    const shipCost = baseShipCost + 5; // Aggiungi €5
                     const total = shipCost + packCost;
                     
                     return (
