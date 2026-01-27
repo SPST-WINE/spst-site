@@ -5,3 +5,12 @@
 /* opzionale: smoothing & colore di base coerente */
 html, body { height: 100%; }
 body { @apply antialiased; }
+
+/* Utility per nascondere scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

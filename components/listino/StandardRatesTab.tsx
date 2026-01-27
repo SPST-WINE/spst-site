@@ -1,0 +1,112 @@
+"use client";
+
+import React from "react";
+import { pricingData } from "../../lib/pricing-data";
+
+export function StandardRatesTab() {
+  const rates = pricingData.shipping_rates;
+
+  // Raggruppa tutte le zone per visualizzazione
+  const allZones = Object.entries(rates);
+
+  return (
+    <div className="space-y-8">
+      <div className="text-center mb-8">
+        <p className="text-gray-600">
+          Prezzi per spedizioni standard. I prezzi sono indicati per numero di bottiglie.
+        </p>
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto">
+        <div className="space-y-6">
+          {allZones.map(([zoneKey, zoneData]) => (
+            <div key={zoneKey} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                <h3 className="text-lg font-bold text-gray-900">
+                  {zoneData.destinations.join(", ")}
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">{zoneData.notes}</p>
+                {zoneKey === "usa_standard" && (
+                  <p className="text-sm font-semibold text-orange-600 mt-1">
+                    ⚠️ Imballo Incluso
+                  </p>
+                )}
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Bottiglie
+                      </th>
+                      {Object.keys(zoneData.rates).map((bottles) => (
+                        <th
+                          key={bottles}
+                          className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                        >
+                          {bottles}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        Prezzo (€)
+                      </td>
+                      {Object.entries(zoneData.rates).map(([bottles, price]) => (
+                        <td
+                          key={bottles}
+                          className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 font-semibold"
+                        >
+                          €{price.toFixed(2)}
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="lg:hidden space-y-4">
+        {allZones.map(([zoneKey, zoneData]) => (
+          <div key={zoneKey} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              <h3 className="text-base font-bold text-gray-900">
+                {zoneData.destinations.join(", ")}
+              </h3>
+              <p className="text-xs text-gray-600 mt-1">{zoneData.notes}</p>
+              {zoneKey === "usa_standard" && (
+                <p className="text-xs font-semibold text-orange-600 mt-1">
+                  ⚠️ Imballo Incluso
+                </p>
+              )}
+            </div>
+            <div className="p-4">
+              <div className="space-y-2">
+                {Object.entries(zoneData.rates).map(([bottles, price]) => (
+                  <div
+                    key={bottles}
+                    className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
+                  >
+                    <span className="text-sm font-medium text-gray-700">
+                      {bottles} bottiglie
+                    </span>
+                    <span className="text-sm font-bold text-gray-900">
+                      €{price.toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
