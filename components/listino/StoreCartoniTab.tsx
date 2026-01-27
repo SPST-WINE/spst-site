@@ -30,8 +30,8 @@ export function StoreCartoniTab() {
       </div>
 
       {/* Calculator */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Ordine Cartoni</h3>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+        <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Ordine Cartoni</h3>
         
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -47,7 +47,7 @@ export function StoreCartoniTab() {
         </div>
 
         {/* Pricing Breakdown */}
-        <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+        <div className="bg-gray-50 rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Pacchi ordinati:</span>
             <span className="font-semibold text-gray-900">{packs} pacchi</span>
@@ -81,9 +81,9 @@ export function StoreCartoniTab() {
 
       {/* Pricing Table */}
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-bold text-gray-900">Tabella Prezzi</h3>
-          <p className="text-sm text-gray-600 mt-1">
+        <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900">Tabella Prezzi</h3>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
             {packaging.product} - Prezzo base: €{(packaging.prices[0].price_per_pack / packaging.pack_unit).toFixed(2)} per cartone
           </p>
         </div>

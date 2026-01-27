@@ -22,13 +22,13 @@ export function StandardRatesTab() {
         <div className="space-y-6">
           {allZones.map(([zoneKey, zoneData]) => (
             <div key={zoneKey} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900">
+              <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900">
                   {zoneData.destinations.join(", ")}
                 </h3>
-                <p className="text-sm text-gray-600 mt-1">{zoneData.notes}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">{zoneData.notes}</p>
                 {zoneKey === "usa_standard" && (
-                  <p className="text-sm font-semibold text-orange-600 mt-1">
+                  <p className="text-xs sm:text-sm font-semibold text-orange-600 mt-1">
                     ⚠️ Imballo Incluso
                   </p>
                 )}

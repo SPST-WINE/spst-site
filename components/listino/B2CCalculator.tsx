@@ -167,8 +167,8 @@ export function B2CCalculator() {
   if (!calculations || !zoneData) return null;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
         {/* Selettore Paese */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -275,8 +275,8 @@ export function B2CCalculator() {
       </div>
 
       {/* Breakdown */}
-      <div className="bg-gray-50 rounded-lg p-6 space-y-3">
-        <h4 className="text-lg font-bold text-gray-900 mb-4">Breakdown Costi</h4>
+      <div className="bg-gray-50 rounded-lg p-4 sm:p-6 space-y-3">
+        <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Breakdown Costi</h4>
         
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
@@ -315,9 +315,9 @@ export function B2CCalculator() {
           )}
           
           <div className="border-t border-gray-300 pt-3 mt-3">
-            <div className="flex justify-between">
-              <span className="text-base font-bold text-gray-900">Totale:</span>
-              <span className="text-xl font-black text-orange-600">€{calculations.total.toFixed(2)}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm sm:text-base font-bold text-gray-900">Totale:</span>
+              <span className="text-lg sm:text-xl font-black text-orange-600">€{calculations.total.toFixed(2)}</span>
             </div>
           </div>
         </div>
