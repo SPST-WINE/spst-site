@@ -312,19 +312,24 @@ export function B2CCalculator() {
             </div>
           )}
           
-          {calculations.exciseTotal > 0 && exciseData && (
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">
+              Accise {calculations.countryName} {exciseData ? `(${exciseData.excise_75cl.toFixed(2)}€/bottiglia)` : '(0.00€/bottiglia)'}:
+            </span>
+            <span className="font-semibold text-gray-900">€{calculations.exciseTotal.toFixed(2)}</span>
+          </div>
+          
+          {calculations.isEU && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
-                Accise {calculations.countryName} ({exciseData.excise_75cl.toFixed(2)}€/bottiglia):
-              </span>
-              <span className="font-semibold text-gray-900">€{calculations.exciseTotal.toFixed(2)}</span>
+              <span className="text-gray-600">IVA (Italia, {(calculations.vatRate * 100).toFixed(0)}%):</span>
+              <span className="font-semibold text-gray-900">€{calculations.vat.toFixed(2)}</span>
             </div>
           )}
           
-          {calculations.vat > 0 && exciseData && (
+          {!calculations.isEU && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">IVA ({calculations.countryName}, {(calculations.vatRate * 100).toFixed(0)}%):</span>
-              <span className="font-semibold text-gray-900">€{calculations.vat.toFixed(2)}</span>
+              <span className="text-gray-600">IVA:</span>
+              <span className="font-semibold text-gray-900">€0.00</span>
             </div>
           )}
           

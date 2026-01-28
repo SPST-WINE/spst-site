@@ -14,15 +14,10 @@ export function AcciseCalculatorTab() {
   const calculations = useMemo(() => {
     if (!data) return null;
     const excisePerBottle = data.excise_75cl;
-    const vatRate = data.vat;
     const totalExcise = excisePerBottle * bottles;
-    const vatOnExcise = totalExcise * vatRate;
     return {
       excisePerBottle,
-      vatRate,
       totalExcise,
-      vatOnExcise,
-      totalWithVat: totalExcise + vatOnExcise,
     };
   }, [data, bottles]);
 
@@ -80,23 +75,15 @@ export function AcciseCalculatorTab() {
             <span className="text-gray-600">Accisa per bottiglia (0,75L):</span>
             <span className="font-semibold text-gray-900">€{calculations.excisePerBottle.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Accise totali ({bottles} bottiglie):</span>
-            <span className="font-semibold text-gray-900">€{calculations.totalExcise.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">IVA su accise ({(calculations.vatRate * 100).toFixed(0)}%):</span>
-            <span className="font-semibold text-gray-900">€{calculations.vatOnExcise.toFixed(2)}</span>
-          </div>
           <div className="border-t border-gray-300 pt-3 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm sm:text-base font-bold text-gray-900">Totale accise + IVA:</span>
-              <span className="text-lg sm:text-xl font-black text-orange-600">€{calculations.totalWithVat.toFixed(2)}</span>
+              <span className="text-sm sm:text-base font-bold text-gray-900">Accise totali ({bottles} bottiglie):</span>
+              <span className="text-lg sm:text-xl font-black text-orange-600">€{calculations.totalExcise.toFixed(2)}</span>
             </div>
           </div>
         </div>
         <p className="mt-3 text-[11px] sm:text-xs text-gray-500">
-          Il calcolo è indicativo e considera solo accise e IVA sul valore delle accise. Non include costi di spedizione, imballo o altri oneri locali.
+          Il calcolo è indicativo e considera solo le accise. Non include costi di spedizione, imballo, IVA o altri oneri locali.
         </p>
       </div>
       </div>
