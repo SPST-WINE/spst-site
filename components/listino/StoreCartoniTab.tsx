@@ -37,31 +37,35 @@ export function StoreCartoniTab() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Numero di pacchi (10 cartoni ciascuno)
           </label>
-          <input
-            type="number"
-            min="1"
+          <select
             value={packs}
             onChange={(e) => setPacks(parseInt(e.target.value) || 1)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          />
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-900"
+          >
+            {[1, 2, 3, 4, 5, 10].map((v) => (
+              <option key={v} value={v}>
+                {v} pacco{v > 1 ? "i" : ""}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Pricing Breakdown */}
         <div className="bg-gray-50 rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="subtitle-muted text-gray-600">Pacchi ordinati:</span>
+            <span className="text-gray-900">Pacchi ordinati:</span>
             <span className="font-semibold text-gray-900">{packs} pacchi</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="subtitle-muted text-gray-600">Cartoni totali:</span>
+            <span className="text-gray-900">Cartoni totali:</span>
             <span className="font-semibold text-gray-900">{totalCartons} cartoni</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="subtitle-muted text-gray-600">Prezzo per pacco:</span>
+            <span className="text-gray-900">Prezzo per pacco:</span>
             <span className="font-semibold text-gray-900">€{pricePerPack.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="subtitle-muted text-gray-600">Prezzo per cartone:</span>
+            <span className="text-gray-900">Prezzo per cartone:</span>
             <span className="font-semibold text-gray-900">€{pricePerCarton.toFixed(2)}</span>
           </div>
           {savings > 0 && (

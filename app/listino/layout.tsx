@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Listino Prezzi - VeronaSped",
-  description: "Consulta i nostri prezzi per spedizioni nazionali e internazionali",
+  title: "SPST - Listino B2C",
+  description: "Listino B2C SPST per spedizioni nazionali e internazionali",
 };
 
 export default function ListinoLayout({
