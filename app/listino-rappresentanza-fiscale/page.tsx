@@ -41,7 +41,7 @@ export default function RappresentanzaFiscalePage() {
 
       {/* CTA Button to B2C */}
       <section className="pb-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <Link
             href="/listino"
             className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base"
