@@ -44,7 +44,7 @@ export function StoreCartoniTab() {
           >
             {[1, 2, 3, 4, 5, 10].map((v) => (
               <option key={v} value={v}>
-                {v} pacco{v > 1 ? "i" : ""}
+                {v} {v === 1 ? "pacco" : "pacchi"}
               </option>
             ))}
           </select>

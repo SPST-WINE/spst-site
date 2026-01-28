@@ -180,6 +180,7 @@ export function B2CCalculator() {
               setSelectedCountry(e.target.value);
               if (e.target.value !== "USA") {
                 setUsaStateType("standard");
+                setIsLiquor(false); // Reset liquori se non è USA
               }
             }}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
@@ -210,20 +211,22 @@ export function B2CCalculator() {
           </select>
         </div>
 
-        {/* Toggle Liquori */}
-        <div className="md:col-span-2">
-          <label className="flex items-center space-x-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={isLiquor}
-              onChange={(e) => setIsLiquor(e.target.checked)}
-              className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-            />
-            <span className="text-sm font-medium text-gray-700">
-              Spedizione Liquori (+€15 ogni 3 bottiglie)
-            </span>
-          </label>
-        </div>
+        {/* Toggle Liquori - Solo per USA */}
+        {selectedCountry === "USA" && (
+          <div className="md:col-span-2">
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isLiquor}
+                onChange={(e) => setIsLiquor(e.target.checked)}
+                className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Spedizione Liquori (+€15 ogni 3 bottiglie)
+              </span>
+            </label>
+          </div>
+        )}
 
         {/* Selettore Stato USA */}
         {calculations.isUSA && 'surcharge_rules' in zoneData && zoneData.surcharge_rules && (
