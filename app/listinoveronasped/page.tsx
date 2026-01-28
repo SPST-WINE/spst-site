@@ -6,38 +6,41 @@ import { ExportAllInTab } from "../../components/listino/ExportAllInTab";
 import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
 import { B2CCalculator } from "../../components/listino/B2CCalculator";
 import { USARulesTab } from "../../components/listino/USARulesTab";
+import { VeronaSpedHeader } from "../../components/listino/VeronaSpedHeader";
 
 type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "usa-rules";
 
-export default function ListinoPage() {
+export default function ListinoVeronaSpedPage() {
   const [activeTab, setActiveTab] = useState<Tab>("standard");
 
   return (
-    <main className="min-h-screen font-sans text-slate-100 selection:bg-orange-300/40">
+    <main className="min-h-screen bg-white text-gray-900 font-sans antialiased">
+      <VeronaSpedHeader />
+      
       {/* Hero Section */}
-      <section className="py-12 sm:py-16">
+      <section className="bg-gradient-to-br from-gray-50 to-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white">
-              Listino Prezzi VeronaSped
+            <h1 className="text-4xl font-black tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+              Listino Prezzi
             </h1>
-            <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-slate-200/80 max-w-2xl mx-auto">
-              Stesse logiche di prezzo del portale VeronaSped, integrate nell'ambiente SPST.
+            <p className="mt-4 text-lg text-gray-600 sm:text-xl">
+              Consulta i nostri prezzi per spedizioni nazionali e internazionali
             </p>
           </div>
         </div>
       </section>
 
       {/* Tab Navigation */}
-      <section className="border-b border-white/10 bg-black/20 sticky top-[64px] sm:top-[72px] z-40 backdrop-blur">
+      <section className="border-b border-gray-200 bg-white sticky top-[73px] z-40">
         <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
           <nav className="flex space-x-1 overflow-x-auto scrollbar-hide pb-px" aria-label="Tabs">
             <button
               onClick={() => setActiveTab("standard")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "standard"
-                  ? "border-orange-500 text-orange-400"
-                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Listino Standard
@@ -46,8 +49,8 @@ export default function ListinoPage() {
               onClick={() => setActiveTab("export-all-in")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "export-all-in"
-                  ? "border-orange-500 text-orange-400"
-                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               <span className="hidden sm:inline">Listino Standard con Imballo Incluso</span>
@@ -57,8 +60,8 @@ export default function ListinoPage() {
               onClick={() => setActiveTab("store-cartoni")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "store-cartoni"
-                  ? "border-orange-500 text-orange-400"
-                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Store Cartoni
@@ -67,8 +70,8 @@ export default function ListinoPage() {
               onClick={() => setActiveTab("b2c-calculator")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "b2c-calculator"
-                  ? "border-orange-500 text-orange-400"
-                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Calcolatore B2C
@@ -77,8 +80,8 @@ export default function ListinoPage() {
               onClick={() => setActiveTab("usa-rules")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "usa-rules"
-                  ? "border-orange-500 text-orange-400"
-                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
               }`}
             >
               Regole USA
@@ -88,8 +91,8 @@ export default function ListinoPage() {
       </section>
 
       {/* Tab Content */}
-      <section className="py-6 sm:py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+      <section className="py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {activeTab === "standard" && <StandardRatesTab />}
           {activeTab === "export-all-in" && <ExportAllInTab />}
           {activeTab === "store-cartoni" && <StoreCartoniTab />}
