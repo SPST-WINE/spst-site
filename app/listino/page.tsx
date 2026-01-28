@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { StandardRatesTab } from "../../components/listino/StandardRatesTab";
 import { ExportAllInTab } from "../../components/listino/ExportAllInTab";
 import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
@@ -26,6 +28,19 @@ export default function ListinoPage() {
               Spedizioni dirette al cliente finale in tutto il mondo
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Button to Rappresentanza Fiscale */}
+      <section className="pb-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/listino-rappresentanza-fiscale"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors text-sm sm:text-base"
+          >
+            Il tuo cliente finale è un business e non ha codice accisa?
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 
