@@ -24,8 +24,8 @@ export function StoreCartoniTab() {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <p className="text-gray-600">
-          Ordina pacchi da 10 cartoni per imballo export. Sconti progressivi per quantità.
+        <p className="subtitle-muted text-gray-600">
+          Ordina pacchi da 10 cartoni per imballo export. Sconti progressivi per quantità. Spese di spedizione incluse.
         </p>
       </div>
 
@@ -49,19 +49,19 @@ export function StoreCartoniTab() {
         {/* Pricing Breakdown */}
         <div className="bg-gray-50 rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Pacchi ordinati:</span>
+            <span className="subtitle-muted text-gray-600">Pacchi ordinati:</span>
             <span className="font-semibold text-gray-900">{packs} pacchi</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Cartoni totali:</span>
+            <span className="subtitle-muted text-gray-600">Cartoni totali:</span>
             <span className="font-semibold text-gray-900">{totalCartons} cartoni</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Prezzo per pacco:</span>
+            <span className="subtitle-muted text-gray-600">Prezzo per pacco:</span>
             <span className="font-semibold text-gray-900">€{pricePerPack.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Prezzo per cartone:</span>
+            <span className="subtitle-muted text-gray-600">Prezzo per cartone:</span>
             <span className="font-semibold text-gray-900">€{pricePerCarton.toFixed(2)}</span>
           </div>
           {savings > 0 && (
@@ -166,11 +166,11 @@ export function StoreCartoniTab() {
                   )}
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Per cartone:</span>
+                  <span className="subtitle-muted text-gray-600">Per cartone:</span>
                   <span className="font-semibold text-gray-900 hover:text-orange-600 transition-colors duration-200">€{cartonPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm mt-1">
-                  <span className="text-gray-600">Per pacco ({packaging.pack_unit} cartoni):</span>
+                  <span className="subtitle-muted text-gray-600">Per pacco ({packaging.pack_unit} cartoni):</span>
                   <span className="font-semibold text-gray-900 hover:text-orange-600 transition-colors duration-200">€{price.price_per_pack.toFixed(2)}</span>
                 </div>
               </div>

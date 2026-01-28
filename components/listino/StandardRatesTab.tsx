@@ -12,7 +12,7 @@ export function StandardRatesTab() {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <p className="text-gray-600">
+        <p className="subtitle-muted text-gray-600">
           Prezzi per spedizioni standard. I prezzi sono indicati per numero di bottiglie.
         </p>
       </div>

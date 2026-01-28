@@ -6,9 +6,10 @@ import { ExportAllInTab } from "../../components/listino/ExportAllInTab";
 import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
 import { B2CCalculator } from "../../components/listino/B2CCalculator";
 import { USARulesTab } from "../../components/listino/USARulesTab";
+import { AcciseCalculatorTab } from "../../components/listino/AcciseCalculatorTab";
 import { VeronaSpedHeader } from "../../components/listino/VeronaSpedHeader";
 
-type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "usa-rules";
+type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "accise-calculator" | "usa-rules";
 
 export default function ListinoVeronaSpedPage() {
   const [activeTab, setActiveTab] = useState<Tab>("standard");
@@ -77,6 +78,16 @@ export default function ListinoVeronaSpedPage() {
               Calcolatore B2C
             </button>
             <button
+              onClick={() => setActiveTab("accise-calculator")}
+              className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
+                activeTab === "accise-calculator"
+                  ? "border-orange-500 text-orange-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              Calcolatore Accise
+            </button>
+            <button
               onClick={() => setActiveTab("usa-rules")}
               className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === "usa-rules"
@@ -97,6 +108,7 @@ export default function ListinoVeronaSpedPage() {
           {activeTab === "export-all-in" && <ExportAllInTab />}
           {activeTab === "store-cartoni" && <StoreCartoniTab />}
           {activeTab === "b2c-calculator" && <B2CCalculator />}
+          {activeTab === "accise-calculator" && <AcciseCalculatorTab />}
           {activeTab === "usa-rules" && <USARulesTab />}
         </div>
       </section>

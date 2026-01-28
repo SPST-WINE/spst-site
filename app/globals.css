@@ -14,3 +14,8 @@ body { @apply antialiased; }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Sottotitoli chiari per pagina listino SPST */
+.listino-spst .subtitle-muted {
+  @apply text-slate-100/90;
+}

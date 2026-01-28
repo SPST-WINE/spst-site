@@ -17,7 +17,7 @@ export function ExportAllInTab() {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <p className="text-gray-600">
+        <p className="subtitle-muted text-gray-600">
           Prezzi listino standard con imballo incluso. Aggiunta di €5 ogni 6 bottiglie (1 cartone = 6 bottiglie = €5).
         </p>
       </div>
