@@ -29,8 +29,14 @@ export function AcciseCalculatorTab() {
   if (!data || !calculations) return null;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+    <div className="space-y-8">
+      <div className="text-center mb-8">
+        <p className="subtitle-muted text-gray-600">
+          Calcolatore accisa per vino fermo con gradazione inferiore 15% alc.
+        </p>
+      </div>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
         {/* Selettore Paese */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -92,6 +98,7 @@ export function AcciseCalculatorTab() {
         <p className="mt-3 text-[11px] sm:text-xs text-gray-500">
           Il calcolo è indicativo e considera solo accise e IVA sul valore delle accise. Non include costi di spedizione, imballo o altri oneri locali.
         </p>
+      </div>
       </div>
     </div>
   );

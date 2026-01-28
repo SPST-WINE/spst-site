@@ -137,9 +137,14 @@ export function B2CCalculator() {
     // Toggle liquori: +15€ ogni 3 bottiglie
     const liquorSurcharge = isLiquor ? Math.ceil(bottles / 3) * 15 : 0;
 
-    // IVA (specifica per paese, solo per paesi UE)
-    const isEU = exciseData && countryData.zoneKey !== "uk" && countryData.zoneKey !== "svizzera_norvegia";
-    const vatRate = exciseData?.vat || 0;
+    // IVA: per Europa sempre IVA italiana (0.22), per extra-UE IVA 0
+    // Europa = zoneKey diverso da uk, svizzera_norvegia, usa_standard, canada, asia_oceania
+    const isEU = countryData.zoneKey !== "uk" && 
+                 countryData.zoneKey !== "svizzera_norvegia" && 
+                 countryData.zoneKey !== "usa_standard" && 
+                 countryData.zoneKey !== "canada" && 
+                 countryData.zoneKey !== "asia_oceania";
+    const vatRate = isEU ? 0.22 : 0; // Sempre IVA italiana (22%) per Europa, 0 per extra-UE
     const vatBase = shippingCost + packagingCost + liquorSurcharge;
     const vat = isEU ? vatBase * vatRate : 0;
 
@@ -167,7 +172,13 @@ export function B2CCalculator() {
   if (!calculations || !zoneData) return null;
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
+    <div className="space-y-8">
+      <div className="text-center mb-8">
+        <p className="subtitle-muted text-gray-600">
+          Calcolatore spedizione + accisa + imballo
+        </p>
+      </div>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 sm:p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
         {/* Selettore Paese */}
         <div>
@@ -343,6 +354,7 @@ export function B2CCalculator() {
           <USAShippingRulesCard />
         </div>
       )}
+      </div>
     </div>
   );
 }
