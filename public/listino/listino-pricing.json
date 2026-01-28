@@ -1,0 +1,94 @@
+{
+  "shipping_rates": {
+    "italia": {
+      "destinations": ["Italia", "Sicilia", "Sardegna"],
+      "rates": { "3": 18.81, "6": 21.38, "12": 31.65, "18": 42.76, "24": 65.01 },
+      "notes": "IVA inclusa, imballo escluso."
+    },
+    "ue_zona_1": {
+      "destinations": ["Germania", "Francia", "Belgio", "Grecia", "Lussemburgo", "Portogallo", "Olanda", "Spagna"],
+      "rates": { "3": 16.0, "6": 19.0, "12": 30.0, "18": 43.5, "24": 61.0, "30": 76.0, "36": 89.0, "42": 105.0, "48": 120.0, "54": 135.0, "60": 150.0 },
+      "notes": "IVA inclusa, imballo escluso."
+    },
+    "ue_zona_2": {
+      "destinations": ["Austria", "Croazia", "Polonia", "Repubblica Ceca", "Slovenia", "Ungheria"],
+      "rates": { "3": 19.0, "6": 21.0, "12": 34.0, "18": 45.0, "24": 64.5, "30": 80.0, "36": 89.0, "42": 108.0, "48": 125.0, "54": 142.0, "60": 160.0 },
+      "notes": "IVA inclusa, imballo escluso."
+    },
+    "ue_zona_3": {
+      "destinations": ["Bulgaria", "Estonia", "Lettonia", "Lituania", "Romania"],
+      "rates": { "3": 29.0, "6": 32.0, "12": 44.5, "18": 60.0, "24": 80.0, "30": 97.5, "36": 117.0, "42": 135.0, "48": 155.0, "54": 175.0, "60": 195.0 },
+      "notes": "IVA inclusa, imballo escluso."
+    },
+    "scandinavia": {
+      "destinations": ["Svezia", "Finlandia"],
+      "rates": { "3": 16.0, "6": 19.0, "12": 30.0, "18": 43.5, "24": 61.0, "30": 76.0, "36": 89.0, "42": 105.0, "48": 120.0, "54": 135.0, "60": 150.0 },
+      "notes": "IVA inclusa, imballo escluso."
+    },
+    "uk": {
+      "destinations": ["Regno Unito"],
+      "rates": { "3": 23.0, "6": 31.5, "12": 36.5, "18": 81.0, "24": 104.0, "30": 130.0, "36": 155.0, "42": 180.0, "48": 205.0, "54": 230.0, "60": 255.0 },
+      "notes": "Dazi e imballo esclusi."
+    },
+    "svizzera_norvegia": {
+      "destinations": ["Svizzera", "Norvegia"],
+      "rates": { "3": 28.0, "6": 37.0, "12": 48.5, "18": 72.0, "24": 110.0, "30": 140.0, "36": 170.0, "42": 200.0, "48": 230.0, "54": 260.0, "60": 290.0 },
+      "notes": "Dazi e imballo esclusi."
+    },
+    "usa_standard": {
+      "destinations": ["USA (Stati Standard)"],
+      "rates": { "3": 63.0, "6": 83.0, "12": 133.0, "18": 218.0, "24": 268.0, "30": 346.0, "36": 402.0, "42": 470.0, "48": 535.0, "54": 600.0, "60": 670.0 },
+      "notes": "IMBALLO INCLUSO. Dazi esclusi.",
+      "surcharge_rules": {
+        "tier_5_euro": ["AR", "MO", "MT", "NE", "OK", "TX"],
+        "tier_65_euro": ["AK", "HI", "PR"]
+      }
+    },
+    "canada": {
+      "destinations": ["Canada (AB, QC, BC, ON)"],
+      "rates": { "3": 76.0, "6": 127.0, "12": 208.0, "18": 281.0, "24": 349.0, "30": 423.0, "36": 481.0, "42": 560.0, "48": 640.0, "54": 720.0, "60": 800.0 },
+      "notes": "Imballo escluso. Dazi esclusi."
+    },
+    "asia_oceania": {
+      "destinations": ["Giappone", "Hong Kong", "Singapore", "Taiwan"],
+      "rates": { "3": 101.0, "6": 156.0, "12": 203.0, "18": 290.4, "24": 400.51, "30": 490.0, "36": 580.0, "42": 670.0, "48": 760.0, "54": 850.0, "60": 940.0 },
+      "notes": "Dazi e imballo esclusi."
+    }
+  },
+  "european_excise_map": {
+    "germany": { "name": "Germania", "excise_75cl": 0.0, "vat": 0.19 },
+    "france": { "name": "Francia", "excise_75cl": 0.03, "vat": 0.2 },
+    "belgium": { "name": "Belgio", "excise_75cl": 0.56, "vat": 0.21 },
+    "greece": { "name": "Grecia", "excise_75cl": 0.0, "vat": 0.24 },
+    "luxembourg": { "name": "Lussemburgo", "excise_75cl": 0.0, "vat": 0.17 },
+    "portugal": { "name": "Portogallo", "excise_75cl": 0.0, "vat": 0.23 },
+    "netherlands": { "name": "Olanda", "excise_75cl": 0.67, "vat": 0.21 },
+    "spain": { "name": "Spagna", "excise_75cl": 0.0, "vat": 0.21 },
+    "austria": { "name": "Austria", "excise_75cl": 0.0, "vat": 0.2 },
+    "croatia": { "name": "Croazia", "excise_75cl": 0.0, "vat": 0.25 },
+    "poland": { "name": "Polonia", "excise_75cl": 0.35, "vat": 0.23 },
+    "czech_republic": { "name": "Repubblica Ceca", "excise_75cl": 0.0, "vat": 0.21 },
+    "slovenia": { "name": "Slovenia", "excise_75cl": 0.0, "vat": 0.22 },
+    "hungary": { "name": "Ungheria", "excise_75cl": 0.0, "vat": 0.27 },
+    "bulgaria": { "name": "Bulgaria", "excise_75cl": 0.0, "vat": 0.2 },
+    "estonia": { "name": "Estonia", "excise_75cl": 1.11, "vat": 0.22 },
+    "latvia": { "name": "Lettonia", "excise_75cl": 0.83, "vat": 0.21 },
+    "lithuania": { "name": "Lituania", "excise_75cl": 1.48, "vat": 0.21 },
+    "romania": { "name": "Romania", "excise_75cl": 0.0, "vat": 0.19 },
+    "sweden": { "name": "Svezia", "excise_75cl": 1.78, "vat": 0.25 },
+    "finland": { "name": "Finlandia", "excise_75cl": 3.02, "vat": 0.24 },
+    "denmark": { "name": "Danimarca", "excise_75cl": 0.88, "vat": 0.25 },
+    "norway": { "name": "Norvegia", "excise_75cl": 4.5, "vat": 0.25 },
+    "uk": { "name": "Regno Unito", "excise_75cl": 2.55, "vat": 0.2 },
+    "italy": { "name": "Italia", "excise_75cl": 0.0, "vat": 0.22 }
+  },
+  "packaging_shop": {
+    "product": "Cartone Export 6btl",
+    "pack_unit": 10,
+    "prices": [
+      { "min_packs": 1, "price_per_pack": 50.0 },
+      { "min_packs": 5, "price_per_pack": 45.0 },
+      { "min_packs": 10, "price_per_pack": 40.0 }
+    ]
+  }
+}
