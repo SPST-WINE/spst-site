@@ -2,7 +2,7 @@ export const pricingData = {
   shipping_rates: {
     italia: {
       destinations: ["Italia", "Sicilia", "Sardegna"],
-      rates: { "3": 20.49, "6": 23.49, "12": 34.99, "18": 47.00, "24": 71.49 },
+      rates: { "3": 9.90, "6": 14.90, "12": 19.90, "18": 27.90, "24": 35.90, "30": 39.90 },
       notes: "IVA inclusa, imballo escluso."
     },
     ue_zona_1: {

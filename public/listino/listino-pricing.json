@@ -2,7 +2,7 @@
   "shipping_rates": {
     "italia": {
       "destinations": ["Italia", "Sicilia", "Sardegna"],
-      "rates": { "3": 20.49, "6": 23.49, "12": 34.99, "18": 47.0, "24": 71.49 },
+      "rates": { "3": 9.9, "6": 14.9, "12": 19.9, "18": 27.9, "24": 35.9, "30": 39.9 },
       "notes": "IVA inclusa, imballo escluso."
     },
     "ue_zona_1": {
