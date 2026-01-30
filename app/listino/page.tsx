@@ -9,8 +9,9 @@ import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
 import { B2CCalculator } from "../../components/listino/B2CCalculator";
 import { USARulesTab } from "../../components/listino/USARulesTab";
 import { AcciseCalculatorTab } from "../../components/listino/AcciseCalculatorTab";
+import { TermsAndConditionsTab } from "../../components/listino/TermsAndConditionsTab";
 
-type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "accise-calculator" | "usa-rules";
+type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "accise-calculator" | "usa-rules" | "terms";
 
 export default function ListinoPage() {
   const [activeTab, setActiveTab] = useState<Tab>("standard");
@@ -109,6 +110,17 @@ export default function ListinoPage() {
             >
               Regole USA
             </button>
+            <button
+              onClick={() => setActiveTab("terms")}
+              className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
+                activeTab === "terms"
+                  ? "border-orange-500 text-orange-400"
+                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+              }`}
+            >
+              <span className="hidden sm:inline">Condizioni Fiscali</span>
+              <span className="sm:hidden">Condizioni</span>
+            </button>
           </nav>
         </div>
       </section>
@@ -122,6 +134,7 @@ export default function ListinoPage() {
           {activeTab === "b2c-calculator" && <B2CCalculator />}
           {activeTab === "accise-calculator" && <AcciseCalculatorTab />}
           {activeTab === "usa-rules" && <USARulesTab />}
+          {activeTab === "terms" && <TermsAndConditionsTab />}
         </div>
       </section>
     </main>
