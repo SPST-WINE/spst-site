@@ -1,16 +1,50 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Ship, Globe2, Package, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Ship, Globe2, Package, ArrowRight, CheckCircle2, Mail, Phone, Building2, User, FileText } from "lucide-react";
 import { useLocale } from "../../components/i18n/LocaleProvider";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 const SPST_ORANGE = "#f7931e";
 const SPST_BLUE_SOFT = "#1c3e5e";
 
+// Toast component
+type ToastVariant = "success" | "error" | "info";
+function useToast() {
+  const [toast, setToast] = useState<{ message: string; variant: ToastVariant } | null>(null);
+
+  function show(message: string, variant: ToastVariant = "success") {
+    setToast({ message, variant });
+    window.clearTimeout((show as any)._t);
+    (show as any)._t = window.setTimeout(() => setToast(null), 5000);
+  }
+
+  return { toast, show };
+}
+
+function Toast({ toast }: { toast: { message: string; variant: ToastVariant } | null }) {
+  if (!toast) return null;
+  const ring =
+    toast.variant === "success"
+      ? "ring-1 ring-emerald-400/50"
+      : toast.variant === "error"
+      ? "ring-1 ring-red-400/50"
+      : "ring-1 ring-white/30";
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] px-4 py-3 rounded-xl border border-white/15 bg-white/10 backdrop-blur ${ring} shadow-[0_8px_30px_rgba(0,0,0,.25)]`}
+    >
+      <span className="text-sm">{toast.message}</span>
+    </div>
+  );
+}
+
 export default function SpedizioniGenerichePage() {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
+  const { toast, show } = useToast();
 
   return (
     <main className="font-sans text-slate-100 selection:bg-orange-300/40" style={{ background: SPST_PUBLIC_BG }}>
@@ -241,6 +275,28 @@ export default function SpedizioniGenerichePage() {
         </div>
       </section>
 
+      {/* ===== FORM ===== */}
+      <section className="relative py-12 md:py-16">
+        <div className="mx-auto max-w-[1200px] px-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-8 md:p-10"
+          >
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-black text-white mb-2">
+                {t.genericShipping.formTitle}
+              </h2>
+              <p className="text-white/70 text-sm md:text-base">
+                {t.genericShipping.formDescription}
+              </p>
+            </div>
+            <GenericShippingForm onSuccess={() => show(t.genericShipping.success, "success")} onError={() => show(t.genericShipping.error, "error")} />
+          </motion.div>
+        </div>
+      </section>
+
       {/* ===== CTA ===== */}
       <section className="relative py-12 md:py-16">
         <div className="mx-auto max-w-[1400px] px-5">
@@ -277,6 +333,218 @@ export default function SpedizioniGenerichePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Toast */}
+      <Toast toast={toast} />
     </main>
+  );
+}
+
+/* ------------------------ FORM COMPONENT ------------------------ */
+function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
+  const { t, locale } = useLocale();
+  const [submitting, setSubmitting] = useState(false);
+  const [selectedMarkets, setSelectedMarkets] = useState<string[]>([]);
+
+  const marketsOptions = [
+    { value: "europe", label: t.genericShipping.marketsOptions.europe },
+    { value: "usa", label: t.genericShipping.marketsOptions.usa },
+    { value: "asia", label: t.genericShipping.marketsOptions.asia },
+    { value: "uk", label: t.genericShipping.marketsOptions.uk },
+    { value: "other", label: t.genericShipping.marketsOptions.other },
+  ];
+
+  const toggleMarket = (value: string) => {
+    setSelectedMarkets((prev) =>
+      prev.includes(value) ? prev.filter((m) => m !== value) : [...prev, value]
+    );
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+
+    try {
+      const form = e.currentTarget;
+      const fd = new FormData(form);
+
+      // Aggiungi mercati selezionati
+      selectedMarkets.forEach((market) => {
+        fd.append("mercati", market);
+      });
+
+      // Honeypot + timestamp
+      if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
+      if (!fd.get("_gotcha")) fd.append("_gotcha", "");
+
+      const res = await fetch("/api/spedizioni-generiche", {
+        method: "POST",
+        body: fd,
+      });
+
+      const json = await res.json();
+
+      if (json.ok) {
+        // GTM custom event
+        if (typeof window !== "undefined" && window.dataLayer) {
+          window.dataLayer.push({
+            event: "spst_generate_lead",
+            form: "spedizioni_generiche",
+          });
+        }
+
+        onSuccess();
+        form.reset();
+        setSelectedMarkets([]);
+      } else {
+        onError();
+      }
+    } catch (err: any) {
+      onError();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="grid gap-6" noValidate>
+      {/* Honeypot */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+      />
+      <input type="hidden" name="_ts" value={String(Date.now())} />
+
+      {/* Contatti */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Field label={t.genericShipping.name}>
+          <User className="h-4 w-4 text-white/60" />
+          <input
+            required
+            name="nome"
+            placeholder={locale === "it" ? "Nome e cognome" : "Full name"}
+            className="bg-transparent outline-none w-full placeholder:text-white/40"
+          />
+        </Field>
+        <Field label={t.genericShipping.email}>
+          <Mail className="h-4 w-4 text-white/60" />
+          <input
+            required
+            type="email"
+            name="email"
+            placeholder="nome@azienda.it"
+            className="bg-transparent outline-none w-full placeholder:text-white/40"
+          />
+        </Field>
+        <Field label={t.genericShipping.company}>
+          <Building2 className="h-4 w-4 text-white/60" />
+          <input
+            name="azienda"
+            placeholder={locale === "it" ? "Nome azienda" : "Company name"}
+            className="bg-transparent outline-none w-full placeholder:text-white/40"
+          />
+        </Field>
+        <Field label={t.genericShipping.phone}>
+          <Phone className="h-4 w-4 text-white/60" />
+          <input
+            name="telefono"
+            type="tel"
+            placeholder="+39 ..."
+            className="bg-transparent outline-none w-full placeholder:text-white/40"
+          />
+        </Field>
+      </div>
+
+      {/* Categoria merceologica */}
+      <Field label={t.genericShipping.category}>
+        <Package className="h-4 w-4 text-white/60" />
+        <input
+          required
+          name="categoria_merceologica"
+          placeholder={t.genericShipping.categoryPlaceholder}
+          className="bg-transparent outline-none w-full placeholder:text-white/40"
+        />
+      </Field>
+
+      {/* Numero spedizioni mensili */}
+      <Field label={t.genericShipping.monthlyShipments}>
+        <FileText className="h-4 w-4 text-white/60" />
+        <input
+          required
+          name="numero_spedizioni_mensili"
+          placeholder={t.genericShipping.monthlyShipmentsPlaceholder}
+          className="bg-transparent outline-none w-full placeholder:text-white/40"
+        />
+      </Field>
+
+      {/* Principali mercati (multiselect) */}
+      <div>
+        <label className="block text-[11px] text-white/60 mb-2">
+          {t.genericShipping.markets}
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {marketsOptions.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10 cursor-pointer select-none hover:bg-black/40 transition-colors"
+            >
+              <input
+                type="checkbox"
+                checked={selectedMarkets.includes(option.value)}
+                onChange={() => toggleMarket(option.value)}
+                className="peer sr-only"
+              />
+              <span
+                className="relative grid place-items-center w-5 h-5 rounded-full border border-white/30 bg-white/5
+                           after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-orange-400
+                           after:opacity-0 peer-checked:after:opacity-100 after:transition-opacity"
+              />
+              <span className="text-sm text-white/90">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Particolari esigenze */}
+      <Field label={t.genericShipping.specialNeeds}>
+        <FileText className="h-4 w-4 text-white/60" />
+        <textarea
+          name="esigenze_particolari"
+          rows={4}
+          placeholder={t.genericShipping.specialNeedsPlaceholder}
+          className="bg-transparent outline-none w-full placeholder:text-white/40 resize-none"
+        />
+      </Field>
+
+      {/* Submit */}
+      <motion.button
+        type="submit"
+        whileTap={{ scale: 0.98 }}
+        disabled={submitting}
+        className="mt-2 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 disabled:opacity-60 disabled:hover:scale-100"
+        style={{ background: SPST_ORANGE }}
+      >
+        {submitting ? t.genericShipping.submitting : t.genericShipping.submit}
+      </motion.button>
+
+      <div className="text-[11px] text-white/50 text-center">
+        {t.genericShipping.protected}
+      </div>
+    </form>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="group grid gap-1">
+      <div className="text-[11px] text-white/60">{label}</div>
+      <div className="flex items-center gap-2 rounded-xl px-3 py-3 bg-black/30 border border-white/10 ring-0 focus-within:ring-1 focus-within:ring-white/30">
+        {children}
+      </div>
+    </label>
   );
 }

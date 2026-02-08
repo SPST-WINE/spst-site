@@ -335,6 +335,35 @@ export const translations = {
     footer: {
       termsAndConditions: 'Termini e Condizioni',
     },
+    // Spedizioni Generiche
+    genericShipping: {
+      formTitle: 'Richiedi informazioni',
+      formDescription: 'Compila il form per ricevere una consulenza personalizzata sulle tue esigenze di spedizione.',
+      name: 'Nome',
+      company: 'Azienda',
+      email: 'Email',
+      phone: 'Telefono',
+      category: 'Categoria merceologica spedita',
+      categoryPlaceholder: 'es. Elettronica, Abbigliamento, Alimentari...',
+      monthlyShipments: 'Numero spedizioni mensili',
+      monthlyShipmentsPlaceholder: 'es. 10-50, 50-100, 100+',
+      markets: 'Principali mercati',
+      marketsPlaceholder: 'Seleziona i mercati di interesse',
+      specialNeeds: 'Particolari esigenze',
+      specialNeedsPlaceholder: 'Descrivi eventuali esigenze specifiche...',
+      submit: 'Invia richiesta',
+      submitting: 'Invio in corso...',
+      protected: 'Invio protetto. Nessuno spam.',
+      success: 'Richiesta inviata! Ti contatteremo a breve.',
+      error: 'Errore durante l\'invio. Riprova.',
+      marketsOptions: {
+        europe: 'Europa',
+        usa: 'USA',
+        asia: 'Asia',
+        uk: 'Regno Unito',
+        other: 'Altri mercati',
+      },
+    },
   },
   en: {
     // Navigation
@@ -663,6 +692,35 @@ export const translations = {
     footer: {
       termsAndConditions: 'Terms and Conditions',
     },
+    // Generic Shipping
+    genericShipping: {
+      formTitle: 'Request information',
+      formDescription: 'Fill out the form to receive personalized consultation on your shipping needs.',
+      name: 'Name',
+      company: 'Company',
+      email: 'Email',
+      phone: 'Phone',
+      category: 'Product category shipped',
+      categoryPlaceholder: 'e.g. Electronics, Clothing, Food...',
+      monthlyShipments: 'Number of monthly shipments',
+      monthlyShipmentsPlaceholder: 'e.g. 10-50, 50-100, 100+',
+      markets: 'Main markets',
+      marketsPlaceholder: 'Select markets of interest',
+      specialNeeds: 'Special requirements',
+      specialNeedsPlaceholder: 'Describe any specific requirements...',
+      submit: 'Send request',
+      submitting: 'Sending...',
+      protected: 'Secure submission. No spam.',
+      success: 'Request sent! We will contact you shortly.',
+      error: 'Error sending request. Please try again.',
+      marketsOptions: {
+        europe: 'Europe',
+        usa: 'USA',
+        asia: 'Asia',
+        uk: 'United Kingdom',
+        other: 'Other markets',
+      },
+    },
   },
 } as const;
 
@@ -819,5 +877,8 @@ export type Translations = {
   };
   footer: {
     termsAndConditions: string;
+  };
+  genericShipping: {
+    [key: string]: string | { [key: string]: string };
   };
 };
