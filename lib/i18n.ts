@@ -879,6 +879,31 @@ export type Translations = {
     termsAndConditions: string;
   };
   genericShipping: {
-    [key: string]: string | { [key: string]: string };
+    formTitle: string;
+    formDescription: string;
+    name: string;
+    company: string;
+    email: string;
+    phone: string;
+    category: string;
+    categoryPlaceholder: string;
+    monthlyShipments: string;
+    monthlyShipmentsPlaceholder: string;
+    markets: string;
+    marketsPlaceholder: string;
+    specialNeeds: string;
+    specialNeedsPlaceholder: string;
+    submit: string;
+    submitting: string;
+    protected: string;
+    success: string;
+    error: string;
+    marketsOptions: {
+      europe: string;
+      usa: string;
+      asia: string;
+      uk: string;
+      other: string;
+    };
   };
 };
