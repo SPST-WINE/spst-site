@@ -314,15 +314,6 @@ export default function SpedizioniGenerichePage() {
               </h3>
               <div className="flex flex-wrap justify-center gap-3 md:justify-end">
                 <a
-                  href="/portale-quotazioni"
-                  className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-[#f7931e] px-6 py-3 font-bold text-black transition-all hover:scale-105 hover:shadow-xl hover:shadow-orange-500/40"
-                >
-                  <span className="relative z-10">
-                    {locale === "it" ? "Richiedi una quotazione" : "Request a quote"}
-                  </span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                <a
                   href="https://wa.me/393201441789"
                   className="inline-flex items-center gap-2 rounded-lg border-2 border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 hover:scale-105"
                 >
