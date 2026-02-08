@@ -346,7 +346,7 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
   const [submitting, setSubmitting] = useState(false);
   const [selectedMarkets, setSelectedMarkets] = useState<string[]>([]);
 
-  const [selectedMonthlyShipments, setSelectedMonthlyShipments] = useState<string[]>([]);
+  const [selectedMonthlyShipments, setSelectedMonthlyShipments] = useState<string>("");
 
   const marketsOptions = [
     { value: "italy", label: t.genericShipping.marketsOptions.italy },
@@ -371,10 +371,8 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
     );
   };
 
-  const toggleMonthlyShipment = (value: string) => {
-    setSelectedMonthlyShipments((prev) =>
-      prev.includes(value) ? prev.filter((m) => m !== value) : [...prev, value]
-    );
+  const handleMonthlyShipmentChange = (value: string) => {
+    setSelectedMonthlyShipments(value);
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -391,10 +389,10 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
         fd.append("mercati", market);
       });
 
-      // Aggiungi numero spedizioni mensili selezionate
-      selectedMonthlyShipments.forEach((shipment) => {
-        fd.append("numero_spedizioni_mensili", shipment);
-      });
+      // Aggiungi numero spedizioni mensili selezionato
+      if (selectedMonthlyShipments) {
+        fd.append("numero_spedizioni_mensili", selectedMonthlyShipments);
+      }
 
       // Honeypot + timestamp
       if (!fd.get("_ts")) fd.append("_ts", String(Date.now()));
@@ -419,7 +417,7 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
         onSuccess();
         form.reset();
         setSelectedMarkets([]);
-        setSelectedMonthlyShipments([]);
+        setSelectedMonthlyShipments("");
       } else {
         onError();
       }
@@ -493,7 +491,7 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
         />
       </Field>
 
-      {/* Numero spedizioni mensili (multiselect) */}
+      {/* Numero spedizioni mensili (single-select) */}
       <div>
         <label className="block text-[11px] text-white/60 mb-2">
           {t.genericShipping.monthlyShipments}
@@ -502,18 +500,28 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
           {monthlyShipmentsOptions.map((option) => (
             <label
               key={option.value}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10 cursor-pointer select-none hover:bg-black/40 transition-colors"
+              className={`flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border cursor-pointer select-none hover:bg-black/40 transition-colors ${
+                selectedMonthlyShipments === option.value
+                  ? "border-orange-400 bg-orange-400/10"
+                  : "border-white/10"
+              }`}
             >
               <input
-                type="checkbox"
-                checked={selectedMonthlyShipments.includes(option.value)}
-                onChange={() => toggleMonthlyShipment(option.value)}
+                type="radio"
+                name="numero_spedizioni_mensili"
+                value={option.value}
+                checked={selectedMonthlyShipments === option.value}
+                onChange={() => handleMonthlyShipmentChange(option.value)}
                 className="peer sr-only"
               />
               <span
-                className="relative grid place-items-center w-5 h-5 rounded-full border border-white/30 bg-white/5
-                           after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-orange-400
-                           after:opacity-0 peer-checked:after:opacity-100 after:transition-opacity"
+                className={`relative grid place-items-center w-5 h-5 rounded-full border ${
+                  selectedMonthlyShipments === option.value
+                    ? "border-orange-400 bg-orange-400/20"
+                    : "border-white/30 bg-white/5"
+                } after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-orange-400 after:opacity-0 ${
+                  selectedMonthlyShipments === option.value ? "after:opacity-100" : ""
+                } after:transition-opacity`}
               />
               <span className="text-sm text-white/90">{option.label}</span>
             </label>

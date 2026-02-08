@@ -23,14 +23,13 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
   // Include locale e tutte le traduzioni come dipendenza per aggiornare quando cambia la lingua
   const defaultNavItems = useMemo(
     () => [
-      { href: "/", label: t.nav.home },
       { href: "/servizi-e-contatti", label: t.nav.services },
       { href: "/portale-quotazioni", label: t.nav.quote },
       { href: "/spedizioni-usa", label: t.nav.usaShipping },
       { href: "/spedizioni-generiche", label: t.nav.genericShipping },
       { href: "/#for-buyers", label: t.nav.forBuyers },
     ],
-    [t.nav.home, t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.genericShipping, t.nav.forBuyers, locale]
+    [t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.genericShipping, t.nav.forBuyers, locale]
   );
 
   // Crea una key univoca basata su locale e navItems per forzare il re-render

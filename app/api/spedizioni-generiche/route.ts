@@ -37,8 +37,8 @@ export async function POST(req: Request) {
       const form = await req.formData();
       FIELDS.forEach((k) => {
         const value = form.get(k);
-        // Gestisci array per mercati e numero_spedizioni_mensili (multiselect)
-        if ((k === "mercati" || k === "numero_spedizioni_mensili") && form.getAll(k).length > 0) {
+        // Gestisci array per mercati (multiselect)
+        if (k === "mercati" && form.getAll(k).length > 0) {
           data[k] = form.getAll(k).join(", ");
         } else {
           data[k] = sanitize(value);
