@@ -346,7 +346,6 @@ export const translations = {
       category: 'Categoria merceologica spedita',
       categoryPlaceholder: 'es. Elettronica, Abbigliamento, Alimentari...',
       monthlyShipments: 'Numero spedizioni mensili',
-      monthlyShipmentsPlaceholder: 'es. 10-50, 50-100, 100+',
       markets: 'Principali mercati',
       marketsPlaceholder: 'Seleziona i mercati di interesse',
       specialNeeds: 'Particolari esigenze',
@@ -357,11 +356,19 @@ export const translations = {
       success: 'Richiesta inviata! Ti contatteremo a breve.',
       error: 'Errore durante l\'invio. Riprova.',
       marketsOptions: {
+        italy: 'Italia',
         europe: 'Europa',
         usa: 'USA',
         asia: 'Asia',
         uk: 'Regno Unito',
         other: 'Altri mercati',
+      },
+      monthlyShipmentsOptions: {
+        less10: 'Meno di 10',
+        '10-50': '10-50',
+        '50-100': '50-100',
+        '100-500': '100-500',
+        more500: 'Più di 500',
       },
     },
   },
@@ -703,7 +710,6 @@ export const translations = {
       category: 'Product category shipped',
       categoryPlaceholder: 'e.g. Electronics, Clothing, Food...',
       monthlyShipments: 'Number of monthly shipments',
-      monthlyShipmentsPlaceholder: 'e.g. 10-50, 50-100, 100+',
       markets: 'Main markets',
       marketsPlaceholder: 'Select markets of interest',
       specialNeeds: 'Special requirements',
@@ -714,11 +720,19 @@ export const translations = {
       success: 'Request sent! We will contact you shortly.',
       error: 'Error sending request. Please try again.',
       marketsOptions: {
+        italy: 'Italy',
         europe: 'Europe',
         usa: 'USA',
         asia: 'Asia',
         uk: 'United Kingdom',
         other: 'Other markets',
+      },
+      monthlyShipmentsOptions: {
+        less10: 'Less than 10',
+        '10-50': '10-50',
+        '50-100': '50-100',
+        '100-500': '100-500',
+        more500: 'More than 500',
       },
     },
   },
@@ -899,11 +913,19 @@ export type Translations = {
     success: string;
     error: string;
     marketsOptions: {
+      italy: string;
       europe: string;
       usa: string;
       asia: string;
       uk: string;
       other: string;
+    };
+    monthlyShipmentsOptions: {
+      less10: string;
+      '10-50': string;
+      '50-100': string;
+      '100-500': string;
+      more500: string;
     };
   };
 };

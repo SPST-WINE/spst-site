@@ -277,7 +277,7 @@ export default function SpedizioniGenerichePage() {
 
       {/* ===== FORM ===== */}
       <section className="relative py-12 md:py-16">
-        <div className="mx-auto max-w-[1200px] px-5">
+        <div className="mx-auto max-w-[1400px] px-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -346,7 +346,10 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
   const [submitting, setSubmitting] = useState(false);
   const [selectedMarkets, setSelectedMarkets] = useState<string[]>([]);
 
+  const [selectedMonthlyShipments, setSelectedMonthlyShipments] = useState<string[]>([]);
+
   const marketsOptions = [
+    { value: "italy", label: t.genericShipping.marketsOptions.italy },
     { value: "europe", label: t.genericShipping.marketsOptions.europe },
     { value: "usa", label: t.genericShipping.marketsOptions.usa },
     { value: "asia", label: t.genericShipping.marketsOptions.asia },
@@ -354,8 +357,22 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
     { value: "other", label: t.genericShipping.marketsOptions.other },
   ];
 
+  const monthlyShipmentsOptions = [
+    { value: "less10", label: t.genericShipping.monthlyShipmentsOptions.less10 },
+    { value: "10-50", label: t.genericShipping.monthlyShipmentsOptions['10-50'] },
+    { value: "50-100", label: t.genericShipping.monthlyShipmentsOptions['50-100'] },
+    { value: "100-500", label: t.genericShipping.monthlyShipmentsOptions['100-500'] },
+    { value: "more500", label: t.genericShipping.monthlyShipmentsOptions.more500 },
+  ];
+
   const toggleMarket = (value: string) => {
     setSelectedMarkets((prev) =>
+      prev.includes(value) ? prev.filter((m) => m !== value) : [...prev, value]
+    );
+  };
+
+  const toggleMonthlyShipment = (value: string) => {
+    setSelectedMonthlyShipments((prev) =>
       prev.includes(value) ? prev.filter((m) => m !== value) : [...prev, value]
     );
   };
@@ -372,6 +389,11 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
       // Aggiungi mercati selezionati
       selectedMarkets.forEach((market) => {
         fd.append("mercati", market);
+      });
+
+      // Aggiungi numero spedizioni mensili selezionate
+      selectedMonthlyShipments.forEach((shipment) => {
+        fd.append("numero_spedizioni_mensili", shipment);
       });
 
       // Honeypot + timestamp
@@ -397,6 +419,7 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
         onSuccess();
         form.reset();
         setSelectedMarkets([]);
+        setSelectedMonthlyShipments([]);
       } else {
         onError();
       }
@@ -470,16 +493,33 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
         />
       </Field>
 
-      {/* Numero spedizioni mensili */}
-      <Field label={t.genericShipping.monthlyShipments}>
-        <FileText className="h-4 w-4 text-white/60" />
-        <input
-          required
-          name="numero_spedizioni_mensili"
-          placeholder={t.genericShipping.monthlyShipmentsPlaceholder}
-          className="bg-transparent outline-none w-full placeholder:text-white/40"
-        />
-      </Field>
+      {/* Numero spedizioni mensili (multiselect) */}
+      <div>
+        <label className="block text-[11px] text-white/60 mb-2">
+          {t.genericShipping.monthlyShipments}
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {monthlyShipmentsOptions.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center gap-3 rounded-xl px-3 py-3 bg-black/30 border border-white/10 cursor-pointer select-none hover:bg-black/40 transition-colors"
+            >
+              <input
+                type="checkbox"
+                checked={selectedMonthlyShipments.includes(option.value)}
+                onChange={() => toggleMonthlyShipment(option.value)}
+                className="peer sr-only"
+              />
+              <span
+                className="relative grid place-items-center w-5 h-5 rounded-full border border-white/30 bg-white/5
+                           after:content-[''] after:w-2.5 after:h-2.5 after:rounded-full after:bg-orange-400
+                           after:opacity-0 peer-checked:after:opacity-100 after:transition-opacity"
+              />
+              <span className="text-sm text-white/90">{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
 
       {/* Principali mercati (multiselect) */}
       <div>
@@ -510,15 +550,17 @@ function GenericShippingForm({ onSuccess, onError }: { onSuccess: () => void; on
       </div>
 
       {/* Particolari esigenze */}
-      <Field label={t.genericShipping.specialNeeds}>
-        <FileText className="h-4 w-4 text-white/60" />
-        <textarea
-          name="esigenze_particolari"
-          rows={4}
-          placeholder={t.genericShipping.specialNeedsPlaceholder}
-          className="bg-transparent outline-none w-full placeholder:text-white/40 resize-none"
-        />
-      </Field>
+      <label className="group grid gap-1">
+        <div className="text-[11px] text-white/60">{t.genericShipping.specialNeeds}</div>
+        <div className="rounded-xl px-3 py-3 bg-black/30 border border-white/10 ring-0 focus-within:ring-1 focus-within:ring-white/30">
+          <textarea
+            name="esigenze_particolari"
+            rows={4}
+            placeholder={t.genericShipping.specialNeedsPlaceholder}
+            className="bg-transparent outline-none w-full placeholder:text-white/40 resize-none"
+          />
+        </div>
+      </label>
 
       {/* Submit */}
       <motion.button

@@ -1,5 +1,12 @@
 // app/api/spedizioni-generiche/route.ts
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import {
+  spedizioniGenericheSubject,
+  spedizioniGenericheHtml,
+  spedizioniGenericheText,
+  type SpedizioniGenerichePayload,
+} from "@/lib/email/spedizioni-generiche-confirmation";
 
 // Per sicurezza: whitelist dei campi accettati
 const FIELDS = [
@@ -30,8 +37,8 @@ export async function POST(req: Request) {
       const form = await req.formData();
       FIELDS.forEach((k) => {
         const value = form.get(k);
-        // Gestisci array per mercati (multiselect)
-        if (k === "mercati" && form.getAll(k).length > 0) {
+        // Gestisci array per mercati e numero_spedizioni_mensili (multiselect)
+        if ((k === "mercati" || k === "numero_spedizioni_mensili") && form.getAll(k).length > 0) {
           data[k] = form.getAll(k).join(", ");
         } else {
           data[k] = sanitize(value);
@@ -52,50 +59,62 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Nome mancante" }, { status: 400 });
     }
 
-    // Compose email
-    const subject = `Nuova richiesta Spedizioni Generiche – ${data.email}`;
-    const to = process.env.MAIL_FROM; // ricevi su questo indirizzo
-    const from = process.env.MAIL_FROM; // mittente configurato su Resend
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const MAIL_FROM = process.env.MAIL_FROM;
+    const MAIL_TO = process.env.MAIL_TO || process.env.MAIL_FROM; // email interna
 
-    if (!process.env.RESEND_API_KEY || !from || !to) {
+    if (!RESEND_API_KEY || !MAIL_FROM || !MAIL_TO) {
       return NextResponse.json({ ok: false, error: "Config RESEND mancante" }, { status: 500 });
     }
 
-    const html = `
-      <h2>Richiesta informazioni Spedizioni Generiche</h2>
+    const resend = new Resend(RESEND_API_KEY);
+    const createdAtIso = new Date().toISOString();
+
+    // Payload per le email
+    const payload: SpedizioniGenerichePayload = {
+      nome: data.nome!,
+      email: data.email!,
+      azienda: data.azienda || null,
+      telefono: data.telefono || null,
+      categoria_merceologica: data.categoria_merceologica || "",
+      numero_spedizioni_mensili: data.numero_spedizioni_mensili || "",
+      mercati: data.mercati || "",
+      esigenze_particolari: data.esigenze_particolari || null,
+      createdAtIso,
+    };
+
+    // 1) Email brandizzata al cliente
+    await resend.emails.send({
+      from: MAIL_FROM,
+      to: payload.email,
+      subject: spedizioniGenericheSubject(),
+      html: spedizioniGenericheHtml(payload),
+      text: spedizioniGenericheText(payload),
+    });
+
+    // 2) Email interna con i dati del form
+    const internalHtml = `
+      <h2>Nuova richiesta Spedizioni Generiche</h2>
       <p><strong>Nome:</strong> ${data.nome || ""}</p>
       <p><strong>Email:</strong> ${data.email || ""}</p>
-      <p><strong>Azienda:</strong> ${data.azienda || ""}</p>
-      <p><strong>Telefono:</strong> ${data.telefono || ""}</p>
+      <p><strong>Azienda:</strong> ${data.azienda || "—"}</p>
+      <p><strong>Telefono:</strong> ${data.telefono || "—"}</p>
       <hr/>
       <p><strong>Categoria merceologica spedita:</strong> ${data.categoria_merceologica || ""}</p>
       <p><strong>Numero spedizioni mensili:</strong> ${data.numero_spedizioni_mensili || ""}</p>
       <p><strong>Principali mercati:</strong> ${data.mercati || ""}</p>
       <p><strong>Particolari esigenze:</strong></p>
-      <p>${(data.esigenze_particolari || "").replace(/\n/g, "<br/>")}</p>
+      <p>${(data.esigenze_particolari || "—").replace(/\n/g, "<br/>")}</p>
       <hr/>
-      <p style="color:#888;font-size:12px;">Timestamp: ${new Date().toISOString()}</p>
+      <p style="color:#888;font-size:12px;">Timestamp: ${createdAtIso}</p>
     `;
 
-    // Chiamata Resend via REST
-    const resp = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from,
-        to,
-        subject,
-        html
-      })
+    await resend.emails.send({
+      from: MAIL_FROM,
+      to: MAIL_TO.split(',').map((s) => s.trim()),
+      subject: `[SPST] Nuova richiesta Spedizioni Generiche – ${data.email}`,
+      html: internalHtml,
     });
-
-    if (!resp.ok) {
-      const errText = await resp.text();
-      return NextResponse.json({ ok: false, error: "Resend error", details: errText }, { status: 502 });
-    }
 
     return NextResponse.json({ ok: true });
   } catch (err: any) {
