@@ -902,7 +902,6 @@ export type Translations = {
     category: string;
     categoryPlaceholder: string;
     monthlyShipments: string;
-    monthlyShipmentsPlaceholder: string;
     markets: string;
     marketsPlaceholder: string;
     specialNeeds: string;
