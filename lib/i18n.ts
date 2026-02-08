@@ -16,6 +16,7 @@ export const translations = {
       whySpst: 'Perché SPST',
       quote: 'Richiedi una quotazione',
       usaShipping: 'Spedizioni USA',
+      genericShipping: 'Spedizioni Generiche',
       forBuyers: 'For Buyers',
       areaRiservata: 'Area Riservata',
     },
@@ -343,6 +344,7 @@ export const translations = {
       whySpst: 'Why SPST',
       quote: 'Request a quote',
       usaShipping: 'USA Shipping',
+      genericShipping: 'Generic Shipping',
       forBuyers: 'For Buyers',
       areaRiservata: 'Dashboard',
     },
@@ -676,6 +678,7 @@ export type Translations = {
     whySpst: string;
     quote: string;
     usaShipping: string;
+    genericShipping: string;
     forBuyers: string;
     areaRiservata: string;
   };
