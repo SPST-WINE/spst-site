@@ -63,6 +63,21 @@ const countryToZoneMap: Record<string, { zoneKey: string; countryName: string; e
 // Estrai tutti i paesi unici
 const allCountries = Array.from(new Set(Object.keys(countryToZoneMap))).sort();
 
+// Mappa costi gestione fiscale per paese (in euro per bottiglia)
+const fiscalManagementCosts: Record<string, number> = {
+  "Belgio": 0.50,
+  "Spagna": 0.50,
+  "Francia": 0.50,
+  "Germania": 0.50,
+  "Olanda": 0.50,
+  "Austria": 0.50,
+  "Repubblica Ceca": 0.70,
+  "Danimarca": 0.70,
+  "Svezia": 0.70,
+  "Lituania": 0.70,
+  "Lettonia": 0.70,
+};
+
 export function B2CCalculator() {
   const [selectedCountry, setSelectedCountry] = useState<string>("Francia");
   const [bottles, setBottles] = useState<number>(6);
@@ -137,6 +152,10 @@ export function B2CCalculator() {
     // Toggle liquori: +15€ ogni 3 bottiglie
     const liquorSurcharge = isLiquor ? Math.ceil(bottles / 3) * 15 : 0;
 
+    // Gestione fiscale (per bottiglia)
+    const fiscalManagementPerBottle = fiscalManagementCosts[countryData.countryName] || 0;
+    const fiscalManagementTotal = fiscalManagementPerBottle * bottles;
+
     // IVA: per Europa sempre IVA italiana (0.22), per extra-UE IVA 0
     // Europa = zoneKey diverso da uk, svizzera_norvegia, usa_standard, canada, asia_oceania
     const isEU = countryData.zoneKey !== "uk" && 
@@ -145,11 +164,11 @@ export function B2CCalculator() {
                  countryData.zoneKey !== "canada" && 
                  countryData.zoneKey !== "asia_oceania";
     const vatRate = isEU ? 0.22 : 0; // Sempre IVA italiana (22%) per Europa, 0 per extra-UE
-    const vatBase = shippingCost + packagingCost + liquorSurcharge;
+    const vatBase = shippingCost + packagingCost + liquorSurcharge + fiscalManagementTotal;
     const vat = isEU ? vatBase * vatRate : 0;
 
     // Totale
-    const subtotal = shippingCost + packagingCost + exciseTotal + liquorSurcharge;
+    const subtotal = shippingCost + packagingCost + exciseTotal + liquorSurcharge + fiscalManagementTotal;
     const total = subtotal + vat;
 
     return {
@@ -158,6 +177,8 @@ export function B2CCalculator() {
       exciseTotal,
       exciseRate,
       liquorSurcharge,
+      fiscalManagementTotal,
+      fiscalManagementPerBottle,
       vat,
       vatRate,
       vatBase,
@@ -318,6 +339,15 @@ export function B2CCalculator() {
             </span>
             <span className="font-semibold text-gray-900">€{calculations.exciseTotal.toFixed(2)}</span>
           </div>
+          
+          {calculations.fiscalManagementTotal > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">
+                Gestione Fiscale ({calculations.fiscalManagementPerBottle.toFixed(2)}€/bottiglia):
+              </span>
+              <span className="font-semibold text-gray-900">€{calculations.fiscalManagementTotal.toFixed(2)}</span>
+            </div>
+          )}
           
           {calculations.isEU && (
             <div className="flex justify-between text-sm">
