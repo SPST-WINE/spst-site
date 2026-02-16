@@ -405,7 +405,7 @@ export function B2CCalculator() {
             {calculations.isUSA
               ? "Imballo incluso nel prezzo spedizione. Dazi esclusi."
               : calculations.isEU
-              ? `IVA (${(calculations.vatRate * 100).toFixed(0)}%) inclusa. Imballo calcolato separatamente.`
+              ? `IVA (22%) inclusa. Imballo calcolato separatamente.`
               : "Dazi esclusi. Imballo calcolato separatamente."}
           </p>
         </div>
