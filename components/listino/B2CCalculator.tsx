@@ -203,15 +203,9 @@ export function B2CCalculator() {
       liquorSurcharge,
       fiscalManagementTotal,
       fiscalManagementPerBottle,
-      vat,
-      vatRate,
-      vatBase,
       vatIncludedInShipping,
-      shippingVat,
-      shippingCostNet,
       subtotal,
       total,
-      totalVat,
       isEU,
       countryName: countryData.countryName,
       isUSA,
@@ -403,34 +397,24 @@ export function B2CCalculator() {
             </div>
           )}
           
-          {calculations.isEU && calculations.totalVat > 0 && (
+          {calculations.isEU && calculations.vatIncludedInShipping && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
-                IVA (Italia, {(calculations.vatRate * 100).toFixed(0)}%)
-                {calculations.vatIncludedInShipping ? " (inclusa in spedizione + su altri costi)" : ""}:
-              </span>
-              <span className="font-semibold text-gray-900">€{calculations.totalVat.toFixed(2)}</span>
-            </div>
-          )}
-          
-          {calculations.isEU && calculations.totalVat === 0 && calculations.vatIncludedInShipping && (
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">IVA (Italia, {(calculations.vatRate * 100).toFixed(0)}%):</span>
-              <span className="font-semibold text-gray-900">Inclusa nel prezzo</span>
+              <span className="text-gray-600">IVA (Italia, 22%):</span>
+              <span className="font-semibold text-gray-900">Inclusa nel prezzo spedizione</span>
             </div>
           )}
           
           {!calculations.isEU && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">IVA:</span>
-              <span className="font-semibold text-gray-900">€0.00</span>
+              <span className="font-semibold text-gray-900">Non dovuta</span>
             </div>
           )}
           
           <div className="border-t border-gray-300 pt-3 mt-3">
             <div className="flex justify-between items-center">
               <span className="text-sm sm:text-base font-bold text-gray-900">
-                Totale{calculations.isEU ? " (IVA inclusa)" : ""}:
+                Totale{calculations.isEU && calculations.vatIncludedInShipping ? " (IVA inclusa)" : !calculations.isEU ? " (IVA non dovuta)" : ""}:
               </span>
               <span className="text-lg sm:text-xl font-black text-orange-600">€{calculations.total.toFixed(2)}</span>
             </div>
