@@ -8,8 +8,6 @@ import { USAShippingRulesCard } from "./USAShippingRulesCard";
 const countryToZoneMap: Record<string, { zoneKey: string; countryName: string; exciseKey?: string }> = {
   // Italia
   "Italia": { zoneKey: "italia", countryName: "Italia", exciseKey: "italy" },
-  "Sicilia": { zoneKey: "italia", countryName: "Sicilia", exciseKey: "italy" },
-  "Sardegna": { zoneKey: "italia", countryName: "Sardegna", exciseKey: "italy" },
   
   // UE Zona 1
   "Germania": { zoneKey: "ue_zona_1", countryName: "Germania", exciseKey: "germany" },
