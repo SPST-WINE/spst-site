@@ -167,33 +167,11 @@ export function B2CCalculator() {
                  countryData.zoneKey !== "usa_standard" && 
                  countryData.zoneKey !== "canada" && 
                  countryData.zoneKey !== "asia_oceania";
-    
-    // Se l'IVA è già inclusa nel prezzo spedizione, non ricalcolarla
-    // Calcoliamo l'IVA solo su: imballo, liquori, gestione fiscale (se aggiunti)
-    // Per il totale finale, se l'IVA è inclusa nel shipping, il totale è già comprensivo
-    const vatRate = isEU ? 0.22 : 0; // Sempre IVA italiana (22%) per Europa, 0 per extra-UE
-    
-    // Base IVA: solo su componenti aggiuntivi (imballo, liquori, gestione fiscale)
-    // Il prezzo spedizione ha già IVA inclusa se vatIncludedInShipping è true
-    const vatBase = packagingCost + liquorSurcharge + fiscalManagementTotal;
-    const vat = (isEU && !vatIncludedInShipping) ? vatBase * vatRate : 0;
-    
-    // Se l'IVA è inclusa nel shipping, dobbiamo estrarre l'IVA dal prezzo per calcolare il totale corretto
-    // shippingCost include già IVA, quindi il totale sarà: shippingCost + altri costi + IVA su altri costi
-    // Se l'IVA non è inclusa, calcoliamo tutto normalmente
-    let shippingCostNet = shippingCost;
-    let shippingVat = 0;
-    if (vatIncludedInShipping && isEU) {
-      // Estrai IVA dal prezzo spedizione (prezzo / 1.22 * 0.22)
-      shippingCostNet = shippingCost / (1 + vatRate);
-      shippingVat = shippingCost - shippingCostNet;
-    }
 
-    // Totale: se IVA inclusa nel shipping, il totale è shippingCost + altri costi + IVA su altri costi
-    // Se IVA non inclusa, totale = subtotal + vat
-    const subtotal = shippingCostNet + packagingCost + exciseTotal + liquorSurcharge + fiscalManagementTotal;
-    const totalVat = vatIncludedInShipping ? shippingVat + vat : vat;
-    const total = subtotal + totalVat;
+    // Non calcoliamo IVA su altri costi, solo manteniamo quella già inclusa nel prezzo spedizione
+    // Totale: spedizione (con IVA inclusa se prevista) + altri costi (senza IVA)
+    const subtotal = shippingCost + packagingCost + exciseTotal + liquorSurcharge + fiscalManagementTotal;
+    const total = subtotal;
 
     return {
       shippingCost,
