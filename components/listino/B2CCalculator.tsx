@@ -83,6 +83,7 @@ export function B2CCalculator() {
   const [bottles, setBottles] = useState<number>(6);
   const [isLiquor, setIsLiquor] = useState<boolean>(false);
   const [usaStateType, setUsaStateType] = useState<"standard" | "tier_5" | "tier_65">("standard");
+  const [includePackaging, setIncludePackaging] = useState<boolean>(true);
 
   const exciseMap = pricingData.european_excise_map;
   const shippingRates = pricingData.shipping_rates;
@@ -140,10 +141,13 @@ export function B2CCalculator() {
     // Costo imballo (escluso per USA standard che ha imballo incluso)
     // 1 cartone = 6 bottiglie = 5€ (non bundle, solo nello Store Cartoni)
     let packagingCost = 0;
-    if (!isUSA) {
+    if (!isUSA && includePackaging) {
       const cartonsNeeded = Math.ceil(bottles / 6); // 1 cartone ogni 6 bottiglie
       packagingCost = cartonsNeeded * 5; // 5€ per cartone
     }
+
+    // Verifica se l'IVA è già inclusa nel prezzo base (guardando le note)
+    const vatIncludedInShipping = zoneData.notes?.includes("IVA inclusa") || false;
 
     // Accise (per 75cl)
     const exciseRate = exciseData?.excise_75cl || 0;
@@ -163,13 +167,33 @@ export function B2CCalculator() {
                  countryData.zoneKey !== "usa_standard" && 
                  countryData.zoneKey !== "canada" && 
                  countryData.zoneKey !== "asia_oceania";
+    
+    // Se l'IVA è già inclusa nel prezzo spedizione, non ricalcolarla
+    // Calcoliamo l'IVA solo su: imballo, liquori, gestione fiscale (se aggiunti)
+    // Per il totale finale, se l'IVA è inclusa nel shipping, il totale è già comprensivo
     const vatRate = isEU ? 0.22 : 0; // Sempre IVA italiana (22%) per Europa, 0 per extra-UE
-    const vatBase = shippingCost + packagingCost + liquorSurcharge + fiscalManagementTotal;
-    const vat = isEU ? vatBase * vatRate : 0;
+    
+    // Base IVA: solo su componenti aggiuntivi (imballo, liquori, gestione fiscale)
+    // Il prezzo spedizione ha già IVA inclusa se vatIncludedInShipping è true
+    const vatBase = packagingCost + liquorSurcharge + fiscalManagementTotal;
+    const vat = (isEU && !vatIncludedInShipping) ? vatBase * vatRate : 0;
+    
+    // Se l'IVA è inclusa nel shipping, dobbiamo estrarre l'IVA dal prezzo per calcolare il totale corretto
+    // shippingCost include già IVA, quindi il totale sarà: shippingCost + altri costi + IVA su altri costi
+    // Se l'IVA non è inclusa, calcoliamo tutto normalmente
+    let shippingCostNet = shippingCost;
+    let shippingVat = 0;
+    if (vatIncludedInShipping && isEU) {
+      // Estrai IVA dal prezzo spedizione (prezzo / 1.22 * 0.22)
+      shippingCostNet = shippingCost / (1 + vatRate);
+      shippingVat = shippingCost - shippingCostNet;
+    }
 
-    // Totale
-    const subtotal = shippingCost + packagingCost + exciseTotal + liquorSurcharge + fiscalManagementTotal;
-    const total = subtotal + vat;
+    // Totale: se IVA inclusa nel shipping, il totale è shippingCost + altri costi + IVA su altri costi
+    // Se IVA non inclusa, totale = subtotal + vat
+    const subtotal = shippingCostNet + packagingCost + exciseTotal + liquorSurcharge + fiscalManagementTotal;
+    const totalVat = vatIncludedInShipping ? shippingVat + vat : vat;
+    const total = subtotal + totalVat;
 
     return {
       shippingCost,
@@ -182,13 +206,17 @@ export function B2CCalculator() {
       vat,
       vatRate,
       vatBase,
+      vatIncludedInShipping,
+      shippingVat,
+      shippingCostNet,
       subtotal,
       total,
+      totalVat,
       isEU,
       countryName: countryData.countryName,
       isUSA,
     };
-  }, [selectedCountry, bottles, isLiquor, usaStateType, zoneData, countryData, exciseData]);
+  }, [selectedCountry, bottles, isLiquor, usaStateType, includePackaging, zoneData, countryData, exciseData]);
 
   if (!calculations || !zoneData) return null;
 
@@ -242,6 +270,23 @@ export function B2CCalculator() {
             ))}
           </select>
         </div>
+
+        {/* Toggle Imballo - Solo per paesi non USA */}
+        {selectedCountry !== "USA" && (
+          <div className="md:col-span-2">
+            <label className="flex items-center space-x-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={includePackaging}
+                onChange={(e) => setIncludePackaging(e.target.checked)}
+                className="w-5 h-5 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Includi Imballo (€5 per cartone, 1 cartone = 6 bottiglie)
+              </span>
+            </label>
+          </div>
+        )}
 
         {/* Toggle Liquori - Solo per USA */}
         {selectedCountry === "USA" && (
@@ -315,7 +360,9 @@ export function B2CCalculator() {
         
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Prezzo Spedizione:</span>
+            <span className="text-gray-600">
+              Prezzo Spedizione{calculations.vatIncludedInShipping && calculations.isEU ? " (IVA inclusa)" : ""}:
+            </span>
             <span className="font-semibold text-gray-900">€{calculations.shippingCost.toFixed(2)}</span>
           </div>
           
@@ -323,6 +370,13 @@ export function B2CCalculator() {
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Costo Imballo:</span>
               <span className="font-semibold text-gray-900">€{calculations.packagingCost.toFixed(2)}</span>
+            </div>
+          )}
+          
+          {!includePackaging && !calculations.isUSA && (
+            <div className="flex justify-between text-sm text-gray-500 italic">
+              <span>Imballo escluso</span>
+              <span>€0.00</span>
             </div>
           )}
           
@@ -349,10 +403,20 @@ export function B2CCalculator() {
             </div>
           )}
           
-          {calculations.isEU && (
+          {calculations.isEU && calculations.totalVat > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">
+                IVA (Italia, {(calculations.vatRate * 100).toFixed(0)}%)
+                {calculations.vatIncludedInShipping ? " (inclusa in spedizione + su altri costi)" : ""}:
+              </span>
+              <span className="font-semibold text-gray-900">€{calculations.totalVat.toFixed(2)}</span>
+            </div>
+          )}
+          
+          {calculations.isEU && calculations.totalVat === 0 && calculations.vatIncludedInShipping && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">IVA (Italia, {(calculations.vatRate * 100).toFixed(0)}%):</span>
-              <span className="font-semibold text-gray-900">€{calculations.vat.toFixed(2)}</span>
+              <span className="font-semibold text-gray-900">Inclusa nel prezzo</span>
             </div>
           )}
           
@@ -365,7 +429,9 @@ export function B2CCalculator() {
           
           <div className="border-t border-gray-300 pt-3 mt-3">
             <div className="flex justify-between items-center">
-              <span className="text-sm sm:text-base font-bold text-gray-900">Totale:</span>
+              <span className="text-sm sm:text-base font-bold text-gray-900">
+                Totale{calculations.isEU ? " (IVA inclusa)" : ""}:
+              </span>
               <span className="text-lg sm:text-xl font-black text-orange-600">€{calculations.total.toFixed(2)}</span>
             </div>
           </div>
