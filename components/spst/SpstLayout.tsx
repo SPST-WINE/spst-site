@@ -8,7 +8,7 @@ import { useLocale } from "../i18n/LocaleProvider";
 import { SPST_PUBLIC_BG } from "../../lib/spstTheme";
 
 // Pagine che non devono avere header/footer
-const EXCLUDED_PATHS = ["/back-office", "/listinoveronasped"];
+const EXCLUDED_PATHS = ["/back-office", "/listinoveronasped", "/listino-generico"];
 
 export function SpstLayout({ children }: { children: React.ReactNode }) {
   const { t, locale } = useLocale();
