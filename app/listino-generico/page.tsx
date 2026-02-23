@@ -7,8 +7,9 @@ import { StoreCartoniTab } from "../../components/listino/StoreCartoniTab";
 import { B2CCalculator } from "../../components/listino/B2CCalculator";
 import { USARulesTab } from "../../components/listino/USARulesTab";
 import { AcciseCalculatorTab } from "../../components/listino/AcciseCalculatorTab";
+import { WeightRatesTab } from "../../components/listino/WeightRatesTab";
 
-type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "accise-calculator" | "usa-rules";
+type Tab = "standard" | "export-all-in" | "store-cartoni" | "b2c-calculator" | "accise-calculator" | "usa-rules" | "weight-rates";
 
 // Sfondo generico senza branding
 const GENERIC_BG = "radial-gradient(120% 120% at 50% -10%, #1c3e5e 0%, #0a1722 60%, #000 140%)";
@@ -45,6 +46,16 @@ export default function ListinoGenericoPage() {
               }`}
             >
               Listino Standard
+            </button>
+            <button
+              onClick={() => setActiveTab("weight-rates")}
+              className={`whitespace-nowrap px-3 py-3 sm:px-4 sm:py-4 text-xs sm:text-sm font-semibold transition-colors border-b-2 ${
+                activeTab === "weight-rates"
+                  ? "border-orange-500 text-orange-400"
+                  : "border-transparent text-slate-300/80 hover:text-white hover:border-slate-500/60"
+              }`}
+            >
+              Listino KG
             </button>
             <button
               onClick={() => setActiveTab("export-all-in")}
@@ -105,6 +116,7 @@ export default function ListinoGenericoPage() {
       <section className="py-6 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
           {activeTab === "standard" && <StandardRatesTab />}
+          {activeTab === "weight-rates" && <WeightRatesTab />}
           {activeTab === "export-all-in" && <ExportAllInTab />}
           {activeTab === "store-cartoni" && <StoreCartoniTab />}
           {activeTab === "b2c-calculator" && <B2CCalculator />}
