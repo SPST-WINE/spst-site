@@ -23,7 +23,6 @@ export const PARTNER_LOGOS: PartnerLogo[] = [
   { name: "Cantina 6", logo: "/partners/cantina-6.png" },
   { name: "Cantina 7", logo: "/partners/cantina-7.png" },
   { name: "Cantina 8", logo: "/partners/cantina-8.png" },
-  { name: "Cantina 9", logo: "/partners/cantina-9.png" },
   { name: "Cantina 10", logo: "/partners/cantina-10.png" },
   { name: "Cantina 11", logo: "/partners/cantina-11.png" },
   { name: "Cantina 12", logo: "/partners/cantina-12.png" },
