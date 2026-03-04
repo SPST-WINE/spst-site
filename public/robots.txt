@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /back-office/
+Disallow: /register/thank-you
+
+Sitemap: https://www.spst.it/sitemap.xml
