@@ -20,7 +20,7 @@ const mainPages: { url: string; changefreq?: "weekly" | "monthly"; priority?: nu
   { url: "/legal", changefreq: "monthly", priority: 0.5 },
   { url: "/register", changefreq: "monthly", priority: 0.6 },
   { url: "/blog", changefreq: "weekly", priority: 0.8 },
-  { url: "/landing/spedire-senza-codice-accisa", changefreq: "monthly", priority: 0.7 },
+  // Landing omesse: sono noindex e duplicate del blog (canonical → blog)
 ];
 
 // Articoli blog (priorità media, aggiornamento mensile)

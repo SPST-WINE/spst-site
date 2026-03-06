@@ -64,6 +64,7 @@ export const metadata: Metadata = {
     shortcut: ["/bo-assets/img/spst-logo.png"],
   },
   themeColor: "#0b1220",
+  referrer: "origin-when-cross-origin",
 };
 
 const META_PIXEL_ID = "1938569710028909";
@@ -100,18 +101,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </Script>
         {/* End Meta Pixel */}
 
-        {/* JSON-LD Organization per rich results Google */}
+        {/* JSON-LD Organization + WebSite per rich results Google */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
+              "@id": `${CANONICAL_DOMAIN}/#organization`,
               name: "SPST",
               url: CANONICAL_DOMAIN,
               logo: `${CANONICAL_DOMAIN}/bo-assets/img/spst-logo.png`,
               description: DEFAULT_DESCRIPTION,
-              address: { "@type": "PostalAddress", addressCountry: "IT" },
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Piazzale Gambale 23",
+                addressLocality: "Avellino",
+                addressRegion: "AV",
+                postalCode: "83100",
+                addressCountry: "IT",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "SPST - Export & Wine Logistics",
+              url: CANONICAL_DOMAIN,
+              description: DEFAULT_DESCRIPTION,
+              publisher: { "@id": `${CANONICAL_DOMAIN}/#organization` },
+              inLanguage: "it",
             }),
           }}
         />

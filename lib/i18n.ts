@@ -18,6 +18,7 @@ export const translations = {
       usaShipping: 'Spedizioni USA',
       genericShipping: 'Spedizioni Generiche',
       forBuyers: 'For Buyers',
+      blog: 'Blog',
       areaRiservata: 'Area Riservata',
     },
     // Hero
@@ -382,6 +383,7 @@ export const translations = {
       usaShipping: 'USA Shipping',
       genericShipping: 'Generic Shipping',
       forBuyers: 'For Buyers',
+      blog: 'Blog',
       areaRiservata: 'Dashboard',
     },
     // Hero
@@ -752,6 +754,7 @@ export type Translations = {
     usaShipping: string;
     genericShipping: string;
     forBuyers: string;
+    blog: string;
     areaRiservata: string;
   };
   hero: {

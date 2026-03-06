@@ -20,12 +20,20 @@ export function SpstFooter() {
           <small className="text-white/80 leading-tight">
             Sede Legale: Piazzale Gambale 23, Avellino (AV) 83100
           </small>
-          <a
-            href="https://www.spst.it/legal"
-            className="text-white/70 hover:text-white transition-colors text-sm"
-          >
-            Termini e Condizioni
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 sm:justify-end">
+            <a
+              href="/blog"
+              className="text-white/70 hover:text-white transition-colors text-sm"
+            >
+              Blog
+            </a>
+            <a
+              href="https://www.spst.it/legal"
+              className="text-white/70 hover:text-white transition-colors text-sm"
+            >
+              Termini e Condizioni
+            </a>
+          </div>
         </div>
       </div>
     </footer>

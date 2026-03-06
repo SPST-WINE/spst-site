@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SPST - Listino B2C",
-  description: "Listino B2C SPST per spedizioni nazionali e internazionali",
+  title: "Listino B2C",
+  description:
+    "Listino prezzi SPST per spedizioni vino B2C: nazionali e internazionali, multicollo e pallet. Tariffe e calcolatore per export vino.",
+  alternates: { canonical: "/listino" },
+  robots: { index: true, follow: true },
 };
 
 export default function ListinoLayout({
