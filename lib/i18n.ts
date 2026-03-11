@@ -141,6 +141,12 @@ export const translations = {
       privacyDesc: 'Come trattiamo i dati: finalità, basi giuridiche, conservazione e diritti.',
       cookieTitle: 'Cookie',
       cookieDesc: 'Informazioni essenziali su cookie tecnici e, se presenti, strumenti di analytics.',
+      cookieBanner: {
+        message: 'Utilizziamo cookie tecnici e, con il tuo consenso, cookie di analytics e marketing per migliorare il sito e misurare l\'efficacia delle campagne. Puoi accettare tutti, rifiutare i non necessari o leggere di più.',
+        acceptAll: 'Accetta tutti',
+        rejectNonEssential: 'Solo necessari',
+        more: 'Maggiori informazioni',
+      },
       tocTitle: 'Indice',
       note: 'Nota: questo testo è un template "pronto-pubblicazione" ma non sostituisce una consulenza legale. Se vuoi lo rendiamo 100% aderente alla tua ragione sociale/partita IVA e ai tuoi flussi (Stripe, vettori, importatori).',
     },
@@ -506,6 +512,12 @@ export const translations = {
       privacyDesc: 'How we handle data: purposes, legal bases, retention and rights.',
       cookieTitle: 'Cookies',
       cookieDesc: 'Essential information about technical cookies and, if present, analytics tools.',
+      cookieBanner: {
+        message: 'We use technical cookies and, with your consent, analytics and marketing cookies to improve the site and measure campaign effectiveness. You can accept all, reject non-essential, or read more.',
+        acceptAll: 'Accept all',
+        rejectNonEssential: 'Essential only',
+        more: 'Learn more',
+      },
       tocTitle: 'Index',
       note: 'Note: this text is a "ready-to-publish" template but does not replace legal advice. If you want, we can make it 100% compliant with your company name/VAT number and your flows (Stripe, carriers, importers).',
     },
@@ -874,6 +886,12 @@ export type Translations = {
     privacyDesc: string;
     cookieTitle: string;
     cookieDesc: string;
+    cookieBanner: {
+      message: string;
+      acceptAll: string;
+      rejectNonEssential: string;
+      more: string;
+    };
     tocTitle: string;
     note: string;
   };
