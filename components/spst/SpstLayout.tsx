@@ -27,9 +27,10 @@ export function SpstLayout({ children }: { children: React.ReactNode }) {
       { href: "/portale-quotazioni", label: t.nav.quote },
       { href: "/spedizioni-usa", label: t.nav.usaShipping },
       { href: "/spedizioni-generiche", label: t.nav.genericShipping },
+      { href: "/blog", label: t.nav.blog },
       { href: "/#for-buyers", label: t.nav.forBuyers },
     ],
-    [t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.genericShipping, t.nav.forBuyers, locale]
+    [t.nav.services, t.nav.quote, t.nav.usaShipping, t.nav.genericShipping, t.nav.blog, t.nav.forBuyers, locale]
   );
 
   // Crea una key univoca basata su locale e navItems per forzare il re-render

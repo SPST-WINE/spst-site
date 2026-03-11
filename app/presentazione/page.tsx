@@ -9,15 +9,15 @@ import {
   Minimize2,
   LayoutGrid,
   X,
-  TriangleAlert,
-  Ship,
-  Globe2,
-  Route,
-  FileCheck2,
-  TrendingUp,
   Building2,
   LineChart,
   MessageSquareMore,
+  Lock,
+  Users,
+  BadgeCheck,
+  Plane,
+  FileText,
+  ExternalLink,
 } from 'lucide-react';
 import { useLocale } from '../../components/i18n/LocaleProvider';
 import { SPST_PUBLIC_BG } from '../../lib/spstTheme';
@@ -27,8 +27,9 @@ const SPST_ORANGE = '#f7931e';
 const LOGO_URL =
   'https://cdn.prod.website-files.com/6800cc3b5f399f3e2b7f2ffa/68079e968300482f70a36a4a_output-onlinepngtools%20(1).png';
 
-// 👉 link al video YouTube
-const TUTORIAL_URL = 'https://youtu.be/R2Kj2EWMk_U';
+// Link alla sezione contatto in home (Parliamo della tua cantina · Richiedi informazioni)
+const HOME_CONTATTI = '/#contatti';
+const BLOG_URL = '/blog';
 
 type Slide =
   | { kind: 'title'; kicker?: string; title: React.ReactNode; subtitle?: string }
@@ -41,7 +42,7 @@ type Slide =
     }
   | { kind: 'cta'; title: string; bullets?: string[]; primary: { label: string; href: string }; secondary?: { label: string; href: string } };
 
-// Slides will be generated dynamically based on locale
+// Slides: focus su area riservata, B2C/B2B, codice accisa buyer, enoturismo USA, fatturazione
 function getSlides(t: any): Slide[] {
   return [
     {
@@ -62,54 +63,66 @@ function getSlides(t: any): Slide[] {
     },
     {
       kind: 'column',
-      kicker: t.sections.problems.kicker,
-      title: t.sections.problems.title,
-      description: 'Ogni Paese ha prassi diverse. Senza processi chiari si perdono tempo e margini, con maggior rischio di blocchi.',
+      kicker: 'Area riservata',
+      title: 'Tutto in un’unica piattaforma',
+      description: 'Dashboard, documenti, tracking e anagrafiche: gestisci spedizioni e pratiche senza uscire dalla web app. Meno email, più controllo.',
       items: [
-        { icon: <TriangleAlert className="h-5 w-5" />, title: 'Documenti complessi', desc: 'e-DAS, accise, HS code, COLA, Prior Notice: basta un errore per fermare la spedizione.' },
-        { icon: <Ship className="h-5 w-5" />, title: 'Costi e rotte variabili', desc: 'Senza comparazione reale rischi costi più alti e tempi incerti.' },
-        { icon: <Globe2 className="h-5 w-5" />, title: 'Accesso ai buyer', desc: 'Serve metodo e rete per qualificare clienti esteri affidabili.' },
+        { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche mittente/destinatario, ritiro, stati e tracking in tempo reale.' },
+        { icon: <FileText className="h-5 w-5" />, title: 'Documenti e archivio', desc: 'LDV, e-DAS, accise: generazione, verifica e download in un solo posto.' },
+        { icon: <LineChart className="h-5 w-5" />, title: 'Storico e KPI', desc: 'Spedizioni passate, tempi medi, costi: decisioni informate.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Assistenza integrata', desc: 'WhatsApp e telefono direttamente dalla piattaforma.' },
       ],
     },
     {
       kind: 'column',
-      kicker: t.sections.howItWorks.kicker,
-      title: t.sections.howItWorks.title,
-      description: "Ti seguiamo dall'impostazione documentale alla consegna, con KPI e tracciabilità chiari.",
+      kicker: 'Per chi lavoriamo',
+      title: 'Servizio B2C e B2B',
+      description: 'Dalle cantine che spediscono a privati e buyer, ai distributori e agli e-commerce: un unico partner per export vino in regola.',
       items: [
-        { icon: <FileCheck2 className="h-5 w-5" />, title: '1) Documenti a norma', desc: 'Generiamo e archiviamo modulistica fiscale e doganale.' },
-        { icon: <Route className="h-5 w-5" />, title: '2) Spedizione ottimizzata', desc: 'Express, campionature o pallet: scegliamo tratta e vettore più efficienti.' },
-        { icon: <TrendingUp className="h-5 w-5" />, title: '3) Crescita commerciale', desc: 'Wine Connect ti collega a buyer internazionali qualificati.' },
+        { icon: <Users className="h-5 w-5" />, title: 'B2C', desc: 'Spedizioni al cliente finale (Europa e USA) con documentazione e compliance a posto.' },
+        { icon: <Building2 className="h-5 w-5" />, title: 'B2B', desc: 'Campionature, pallet e flussi ricorrenti verso importatori e buyer esteri.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Un solo interlocutore', desc: 'Documenti, logistica e supporto coordinati per entrambi i canali.' },
       ],
     },
     {
       kind: 'column',
-      kicker: 'La Web App',
-      title: "Un'unica piattaforma per tutto",
-      description: 'Gestisci spedizioni, documenti e tracking. Salva i profili mittente, scarica LDV e monitora gli stati in tempo reale: meno email, più controllo.',
+      kicker: 'Buyer senza codice accisa',
+      title: 'Codice accisa per chi non ce l’ha',
+      description: 'Il tuo buyer è serio ma non ha un codice accisa? Con la rappresentanza fiscale SPST puoi vendere in Europa in regola. Accisa assolta o sospesa, a seconda del caso.',
       items: [
-        { icon: <Building2 className="h-5 w-5" />, title: 'Dashboard operativa', desc: 'Anagrafiche, documenti, ritiro, tracking in un posto solo.' },
-        { icon: <LineChart className="h-5 w-5" />, title: 'Dati e KPI', desc: 'Storico spedizioni, tempi medi, costi: decisioni informate.' },
-        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Assistenza integrata', desc: 'WhatsApp/telefono direttamente dalla piattaforma.' },
+        { icon: <BadgeCheck className="h-5 w-5" />, title: 'Rappresentanza fiscale', desc: 'SPST agisce come rappresentante: il buyer riceve senza dover avere codice accisa.' },
+        { icon: <FileText className="h-5 w-5" />, title: 'Pratiche accise', desc: 'Gestiamo assolta/sospesa e documentazione richiesta dai Paesi di destinazione.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Approfondimenti', desc: 'Sul blog: “Spedire vino B2B in Europa quando il buyer non ha un codice accisa”.' },
       ],
     },
     {
       kind: 'column',
-      kicker: t.sections.whySpst.kicker,
-      title: 'Tecnologia + persone',
-      description: 'La piattaforma riduce tempi ed errori; il team garantisce continuità e risoluzione. Dalla prima spedizione, non sei mai solo.',
+      kicker: 'Spedizioni USA',
+      title: 'Enoturismo e cliente finale negli USA',
+      description: 'Visite in cantina, degustazioni e ordini dal cliente USA: con Paylink e il nostro flusso importazione + vendita domestica spedisci in modo legale e scalabile.',
       items: [
-        { title: 'Unico partner', desc: 'Documenti, logistica e supporto commerciale coordinati.' },
-        { title: 'Tariffe ottimizzate', desc: 'Multi-corriere e rotte selezionate su dati reali.' },
-        { title: 'SLA chiari', desc: 'Tempi certi e comunicazione proattiva sugli stati.' },
+        { icon: <Plane className="h-5 w-5" />, title: 'Modello corretto', desc: 'Importatore USA, COLA e Prior Notice: niente “spedisco e basta”, zero rischi.' },
+        { icon: <FileText className="h-5 w-5" />, title: 'Paylink USA', desc: 'Checkout dedicato per invii verso Stati Uniti con documentazione inclusa.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Approfondimenti', desc: 'Sul blog: guide su B2C USA, campioni e come spedire vino negli USA.' },
+      ],
+    },
+    {
+      kind: 'column',
+      kicker: 'Trasparenza',
+      title: 'Fatturazione chiara e trasparente',
+      description: 'Niente sorprese: costi spiegati in anticipo, voci leggibili in fattura e supporto per ogni dubbio.',
+      items: [
+        { icon: <FileText className="h-5 w-5" />, title: 'Preventivi chiari', desc: 'Quotazioni con voci distinte (spedizione, documenti, assicurazione, ecc.).' },
+        { icon: <LineChart className="h-5 w-5" />, title: 'Fatture leggibili', desc: 'Dettaglio per servizio e per spedizione, facile da conciliare.' },
+        { icon: <MessageSquareMore className="h-5 w-5" />, title: 'Supporto', desc: 'Per qualsiasi chiarimento su costi e fatturazione.' },
       ],
     },
     {
       kind: 'cta',
-      title: t.sections.cta.title,
-      bullets: ['Preventivi chiari', 'Documenti a norma', 'Supporto reale'],
-      primary: { label: 'Entra in SPST', href: 'https://spst.it/register' },
-      secondary: { label: 'Guarda il video tutorial', href: TUTORIAL_URL },
+      title: 'Parliamo della tua cantina',
+      bullets: ['Preventivi chiari', 'Documenti a norma', 'Fatturazione trasparente'],
+      primary: { label: 'Richiedi informazioni', href: HOME_CONTATTI },
+      secondary: { label: 'Scopri i servizi sul blog', href: BLOG_URL },
     },
   ];
 }
@@ -203,7 +216,7 @@ export default function PresentationPage() {
         <div
           className="
             relative mx-auto w-full rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,.25)]
-            h-[calc(100svh-56px-4px-2rem)] md:h-auto md:max-w-[1200px] md:aspect-[16/9]
+            min-h-[280px] h-[calc(100svh-56px-4px-2rem)] md:min-h-0 md:h-auto md:max-w-[1200px] md:aspect-[16/9]
           "
         >
           {/* Nav: mobile bottom, desktop laterali */}
@@ -296,6 +309,13 @@ function SlideRenderer({ slide, t, locale }: { slide: Slide; t: any; locale: 'it
           {slide.kicker && <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70">{slide.kicker}</div>}
           <h1 className="mt-1 text-[26px] sm:text-[34px] md:text-[44px] font-black leading-tight">{slide.title}</h1>
           {slide.subtitle && <p className="mt-3 text-white/80 text-[14px] sm:text-base">{slide.subtitle}</p>}
+          <a
+            href={BLOG_URL}
+            className="mt-4 inline-flex items-center gap-2 text-[13px] sm:text-sm text-white/70 hover:text-white/90 transition"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            {locale === 'it' ? 'Scopri i servizi sul blog' : 'Discover our services on the blog'}
+          </a>
         </div>
       </div>
     );
@@ -345,20 +365,6 @@ function SlideRenderer({ slide, t, locale }: { slide: Slide; t: any; locale: 'it
             </div>
           )}
 
-          {/* link tutorial per la slide Web App */}
-          {typeof slide.title === 'string' && slide.title.includes("Un'unica piattaforma") && (
-            <div className="mt-4">
-              <a
-                href={TUTORIAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border border-white/30 hover:bg-white/10 transition text-sm"
-              >
-                <MessageSquareMore className="h-4 w-4" />
-                {locale === 'it' ? 'Guarda il video tutorial' : 'Watch the tutorial video'}
-              </a>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -374,22 +380,24 @@ function SlideRenderer({ slide, t, locale }: { slide: Slide; t: any; locale: 'it
               ))}
             </ul>
           )}
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
             <a
               href={slide.primary.href}
-              className="px-4 py-2 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
+              className="min-h-[44px] inline-flex items-center justify-center px-6 py-3 rounded-full font-bold text-[#0f1720] transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:shadow-orange-500/20 hover:ring-2 ring-orange-300/50"
               style={{ background: SPST_ORANGE }}
             >
               {slide.primary.label}
             </a>
-            <a
-              href={slide.secondary.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
-            >
-              {slide.secondary.label}
-            </a>
+            {slide.secondary && (
+              <a
+                href={slide.secondary.href}
+                target={slide.secondary.href.startsWith('http') ? '_blank' : undefined}
+                rel={slide.secondary.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="min-h-[44px] inline-flex items-center justify-center px-6 py-3 rounded-full font-bold border border-white/70 transition-all duration-200 hover:-translate-y-[1px] active:translate-y-[1px] hover:bg-white/10 hover:ring-2 ring-white/30"
+              >
+                {slide.secondary.label}
+              </a>
+            )}
           </div>
         </div>
       </div>

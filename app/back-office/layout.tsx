@@ -4,6 +4,7 @@ import './bo.css'; // ⬅️ importa gli stili del Back Office
 
 export const metadata: Metadata = {
   title: 'SPST Back Office',
+  robots: { index: false, follow: false },
 };
 
 export default function BackOfficeLayout({
