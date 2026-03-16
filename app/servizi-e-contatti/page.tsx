@@ -1,4 +1,5 @@
 "use client";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Ship,
@@ -382,10 +383,30 @@ function ContactCard({
 
 function QuickForm() {
   const { t } = useLocale();
-  const onSubmit = (e: React.FormEvent) => {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: collega EmailJS / Make / Airtable
-    alert("Grazie! Ti contatteremo a breve.");
+    const form = e.currentTarget;
+    setStatus("loading");
+    setErrorMsg("");
+    try {
+      const body = new FormData(form);
+      body.set("_ts", String(Date.now()));
+      const res = await fetch("/api/contact", { method: "POST", body });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setErrorMsg(data?.error || "Errore nell'invio.");
+        setStatus("error");
+        return;
+      }
+      setStatus("success");
+      form.reset();
+    } catch {
+      setErrorMsg("Errore di connessione.");
+      setStatus("error");
+    }
   };
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
@@ -464,12 +485,20 @@ function QuickForm() {
           />
         </div>
       </label>
+      {status === "success" && (
+        <p className="text-sm text-green-400 text-center">Grazie! Ti contatteremo a breve.</p>
+      )}
+      {status === "error" && errorMsg && (
+        <p className="text-sm text-red-400 text-center">{errorMsg}</p>
+      )}
       <motion.button
         whileTap={{ scale: 0.98 }}
-        className="mt-1 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-1 h-12 rounded-lg font-bold text-base text-[#0f1720] w-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30 disabled:opacity-60 disabled:pointer-events-none"
         style={{ background: SPST_ORANGE }}
       >
-        {t.services.formSubmit}
+        {status === "loading" ? "Invio in corso..." : t.services.formSubmit}
       </motion.button>
       <div className="text-[11px] text-white/50 text-center">{t.services.formProtected}</div>
     </form>
