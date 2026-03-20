@@ -37,8 +37,8 @@ export const pricingData = {
     },
     usa_standard: {
       destinations: ["USA (Stati Standard)"],
-      rates: { "3": 69.49, "6": 91.49, "12": 146.49, "18": 239.99, "24": 294.99, "30": 380.49, "36": 442.00, "42": 517.00, "48": 588.49, "54": 660.00, "60": 737.00 },
-      notes: "IMBALLO INCLUSO. Dazi esclusi.",
+      rates: { "3": 89.00, "6": 119.00, "12": 169.00, "18": 249.00, "24": 319.00, "30": 399.00, "36": 459.00, "42": 549.00, "48": 619.00, "54": 699.00, "60": 759.00 },
+      notes: "Dazi esclusi. Calcolare +15% dazi sul valore della merce",
       surcharge_rules: {
         tier_5_euro: ["AR", "MO", "MT", "NE", "OK", "TX"],
         tier_65_euro: ["AK", "HI", "PR"]
