@@ -20,18 +20,13 @@ export function StandardRatesTab() {
       {/* Desktop Table View */}
       <div className="hidden lg:block overflow-x-auto">
         <div className="space-y-6">
-          {allZones.map(([zoneKey, zoneData]) => (
-            <div key={zoneKey} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+          {allZones.map(([, zoneData]) => (
+            <div key={zoneData.destinations.join("-")} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
               <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
                 <h3 className="text-base sm:text-lg font-bold text-gray-900">
                   {zoneData.destinations.join(", ")}
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-600 mt-1">{zoneData.notes}</p>
-                {zoneKey === "usa_standard" && (
-                  <p className="text-xs sm:text-sm font-semibold text-orange-600 mt-1">
-                    ⚠️ Imballo Incluso
-                  </p>
-                )}
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -81,11 +76,6 @@ export function StandardRatesTab() {
                 {zoneData.destinations.join(", ")}
               </h3>
               <p className="text-xs text-gray-600 mt-1">{zoneData.notes}</p>
-              {zoneKey === "usa_standard" && (
-                <p className="text-xs font-semibold text-orange-600 mt-1">
-                  ⚠️ Imballo Incluso
-                </p>
-              )}
             </div>
             <div className="p-4">
               <div className="space-y-2">
