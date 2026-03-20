@@ -37,8 +37,8 @@
     },
     "usa_standard": {
       "destinations": ["USA (Stati Standard)"],
-      "rates": { "3": 69.49, "6": 91.49, "12": 146.49, "18": 239.99, "24": 294.99, "30": 380.49, "36": 442.0, "42": 517.0, "48": 588.49, "54": 660.0, "60": 737.0 },
-      "notes": "IMBALLO INCLUSO. Dazi esclusi.",
+      "rates": { "3": 89.0, "6": 119.0, "12": 169.0, "18": 249.0, "24": 319.0, "30": 399.0, "36": 459.0, "42": 549.0, "48": 619.0, "54": 699.0, "60": 759.0 },
+      "notes": "Dazi esclusi. Calcolare +15% dazi sul valore della merce",
       "surcharge_rules": {
         "tier_5_euro": ["AR", "MO", "MT", "NE", "OK", "TX"],
         "tier_65_euro": ["AK", "HI", "PR"]
