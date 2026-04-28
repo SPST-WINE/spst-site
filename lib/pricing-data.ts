@@ -3,27 +3,27 @@ export const pricingData = {
     italia: {
       destinations: ["Italia", "Sicilia", "Sardegna"],
       rates: { "3": 9.90, "6": 14.90, "12": 19.90, "18": 27.90, "24": 35.90, "30": 39.90 },
-      notes: "IVA inclusa, imballo escluso."
+      notes: "IVA esclusa, imballo escluso."
     },
     ue_zona_1: {
       destinations: ["Germania", "Francia", "Belgio", "Grecia", "Lussemburgo", "Portogallo", "Olanda", "Spagna"],
       rates: { "3": 17.49, "6": 20.99, "12": 33.00, "18": 47.99, "24": 67.00, "30": 83.49, "36": 97.99, "42": 115.49, "48": 132.00, "54": 148.49, "60": 165.00 },
-      notes: "IVA inclusa, imballo escluso."
+      notes: "IVA esclusa, imballo escluso."
     },
     ue_zona_2: {
       destinations: ["Austria", "Croazia", "Polonia", "Repubblica Ceca", "Slovenia", "Ungheria"],
       rates: { "3": 20.99, "6": 23.00, "12": 37.49, "18": 49.49, "24": 70.99, "30": 88.00, "36": 97.99, "42": 118.99, "48": 137.49, "54": 156.00, "60": 176.00 },
-      notes: "IVA inclusa, imballo escluso."
+      notes: "IVA esclusa, imballo escluso."
     },
     ue_zona_3: {
       destinations: ["Bulgaria", "Estonia", "Lettonia", "Lituania", "Romania"],
       rates: { "3": 31.99, "6": 35.00, "12": 48.99, "18": 66.00, "24": 88.00, "30": 107.49, "36": 128.49, "42": 148.49, "48": 170.49, "54": 192.49, "60": 214.49 },
-      notes: "IVA inclusa, imballo escluso."
+      notes: "IVA esclusa, imballo escluso."
     },
     scandinavia: {
       destinations: ["Svezia", "Finlandia"],
       rates: { "3": 17.49, "6": 20.99, "12": 33.00, "18": 47.99, "24": 67.00, "30": 83.49, "36": 97.99, "42": 115.49, "48": 132.00, "54": 148.49, "60": 165.00 },
-      notes: "IVA inclusa, imballo escluso."
+      notes: "IVA esclusa, imballo escluso."
     },
     uk: {
       destinations: ["Regno Unito"],
@@ -37,7 +37,7 @@ export const pricingData = {
     },
     usa_standard: {
       destinations: ["USA (Stati Standard)"],
-      rates: { "3": 89.00, "6": 119.00, "12": 169.00, "18": 249.00, "24": 319.00, "30": 399.00, "36": 459.00, "42": 549.00, "48": 619.00, "54": 699.00, "60": 759.00 },
+      rates: { "3": 97.99, "6": 130.99, "12": 185.99, "18": 273.99, "24": 350.99, "30": 438.99, "36": 504.99, "42": 603.99, "48": 680.99, "54": 768.99, "60": 834.99 },
       notes: "Dazi esclusi. Calcolare +15% dazi sul valore della merce",
       surcharge_rules: {
         tier_5_euro: ["AR", "MO", "MT", "NE", "OK", "TX"],
